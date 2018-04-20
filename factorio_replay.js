@@ -424,7 +424,7 @@
     }],
     [0x38, 'Shoot', () => {
       const shotTypes = ['None', 'Enemy', 'Selected'];
-      return `${ shotTypes[readUint8] }, ${ readFixed32() }, ${ readFixed32() }`
+      return `${ shotTypes[readUint8()] }, ${ readFixed32() }, ${ readFixed32() }`
     }, () => {
       const shotType = fetchString(true);
       let rawShotType = -1;
