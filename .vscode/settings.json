@@ -1,0 +1,34 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  // Enable/disable default JavaScript formatter.
+  "javascript.format.enable": true,
+  // Defines space handling after a comma delimiter.
+  "javascript.format.insertSpaceAfterCommaDelimiter": true,
+  // Defines space handling after the constructor keyword. Requires TypeScript >= 2.3.0.
+  "javascript.format.insertSpaceAfterConstructor": false,
+  // Defines space handling after function keyword for anonymous functions.
+  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+  // Defines space handling after keywords in a control flow statement.
+  "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+  // Defines space handling after opening and before closing JSX expression braces. Requires TypeScript >= 2.0.6.
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  // Defines space handling after opening and before closing non empty braces. Requires TypeScript >= 2.3.0.
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  // Defines space handling after opening and before closing non empty brackets.
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+  // Defines space handling after opening and before closing non empty parenthesis.
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  // Defines space handling after opening and before closing template string braces. Requires TypeScript >= 2.0.6.
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+  //  Defines space handling after a semicolon in a for statement.
+  "javascript.format.insertSpaceAfterSemicolonInForStatements": true,
+  // Defines space handling after a binary operator.
+  "javascript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+  // Defines space handling before function argument parentheses. Requires TypeScript >= 2.1.5.
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+  // Defines whether an open brace is put onto a new line for control blocks or not.
+  "javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+  // Defines whether an open brace is put onto a new line for functions or not.
+  "javascript.format.placeOpenBraceOnNewLineForFunctions": false,
+}

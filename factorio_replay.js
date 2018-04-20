@@ -38,7 +38,7 @@
 
   const readUint16 = () => {
     return buffer[curIndex++]
-        + (buffer[curIndex++] * 0x100);
+      + (buffer[curIndex++] * 0x100);
   };
 
   const writeUint16 = (num) => {
@@ -51,9 +51,9 @@
 
   const readUint32 = () => {
     return buffer[curIndex++]
-        + (buffer[curIndex++] * 0x100)
-        + (buffer[curIndex++] * 0x10000)
-        + (buffer[curIndex++] * 0x1000000);
+      + (buffer[curIndex++] * 0x100)
+      + (buffer[curIndex++] * 0x10000)
+      + (buffer[curIndex++] * 0x1000000);
   };
 
   const writeUint32 = (num) => {
@@ -275,9 +275,9 @@
     const unknown = readUint8();
     if (unknown != 0) {
       // Does this ever happen? Maybe
-      return `@${ curTick }(${ unknown }): `;
+      return `@${curTick}(${unknown}): `;
     }
-    return `@${ curTick }: `;
+    return `@${curTick}: `;
   };
 
   const getTick = (tickStr) => {
@@ -424,7 +424,7 @@
     }],
     [0x38, 'Shoot', () => {
       const shotTypes = ['None', 'Enemy', 'Selected'];
-      return `${ shotTypes[readUint8()] }, ${ readFixed32() }, ${ readFixed32() }`
+      return `${shotTypes[readUint8()]}, ${readFixed32()}, ${readFixed32()}`
     }, () => {
       const shotType = fetchString(true);
       let rawShotType = -1;
@@ -440,7 +440,7 @@
       writeFixed32();
     }],
     [0x3A, 'MoveSelectionLarge', () => {
-      return `${ readFixed32() }, ${ readFixed32() }`
+      return `${readFixed32()}, ${readFixed32()}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -635,8 +635,8 @@
       reader.addEventListener('loadend', () => {
         buffer = new Uint8Array(reader.result);
         curIndex = 0;
-        let result = `<span>Header: ${ readBytes(18) }</span><br>`;
-        result += `<span>Name: ${ readString() }</span><br>`;
+        let result = `<span>Header: ${readBytes(18)}</span><br>`;
+        result += `<span>Name: ${readString()}</span><br>`;
 
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
@@ -657,7 +657,7 @@
           result += `
             <span>Unhandled bytes:</span>
             <br>
-            <span>${ readBytes(buffer.length - curIndex) }</span>
+            <span>${ readBytes(buffer.length - curIndex)}</span>
             <br>
           `;
         }
