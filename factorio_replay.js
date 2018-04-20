@@ -669,7 +669,7 @@
     }
   });
   exportDatButton.addEventListener('click', () => {
-    buffer = replayDiv.innerHTML.replace(/<\/?span>/g, '').replace(/<br>/g, '\n');
+    buffer = replayDiv.innerHTML.replace(/<(\/?span|\/div)>/g, '').replace(/<(br|div)>/g, '\n');
     curIndex = 0;
     datString = '';
     if (!expect('Header: ')) {
@@ -723,13 +723,13 @@
   exportTxtButton.addEventListener('click', () => {
     // Gross, but it works well enough
     let result = replayDiv.innerHTML;
-    result = result.replace(/<\/?span>/g, '');
+    result = result.replace(/<(\/?span|\/div)>/g, '');
     let lineBreak = '\n';
     if (/Win/.test(navigator.platform)) {
       // Probably good enough?
       lineBreak = '\r\n';
     }
-    result = result.replace(/<br>/g, lineBreak);
+    result = result.replace(/<(br|div)>/g, lineBreak);
     download(result, 'replay.txt', 'text/plain');
   });
 })();
