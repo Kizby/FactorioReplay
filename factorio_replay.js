@@ -37,7 +37,8 @@
   };
 
   const readUint16 = () => {
-    return buffer[curIndex++] + (buffer[curIndex++] * 0x100);
+    return buffer[curIndex++]
+        + (buffer[curIndex++] * 0x100);
   };
 
   const writeUint16 = (num) => {
@@ -49,7 +50,10 @@
   };
 
   const readUint32 = () => {
-    return buffer[curIndex++] + (buffer[curIndex++] * 0x100) + (buffer[curIndex++] * 0x10000) + (buffer[curIndex++] * 0x1000000);
+    return buffer[curIndex++]
+        + (buffer[curIndex++] * 0x100)
+        + (buffer[curIndex++] * 0x10000)
+        + (buffer[curIndex++] * 0x1000000);
   };
 
   const writeUint32 = (num) => {
@@ -116,7 +120,7 @@
       num = fetchNum();
     }
     writeInt32(num * 256);
-  }
+  };
 
   const readOptUint = () => {
     let num = readUint8();
@@ -153,7 +157,7 @@
     for (let i = 0; i < val.length; i++) {
       writeUint8(val.charCodeAt(i));
     }
-  }
+  };
 
   const fetchString = (stopAtComma) => {
     let endIndex = buffer.indexOf('\n', curIndex);
@@ -167,7 +171,7 @@
     curIndex = endIndex;
     skipCommaAndSpaces();
     return result;
-  }
+  };
 
   const readBytes = (length) => {
     let result = '';
@@ -202,7 +206,7 @@
       val = (fetchString() == 'true');
     }
     writeUint8(val ? 1 : 0);
-  }
+  };
 
   const readCheckSum = () => {
     const rawCheckSum = readUint32();
@@ -222,7 +226,7 @@
       checkSum = checkSum.substring(0, checkSum.length - 2);
     }
     return result;
-  }
+  };
 
   const writeCheckSum = () => {
     datString += fetchCheckSum();
@@ -241,7 +245,7 @@
         break;
       }
     }
-  }
+  };
 
   const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
   const readDirection = () => {
@@ -256,7 +260,7 @@
         break;
       }
     }
-  }
+  };
 
   const expect = (val) => {
     if (buffer.substring(curIndex, curIndex + val.length) == val) {
@@ -270,10 +274,10 @@
     curTick = readUint32();
     const unknown = readUint8();
     if (unknown != 0) {
-      // Does this ever happen?
-      return '@' + curTick + '(' + unknown + '): ';
+      // Does this ever happen? Maybe
+      return `@${ curTick }(${ unknown }): `;
     }
-    return '@' + curTick + ': ';
+    return `@${ curTick }: `;
   };
 
   const getTick = (tickStr) => {
@@ -322,8 +326,10 @@
       const unknown1 = readUint8(); // Sometimes get a duplicate build frame with this = 1, but usually 0
       const isGhost = readBool();
       const unknown2 = readUint8(); // Maybe force?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : ', ' + unknown1 + ', ' + unknown2;
-      return x + ', ' + y + ', ' + direction + (isGhost ? ', Ghost' : '') + unknowns;
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
+      return [x, y, direction, (isGhost ? 'Ghost' : null), unknowns]
+        .filter(x => x !== null)
+        .join(', ');
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -347,7 +353,8 @@
       const inventory = readInventory();
       const slot = readUint16();
       const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      return inventory + ', ' + slot + (context == 1 ? '' : ', ' + context);
+      const contextString = context == 1 ? '' : `, ${context}`;
+      return `${inventory}, ${slot}${contextString}`;
     }, () => {
       writeInventory();
       writeUint16();
@@ -361,7 +368,8 @@
       const inventory = readInventory();
       const slot = readUint16();
       const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      return inventory + ', ' + slot + (context == 1 ? '' : ', ' + context);
+      const contextString = context == 1 ? '' : `, ${context}`;
+      return `${inventory}, ${slot}${contextString}`;
     }, () => {
       writeInventory();
       writeUint16();
@@ -375,7 +383,8 @@
       const inventory = readInventory();
       const slot = readUint16();
       const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      return inventory + ', ' + slot + (context == 1 ? '' : ', ' + context);
+      const contextString = context == 1 ? '' : `, ${context}`;
+      return `${inventory}, ${slot}${contextString}`;
     }, () => {
       writeInventory();
       writeUint16();
@@ -388,7 +397,7 @@
     [0x35, 'CheckSum', () => {
       const checkSum = readCheckSum();
       const previousTick = readUint32();
-      return checkSum + (previousTick == curTick - 1 ? '' : ', ' + previousTick);
+      return checkSum + (previousTick == curTick - 1 ? '' : `, ${previousTick}`);
     }, () => {
       writeCheckSum();
       if (buffer[curIndex] != '\n') {
@@ -415,7 +424,7 @@
     }],
     [0x38, 'Shoot', () => {
       const shotTypes = ['None', 'Enemy', 'Selected'];
-      return shotTypes[readUint8()] + ', ' + readFixed32() + ', ' + readFixed32();
+      return `${ shotTypes[readUint8] }, ${ readFixed32() }, ${ readFixed32() }`
     }, () => {
       const shotType = fetchString(true);
       let rawShotType = -1;
@@ -431,7 +440,7 @@
       writeFixed32();
     }],
     [0x3A, 'MoveSelectionLarge', () => {
-      return readFixed32() + ', ' + readFixed32();
+      return `${ readFixed32() }, ${ readFixed32() }`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -442,7 +451,8 @@
       const slot = readUint16();
       const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
       const itemId = readUint16();
-      return inventory + ', ' + slot + ', ' + itemId + (context == 1 ? '' : ', ' + context);
+      const contextString = context == 1 ? '' : `, ${context}`;
+      return `${inventory}, ${slot}, ${itemId}${contextString}`;
     }, () => {
       writeInventory();
       writeUint16();
@@ -462,7 +472,9 @@
       const checkSum = readCheckSum();
       const unknown2 = readUint16(); // No ideas, always 0?
       const unknown3 = readUint8(); // No ideas, always 0?
-      const unknowns = (unknown1 == 0 && unknown2 == 0 && unknown3 == 0 ? '' : ', ' + unknown1 + ', ' + unknown2 + ', ' + unknown3);
+      const unknowns = (unknown1 == 0 && unknown2 == 0 && unknown3 == 0)
+        ? ''
+        : `, ${unknown1}, ${unknown2}, ${unknown3}`;
       return checkSum + unknowns;
     }, () => {
       const checkSum = fetchCheckSum();
@@ -485,8 +497,10 @@
       const sideLength = readUint8();
       const isGhost = readBool();
       const unknown2 = readUint8(); // No ideas?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : ', ' + unknown1 + ', ' + unknown2;
-      return x + ', ' + y + ', ' + direction + ', ' + sideLength + (isGhost ? ', Ghost' : '') + unknowns;
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
+      return [x, y, direction, sideLength, (isGhost ? 'Ghost' : null), unknowns]
+        .filter(x => x !== null)
+        .join(', ');
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -520,7 +534,7 @@
       const rawDelta = readUint8();
       const x = ((rawDelta & 0xf0) / 0x10) - 8;
       const y = (rawDelta & 0xf) - 8;
-      return x + ', ' + y;
+      return `${x}, ${y}`
     }, () => {
       const x = fetchNum(), y = fetchNum();
       writeUint8((x + 8) * 16 + (y + 8));
@@ -534,7 +548,7 @@
     [0x97, 'MoveSelection', () => {
       const y = readFixed16();
       const x = readFixed16();
-      return x + ', ' + y;
+      return `${x}, ${y}`
     }, () => {
       const x = fetchNum();
       writeFixed16(); // Write y first
@@ -621,8 +635,8 @@
       reader.addEventListener('loadend', () => {
         buffer = new Uint8Array(reader.result);
         curIndex = 0;
-        let result = '<span>Header: ' + readBytes(18) + '</span><br>';
-        result += '<span>Name: ' + readString() + '</span><br>';
+        let result = `<span>Header: ${ readBytes(18) }</span><br>`;
+        result += `<span>Name: ${ readString() }</span><br>`;
 
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
@@ -640,7 +654,12 @@
         }
         if (curIndex < buffer.length) {
           --curIndex; // Take back the byte we interpreted as an InputAction
-          result += '<span>Unhandled bytes:</span><br><span>' + readBytes(buffer.length - curIndex) + '</span><br>';
+          result += `
+            <span>Unhandled bytes:</span>
+            <br>
+            <span>${ readBytes(buffer.length - curIndex) }</span>
+            <br>
+          `;
         }
         replayDiv.innerHTML = result;
         exportDatButton.hidden = false;
@@ -678,7 +697,7 @@
       }
       let frameHandler = inputActionNameToFrameHandler[name];
       if (!frameHandler) {
-        console.error('Can\'t handle InputAction "' + name + '"; only emitting before tick ' + tick);
+        console.error(`Can't handle InputAction "${name}"; only emitting before tick ${tick}`);
         failed = true;
         break;
       }
