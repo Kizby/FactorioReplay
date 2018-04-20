@@ -314,7 +314,7 @@
     [0x19, 'ShowInfo'],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
-      return readFixed32() + ', ' + readFixed32();
+      return `${readFixed32()}, ${readFixed32()}`;
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -326,10 +326,8 @@
       const unknown1 = readUint8(); // Sometimes get a duplicate build frame with this = 1, but usually 0
       const isGhost = readBool();
       const unknown2 = readUint8(); // Maybe force?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
-      return [x, y, direction, (isGhost ? 'Ghost' : null), unknowns]
-        .filter(x => x !== null)
-        .join(', ');
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
+      return `${x}, ${y}, ${direction}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -397,7 +395,7 @@
     [0x35, 'CheckSum', () => {
       const checkSum = readCheckSum();
       const previousTick = readUint32();
-      return checkSum + (previousTick == curTick - 1 ? '' : `, ${previousTick}`);
+      return `${checkSum}${previousTick == curTick - 1 ? '' : `, ${previousTick}`}`;
     }, () => {
       writeCheckSum();
       if (buffer[curIndex] != '\n') {
@@ -412,7 +410,7 @@
       if (0xffffffff == quantity) {
         quantity = 'all';
       }
-      return recipeId + ', ' + quantity;
+      return `${recipeId}, ${quantity}`;
     }, () => {
       writeUint16();
       if (buffer[curIndex] == 'a') {
@@ -475,7 +473,7 @@
       const unknowns = (unknown1 == 0 && unknown2 == 0 && unknown3 == 0)
         ? ''
         : `, ${unknown1}, ${unknown2}, ${unknown3}`;
-      return checkSum + unknowns;
+      return `${checkSum}${unknowns}`;
     }, () => {
       const checkSum = fetchCheckSum();
       let unknown1 = 0, unknown2 = 0, unknown3 = 0;
@@ -497,10 +495,8 @@
       const sideLength = readUint8();
       const isGhost = readBool();
       const unknown2 = readUint8(); // No ideas?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
-      return [x, y, direction, sideLength, (isGhost ? 'Ghost' : null), unknowns]
-        .filter(x => x !== null)
-        .join(', ');
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
+      return `${x}, ${y}, ${direction}, ${sideLength}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -524,7 +520,7 @@
       writeUint8(unknown2);
     }],
     [0x91, 'UpdateResolution', () => {
-      return readUint32() + ', ' + readUint32();
+      return `${readUint32()}, ${readUint32()}`;
     }, () => {
       writeUint32();
       writeUint32();
@@ -540,7 +536,7 @@
       writeUint8((x + 8) * 16 + (y + 8));
     }],
     [0x96, 'MoveSelectionTiny?', () => {
-      return (readUint8() - 128) / 256 + ', ' + (readUint8() - 128) / 256;
+      return `${(readUint8() - 128) / 256}, ${(readUint8() - 128) / 256}`;
     }, () => {
       writeUint8((fetchNum() * 256) + 128);
       writeUint8((fetchNum() * 256) + 128);
@@ -604,6 +600,14 @@
     }
   };
 
+  const appendElement = (node, tag, contents) => {
+    const element = document.createElement(tag);
+    if (undefined !== contents) {
+      element.textContent = contents;
+    }
+    node.appendChild(element);
+  };
+
   document.body.addEventListener('dragover', (event) => {
     if (event.dataTransfer.items &&
       event.dataTransfer.items.length > 0 &&
@@ -617,16 +621,21 @@
     const reader = new FileReader();
     if (file.name.toLowerCase().endsWith('.txt')) {
       reader.addEventListener('loadend', () => {
-        let result = '';
+        let result = document.createElement('div');
+        result.id = 'replayDiv';
+        result.contentEditable = true;
+        result.style = 'font-family: monospace';
+
         const lines = reader.result.split(/\r?\n/);
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].length == 0 && i == lines.length - 1) {
             // Don't add spurious line for last linebreak
             break;
           }
-          result += '<span>' + lines[i] + '</span><br>';
+          appendElement(result, 'span', lines[i]);
+          appendElement(result, 'br');
         }
-        replayDiv.innerHTML = result;
+        replayDiv.parentNode.replaceChild(result, replayDiv);
         exportDatButton.hidden = false;
         exportTxtButton.hidden = false;
       });
@@ -635,17 +644,22 @@
       reader.addEventListener('loadend', () => {
         buffer = new Uint8Array(reader.result);
         curIndex = 0;
-        let result = `<span>Header: ${readBytes(18)}</span><br>`;
-        result += `<span>Name: ${readString()}</span><br>`;
+
+        let result = document.createElement('div');
+        result.id = 'replayDiv';
+        result.contentEditable = true;
+        result.style = 'font-family: monospace';
+
+        appendElement(result, 'span', `Header: ${readBytes(18)}`);
+        appendElement(result, 'br');
+        appendElement(result, 'span', `Name: ${readString()}`);
+        appendElement(result, 'br');
 
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
         while (frameHandler) {
-          result += '<span>' + tickHandler() + frameHandler[1];
-          if (frameHandler.length > 2) {
-            result += ' ' + frameHandler[2]();
-          }
-          result += '</span><br>';
+          appendElement(result, 'span', `${tickHandler()}${frameHandler[1]}${frameHandler.length > 2 ? ` ${frameHandler[2]()}` : ''}`);
+          appendElement(result, 'br');
           if (curIndex == buffer.length) {
             break;
           }
@@ -654,14 +668,12 @@
         }
         if (curIndex < buffer.length) {
           --curIndex; // Take back the byte we interpreted as an InputAction
-          result += `
-            <span>Unhandled bytes:</span>
-            <br>
-            <span>${ readBytes(buffer.length - curIndex)}</span>
-            <br>
-          `;
+          appendElement(result, 'span', 'Unhandled bytes:');
+          appendElement(result, 'br');
+          appendElement(result, 'span', `${readBytes(buffer.length - curIndex)}`);
+          appendElement(result, 'br');
         }
-        replayDiv.innerHTML = result;
+        replayDiv.parentNode.replaceChild(result, replayDiv);
         exportDatButton.hidden = false;
         exportTxtButton.hidden = false;
       });
