@@ -269,7 +269,7 @@ const loadText = (text) => {
   };
 
   const inventories = [[],
-  [undefined, 'Player', 'Toolbelt', 'Gun', 'Armor', 'Ammo', 'Tool'],
+  [undefined, 'Player', 'Toolbelt', 'Gun', 'Ammo', 'Armor', 'Tool'],
   [],
   [],
   [undefined, 'FuelOrContainer', 'Input', 'Output']];
@@ -384,6 +384,24 @@ const loadText = (text) => {
       writeUint8(unknown2);
     }],
     [0x2b, 'Run', readDirection, writeDirection],
+    [0x2e, 'OpenEquipmentGrid', () => {
+      const whichInventory = readUint8();
+      const slot = readUint16();
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
+    }, () => {
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
+      }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
+    }],
     [0x31, 'ClickItemStack', () => {
       const whichInventory = readUint8();
       const slot = readUint16();
@@ -555,6 +573,23 @@ const loadText = (text) => {
     [0x43, 'ChooseTechnology', readUint16, writeUint16],
     [0x48, 'Chat', readString, writeString],
     [0x4C, 'ChooseCraftingItemGroup', readUint8, writeUint8],
+    [0x51, 'PlaceInEquipmentGrid', () => {
+      const column = readUint32();
+      const row = readUint32();
+      const whichInventory = readUint8();
+      const inventory = getInventory(1, whichInventory);
+      return `${column}, ${row}, ${inventory ? inventory : whichInventory}`;
+    }, () => {
+      writeUint32();
+      writeUint32();
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+      }
+      writeUint8(whichInventory);
+    }],
     [0x56, 'LimitSlots', () => {
       const whichInventory = readUint8();
       const slotCount = readUint16();
