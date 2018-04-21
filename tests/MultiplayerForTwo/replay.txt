@@ -1,5 +1,5 @@
-@0(255): JoinMultiPlayer 
-@0(255): AddPlayer Murray65536
+@0(65535): JoinMultiPlayer
+@0(65535): AddPlayer Murray65536, 0, 1
 @1(0): UpdateResolution 1920, 1080
 @1(0): PlayerId? 5ad3c174
 @3(0): MoveSelection 1.4375, 9.0625
