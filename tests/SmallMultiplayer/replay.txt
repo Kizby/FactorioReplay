@@ -1,210 +1,210 @@
 @0(255): JoinMultiPlayer 
 @0(255): AddPlayer Murray65536
-@1: UpdateResolution 1920, 1080
-@1: CheckSum68? 5ad3c174
-@2: MoveSelection 1.09375, 9.28125
-@60: MoveSelectionSmall 0, -2
-@60: CheckSum cb7b736c
-@62: MoveSelectionSmall 0, -1
-@94: Run E
-@96: MoveSelectionSmall 0, -1
-@97: MoveSelectionSmall 1, 0
-@100: ClearSelection
-@108: Run NE
-@120: CheckSum 7e216f31
-@159: Run N
-@180: CheckSum 8628d6b7
-@193: StopRunning
-@222: OpenPlayerInventory
-@240: CheckSum 8f3891c7
-@274: ChooseCraftingItemGroup 4
-@300: CheckSum fd3feb20
-@306: Craft 83, 1
-@325: CloseWindow
-@360: CheckSum 780eb457
-@412: MoveSelection 6.828125, -18.67578125
-@420: CheckSum b4b0e40c
-@433: StartMining
-@480: CheckSum 9b43648a
-@540: CheckSum 1442e718
-@543: Run E
-@546: Run NE
-@566: MoveSelectionSmall 3, -1
-@575: Run E
-@588: StopRunning
-@600: CheckSum 52610d73
-@660: CheckSum 48f16aab
-@675: StopMining
-@677: Run W
-@679: Run SW
-@694: Run S
-@714: Toolbelt 0
-@720: CheckSum 7bf92e60
-@737: Run SW
-@774: MoveSelection -12.97265625, 18.53515625
-@780: CheckSum 455d59dd
-@781: Run S
-@783: MoveSelectionSmall 0, 1
-@783: StopRunning
-@796: Build 0, 5, N
-@797: MoveSelectionSmall 0, -1
-@827: Toolbelt 1
-@831: ClearSelection
-@840: CheckSum d018182e
-@859: Build 0, 3, N
-@860: MoveSelectionSmall 0, -2
-@885: OpenPlayerInventory
-@887: ClearSelection
-@900: CheckSum 68c3c618
-@953: SplitItemStack Player, 0
-@960: CheckSum cb586ceb
-@963: CloseWindow
-@985: MoveSelectionSmall 0, 2
-@1005: MoveSelectionSmall 0, -2
-@1019: StartMining
-@1020: CheckSum e67dcf7a
-@1024: StopMining
-@1062: MoveSelectionSmall 0, 2
-@1077: Run S
-@1080: CheckSum 8edaf57e
-@1083: Run SW
-@1088: Run W
-@1089: MoveSelectionSmall 1, 2
-@1090: MoveSelectionSmall -1, 0
-@1096: MoveSelectionSmall -1, 0
-@1099: StopRunning
-@1101: ClearCursor
-@1104: MoveSelectionSmall 0, -1
-@1108: MoveSelectionSmall 1, -1
-@1113: Run S
-@1125: StopRunning
-@1137: OpenTargetInventory
-@1139: ClearSelection
-@1140: CheckSum c20585fd
-@1195: ClickItemStack Player, 0
-@1200: CheckSum 60ffaa65
-@1260: CheckSum f0aaceba
-@1265: SplitItemStack FuelOrContainer, 0
-@1305: ClickItemStack Player, 3
-@1320: CheckSum fc24fc50
-@1329: CloseWindow
-@1331: MoveSelectionSmall 0, 0
-@1335: ClearSelection
-@1353: MoveSelectionSmall 0, -2
-@1365: OpenTargetInventory
-@1367: ClearSelection
-@1380: CheckSum f07534d5
-@1423: SplitItemStack Player, 0
-@1440: CheckSum 35059c01
-@1470: SplitItemStack FuelOrContainer, 0
-@1500: CheckSum cb570963
-@1536: SplitItemStack Player, 2
-@1560: CheckSum a395b3cf
-@1571: ClickItemStack Player, 3
-@1595: CloseWindow
-@1597: MoveSelectionSmall 0, 2
-@1620: CheckSum b8f1de80
-@1622: MoveSelectionSmall 2, 1
-@1628: Run E
-@1630: MoveSelectionSmall 1, 0
-@1635: ClearSelection
-@1655: MoveSelectionSmall 4, 2
-@1658: MoveSelectionSmall 1, 0
-@1664: MoveSelectionSmall 1, 0
-@1671: MoveSelectionSmall 1, 0
-@1678: ClearSelection
-@1680: CheckSum ebe57580
-@1689: MoveSelectionSmall 2, 1
-@1692: MoveSelectionSmall 1, 0
-@1698: ClearSelection
-@1700: StopRunning
-@1710: Run S
-@1718: MoveSelectionSmall 1, 1
-@1725: ClearSelection
-@1740: CheckSum 485f3c77
-@1786: MoveSelection -0.03125, 9.63671875
-@1792: MoveSelectionSmall 0, 1
-@1795: Run SW
-@1800: MoveSelectionSmall 0, 1
-@1800: CheckSum e4109af8
-@1801: MoveSelectionSmall -1, 0
-@1802: Run W
-@1808: MoveSelectionSmall -1, 0
-@1815: MoveSelectionSmall -1, 0
-@1820: MoveSelectionSmall -1, 0
-@1826: MoveSelectionSmall -1, 0
-@1833: ClearSelection
-@1860: CheckSum cf19e804
-@1884: Run NW
-@1907: MoveSelection -11.0625, -3.59765625
-@1912: MoveSelectionSmall -1, 0
-@1916: MoveSelectionSmall 0, -1
-@1918: Run N
-@1920: CheckSum 49a70006
-@1924: MoveSelectionSmall 0, -1
-@1931: MoveSelectionSmall 0, -1
-@1937: MoveSelectionSmall 0, -1
-@1944: MoveSelectionSmall 0, -1
-@1951: MoveSelectionSmall 0, -1
-@1957: MoveSelectionSmall 0, -1
-@1964: MoveSelectionSmall 0, -1
-@1971: MoveSelectionSmall 0, -1
-@1978: MoveSelectionSmall 0, -1
-@1980: CheckSum 2ea26b25
-@1984: MoveSelectionSmall 0, -1
-@1991: MoveSelectionSmall 0, -1
-@1998: MoveSelectionSmall 0, -1
-@2003: StopRunning
-@2021: Run S
-@2029: MoveSelectionSmall 0, 1
-@2036: MoveSelectionSmall 0, 1
-@2040: CheckSum 972fe5b1
-@2041: StopRunning
-@2068: OpenLogisticNetworks
-@2070: ClearSelection
-@2100: CheckSum b431818b
-@2133: CloseWindow
-@2145: OpenTechnologies
-@2160: CheckSum 49daefef
-@2220: CheckSum 4b869366
-@2280: CheckSum 84aeacf0
-@2336: ChooseTechnology 30
-@2338: MoveSelection 36.98046875, -19.87109375
-@2340: CheckSum 4cfaf159
-@2342: MoveSelectionSmall -2, 0
-@2343: ClearSelection
-@2380: Run N
-@2400: CheckSum d7011a5e
-@2402: Run NE
-@2417: Run E
-@2445: Run SE
-@2448: Run S
-@2460: CheckSum 094847c1
-@2484: StopRunning
-@2520: CheckSum 6d353fa8
-@2560: MoveSelection -30.76171875, 17.9140625
-@2580: StartMining
-@2580: CheckSum 29400dcd
-@2640: CheckSum b26a6ee7
-@2646: MoveSelectionSmall -1, -2
-@2700: CheckSum b69579ec
-@2714: StopMining
-@2721: Run N
-@2760: CheckSum 2709cbe4
-@2775: Run NW
-@2812: Run W
-@2820: CheckSum c0fee5f7
-@2880: CheckSum dee28546
-@2930: Run SW
-@2940: CheckSum 9c1f7b08
-@3000: CheckSum b5471879
-@3060: CheckSum 143365c5
-@3120: CheckSum 8baaa6d7
-@3129: Run W
-@3153: StopRunning
-@3180: CheckSum 90d106eb
-@3240: CheckSum 9b1c60ad
-@3300: CheckSum c327faf3
-@3360: CheckSum 342d7ab3
-@3420: CheckSum b0d6b0cd
-@3480: CheckSum 2d39d389
+@1(0): UpdateResolution 1920, 1080
+@1(0): PlayerId? 5ad3c174
+@2(0): MoveSelection 1.09375, 9.28125
+@60(0): MoveSelectionSmall 0, -2
+@60(0): CheckSum cb7b736c
+@62(0): MoveSelectionSmall 0, -1
+@94(0): Run E
+@96(0): MoveSelectionSmall 0, -1
+@97(0): MoveSelectionSmall 1, 0
+@100(0): ClearSelection
+@108(0): Run NE
+@120(0): CheckSum 7e216f31
+@159(0): Run N
+@180(0): CheckSum 8628d6b7
+@193(0): StopRunning
+@222(0): OpenPlayerInventory
+@240(0): CheckSum 8f3891c7
+@274(0): ChooseCraftingItemGroup 4
+@300(0): CheckSum fd3feb20
+@306(0): Craft 83, 1
+@325(0): CloseWindow
+@360(0): CheckSum 780eb457
+@412(0): MoveSelection 6.828125, -18.67578125
+@420(0): CheckSum b4b0e40c
+@433(0): StartMining
+@480(0): CheckSum 9b43648a
+@540(0): CheckSum 1442e718
+@543(0): Run E
+@546(0): Run NE
+@566(0): MoveSelectionSmall 3, -1
+@575(0): Run E
+@588(0): StopRunning
+@600(0): CheckSum 52610d73
+@660(0): CheckSum 48f16aab
+@675(0): StopMining
+@677(0): Run W
+@679(0): Run SW
+@694(0): Run S
+@714(0): Toolbelt 0
+@720(0): CheckSum 7bf92e60
+@737(0): Run SW
+@774(0): MoveSelection -12.97265625, 18.53515625
+@780(0): CheckSum 455d59dd
+@781(0): Run S
+@783(0): MoveSelectionSmall 0, 1
+@783(0): StopRunning
+@796(0): Build 0, 5, N
+@797(0): MoveSelectionSmall 0, -1
+@827(0): Toolbelt 1
+@831(0): ClearSelection
+@840(0): CheckSum d018182e
+@859(0): Build 0, 3, N
+@860(0): MoveSelectionSmall 0, -2
+@885(0): OpenPlayerInventory
+@887(0): ClearSelection
+@900(0): CheckSum 68c3c618
+@953(0): SplitItemStack Player, 0
+@960(0): CheckSum cb586ceb
+@963(0): CloseWindow
+@985(0): MoveSelectionSmall 0, 2
+@1005(0): MoveSelectionSmall 0, -2
+@1019(0): StartMining
+@1020(0): CheckSum e67dcf7a
+@1024(0): StopMining
+@1062(0): MoveSelectionSmall 0, 2
+@1077(0): Run S
+@1080(0): CheckSum 8edaf57e
+@1083(0): Run SW
+@1088(0): Run W
+@1089(0): MoveSelectionSmall 1, 2
+@1090(0): MoveSelectionSmall -1, 0
+@1096(0): MoveSelectionSmall -1, 0
+@1099(0): StopRunning
+@1101(0): ClearCursor
+@1104(0): MoveSelectionSmall 0, -1
+@1108(0): MoveSelectionSmall 1, -1
+@1113(0): Run S
+@1125(0): StopRunning
+@1137(0): OpenTargetInventory
+@1139(0): ClearSelection
+@1140(0): CheckSum c20585fd
+@1195(0): ClickItemStack Player, 0
+@1200(0): CheckSum 60ffaa65
+@1260(0): CheckSum f0aaceba
+@1265(0): SplitItemStack FuelOrContainer, 0
+@1305(0): ClickItemStack Player, 3
+@1320(0): CheckSum fc24fc50
+@1329(0): CloseWindow
+@1331(0): MoveSelectionSmall 0, 0
+@1335(0): ClearSelection
+@1353(0): MoveSelectionSmall 0, -2
+@1365(0): OpenTargetInventory
+@1367(0): ClearSelection
+@1380(0): CheckSum f07534d5
+@1423(0): SplitItemStack Player, 0
+@1440(0): CheckSum 35059c01
+@1470(0): SplitItemStack FuelOrContainer, 0
+@1500(0): CheckSum cb570963
+@1536(0): SplitItemStack Player, 2
+@1560(0): CheckSum a395b3cf
+@1571(0): ClickItemStack Player, 3
+@1595(0): CloseWindow
+@1597(0): MoveSelectionSmall 0, 2
+@1620(0): CheckSum b8f1de80
+@1622(0): MoveSelectionSmall 2, 1
+@1628(0): Run E
+@1630(0): MoveSelectionSmall 1, 0
+@1635(0): ClearSelection
+@1655(0): MoveSelectionSmall 4, 2
+@1658(0): MoveSelectionSmall 1, 0
+@1664(0): MoveSelectionSmall 1, 0
+@1671(0): MoveSelectionSmall 1, 0
+@1678(0): ClearSelection
+@1680(0): CheckSum ebe57580
+@1689(0): MoveSelectionSmall 2, 1
+@1692(0): MoveSelectionSmall 1, 0
+@1698(0): ClearSelection
+@1700(0): StopRunning
+@1710(0): Run S
+@1718(0): MoveSelectionSmall 1, 1
+@1725(0): ClearSelection
+@1740(0): CheckSum 485f3c77
+@1786(0): MoveSelection -0.03125, 9.63671875
+@1792(0): MoveSelectionSmall 0, 1
+@1795(0): Run SW
+@1800(0): MoveSelectionSmall 0, 1
+@1800(0): CheckSum e4109af8
+@1801(0): MoveSelectionSmall -1, 0
+@1802(0): Run W
+@1808(0): MoveSelectionSmall -1, 0
+@1815(0): MoveSelectionSmall -1, 0
+@1820(0): MoveSelectionSmall -1, 0
+@1826(0): MoveSelectionSmall -1, 0
+@1833(0): ClearSelection
+@1860(0): CheckSum cf19e804
+@1884(0): Run NW
+@1907(0): MoveSelection -11.0625, -3.59765625
+@1912(0): MoveSelectionSmall -1, 0
+@1916(0): MoveSelectionSmall 0, -1
+@1918(0): Run N
+@1920(0): CheckSum 49a70006
+@1924(0): MoveSelectionSmall 0, -1
+@1931(0): MoveSelectionSmall 0, -1
+@1937(0): MoveSelectionSmall 0, -1
+@1944(0): MoveSelectionSmall 0, -1
+@1951(0): MoveSelectionSmall 0, -1
+@1957(0): MoveSelectionSmall 0, -1
+@1964(0): MoveSelectionSmall 0, -1
+@1971(0): MoveSelectionSmall 0, -1
+@1978(0): MoveSelectionSmall 0, -1
+@1980(0): CheckSum 2ea26b25
+@1984(0): MoveSelectionSmall 0, -1
+@1991(0): MoveSelectionSmall 0, -1
+@1998(0): MoveSelectionSmall 0, -1
+@2003(0): StopRunning
+@2021(0): Run S
+@2029(0): MoveSelectionSmall 0, 1
+@2036(0): MoveSelectionSmall 0, 1
+@2040(0): CheckSum 972fe5b1
+@2041(0): StopRunning
+@2068(0): OpenLogisticNetworks
+@2070(0): ClearSelection
+@2100(0): CheckSum b431818b
+@2133(0): CloseWindow
+@2145(0): OpenTechnologies
+@2160(0): CheckSum 49daefef
+@2220(0): CheckSum 4b869366
+@2280(0): CheckSum 84aeacf0
+@2336(0): ChooseTechnology 30
+@2338(0): MoveSelection 36.98046875, -19.87109375
+@2340(0): CheckSum 4cfaf159
+@2342(0): MoveSelectionSmall -2, 0
+@2343(0): ClearSelection
+@2380(0): Run N
+@2400(0): CheckSum d7011a5e
+@2402(0): Run NE
+@2417(0): Run E
+@2445(0): Run SE
+@2448(0): Run S
+@2460(0): CheckSum 094847c1
+@2484(0): StopRunning
+@2520(0): CheckSum 6d353fa8
+@2560(0): MoveSelection -30.76171875, 17.9140625
+@2580(0): StartMining
+@2580(0): CheckSum 29400dcd
+@2640(0): CheckSum b26a6ee7
+@2646(0): MoveSelectionSmall -1, -2
+@2700(0): CheckSum b69579ec
+@2714(0): StopMining
+@2721(0): Run N
+@2760(0): CheckSum 2709cbe4
+@2775(0): Run NW
+@2812(0): Run W
+@2820(0): CheckSum c0fee5f7
+@2880(0): CheckSum dee28546
+@2930(0): Run SW
+@2940(0): CheckSum 9c1f7b08
+@3000(0): CheckSum b5471879
+@3060(0): CheckSum 143365c5
+@3120(0): CheckSum 8baaa6d7
+@3129(0): Run W
+@3153(0): StopRunning
+@3180(0): CheckSum 90d106eb
+@3240(0): CheckSum 9b1c60ad
+@3300(0): CheckSum c327faf3
+@3360(0): CheckSum 342d7ab3
+@3420(0): CheckSum b0d6b0cd
+@3480(0): CheckSum 2d39d389

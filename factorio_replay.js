@@ -1,5 +1,5 @@
 (() => {
-  let buffer, curIndex, curTick, datString, isSinglePlayer;
+  let buffer, curIndex, curTick, curPlayer, datString, isSinglePlayer;
 
   const skipCommaAndSpaces = () => {
     if (buffer[curIndex] == ',') {
@@ -41,6 +41,18 @@
   const writeUint16 = (num = fetchNum()) => {
     writeUint8(num & 0xff);
     writeUint8((num / 0x100) & 0xff);
+  };
+
+  // Doubt these actually exist, but useful for unknowns
+  const readUint24 = () => {
+    return buffer[curIndex++]
+      + (buffer[curIndex++] * 0x100)
+      + (buffer[curIndex++] * 0x10000);
+  };
+
+  const writeUint24 = (num = fetchNum()) => {
+    writeUint16(num & 0xffff);
+    writeUint8((num / 0x10000) & 0xff);
   };
 
   const readUint32 = () => {
@@ -255,27 +267,18 @@
 
   const tickHandler = () => {
     curTick = readUint32();
-    const unknown = readUint8();
-    if (unknown != 0) {
-      // Does this ever happen? Maybe
-      return `@${curTick}(${unknown}): `;
-    }
-    return `@${curTick}: `;
+    curPlayer = readUint8();
+    return `@${curTick}(${curPlayer}): `;
   };
 
   const getTick = (tickStr) => {
     // @ has already been consumed
     let openIndex = tickStr.indexOf('(');
-    let unknown = 0;
-    if (-1 == openIndex) {
-      curTick = parseInt(tickStr);
-    } else {
-      curTick = parseInt(tickStr.substring(0, openIndex));
-      let closeIndex = tickStr.indexOf(')', openIndex + 1);
-      unknown = parseInt(tickStr.substring(openIndex + 1, closeIndex));
-    }
+    curTick = parseInt(tickStr.substring(0, openIndex));
+    let closeIndex = tickStr.indexOf(')', openIndex + 1);
+    curPlayer = parseInt(tickStr.substring(openIndex + 1, closeIndex));
 
-    return [curTick, unknown];
+    return [curTick, curPlayer];
   };
 
   const frameHandlers = [
@@ -291,6 +294,7 @@
     [0x0A, 'ClearSelection'],
     [0x0B, 'ClearCursor'],
     [0x0D, 'OpenTechnologies'],
+    [0x0F, 'Unknown0F'],
     [0x10, 'OpenBlueprintLibrary'],
     [0x11, 'OpenProductionStatistics'],
     [0x12, 'OpenKillStatistics'],
@@ -328,6 +332,7 @@
         writeUint8(255);
       }
     }],
+    [0x23, 'Lag?'],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
       return `${readFixed32()}, ${readFixed32()}`;
@@ -552,41 +557,48 @@
       writeUint16();
       writeUint16(inventoryContext);
     }],
-    [0x68, 'CheckSum68?', () => {
-      const unknown1 = readUint32(); // No ideas, always 0?
+    [0x68, 'PlayerId?', () => {
+      const playerNumber = readUint8();
+      const unknown1 = readUint24(); // No ideas, always 0?
       const checkSum = readCheckSum();
-      const unknown2 = readUint16(); // No ideas, always 0?
-      const unknown3 = readUint8(); // No ideas, always 0?
-      const unknowns = (unknown1 == 0 && unknown2 == 0 && unknown3 == 0)
+      const unknown2 = readUint24(); // No ideas, always 0?
+      const extras = (playerNumber == curPlayer && unknown1 == 0 && unknown2 == 0)
         ? ''
-        : `, ${unknown1}, ${unknown2}, ${unknown3}`;
-      return `${checkSum}${unknowns}`;
+        : `, ${playerNumber}, ${unknown1}, ${unknown2}`;
+      return `${checkSum}${extras}`;
     }, () => {
       const checkSum = fetchCheckSum();
-      let unknown1 = 0, unknown2 = 0, unknown3 = 0;
+      let playerNumber = curPlayer, unknown1 = 0, unknown2 = 0;
       if (buffer[curIndex] != '\n') {
+        playerNumber = fetchNum();
         unknown1 = fetchNum();
         unknown2 = fetchNum();
-        unknown3 = fetchNum();
       }
-      writeUint32(unknown1);
+      writeUint8(playerNumber);
+      writeUint24(unknown1);
       datString += checkSum;
-      writeUint16(unknown2);
-      writeUint8(unknown3);
+      writeUint24(unknown2);
     }],
     [0x6F, 'AddPlayer', () => {
-      const unknown1 = readUint8(); // Always 0xff?
-      const unknown2 = readUint16();
+      const playerNumber = readUint8();
+      let unknown2;
+      if (0xff == playerNumber) {
+        // I think this means this player is hosting?
+        unknown2 = readUint16();
+      }
       const unknown3 = readUint8(); // Always 1? Maybe force?
-      const unknowns = (unknown1 != 0xff || unknown2 != (isSinglePlayer ? 0 : 0xff) || unknown3 != 1) ?
-        `, ${unknown1}, ${unknown2}, ${unknown3}` : '';
+      const unknowns = (playerNumber != 0xff || unknown2 != (isSinglePlayer ? 0 : 0xff) || unknown3 != 1) ?
+        `, ${playerNumber}${playerNumber == 0xff ? `, ${unknown2}` : ''}, ${unknown3}` : '';
       const name = readString();
       return `${name}${unknowns}`;
     }, () => {
       const name = fetchString(true);
       if (buffer[curIndex] != '\n') {
-        writeUint8();
-        writeUint16();
+        const playerNumber = fetchNum();
+        writeUint8(playerNumber);
+        if (playerNumber == 0xff) {
+          writeUint16();
+        }
         writeUint8();
       } else {
         writeUint8(0xff);
@@ -781,14 +793,36 @@
       reader.readAsArrayBuffer(file);
     }
   });
+
+  // Probably accurate enough?
+  const lineBreak = /Win/.test(navigator.platform) ? '\r\n' : '\n';
+
+  const getTextRecursively = (node, respectPlatform) => {
+    if (node.nodeType == Node.TEXT_NODE) {
+      return node.nodeValue;
+    }
+    if (node.nodeType != Node.ELEMENT_NODE) {
+      return '';
+    }
+    if (node.nodeName == 'BR') {
+      return respectPlatform ? lineBreak : '\n';
+    }
+    let result = '';
+    const nodes = node.childNodes;
+    for (let i = 0; i < nodes.length; i++) {
+      result += getTextRecursively(nodes[i], respectPlatform);
+    }
+    return result;
+  }
+
   exportDatButton.addEventListener('click', () => {
-    buffer = replayDiv.innerHTML.replace(/<(\/?span|\/div)>/g, '').replace(/<(br|div)>/g, '\n');
+    buffer = getTextRecursively(replayDiv, false);
     curIndex = 0;
     datString = '';
     let failed = false;
     while (expect('@')) {
       let colonIndex = buffer.indexOf(':', curIndex);
-      let [tick, unknown] = getTick(buffer.substring(curIndex, colonIndex));
+      let [tick, player] = getTick(buffer.substring(curIndex, colonIndex));
       curIndex = colonIndex + 1;
       while (buffer[curIndex] == ' ') {
         curIndex++;
@@ -808,7 +842,7 @@
 
       writeUint8(frameHandler[0]);
       writeUint32(tick);
-      writeUint8(unknown);
+      writeUint8(player);
 
       if (frameHandler.length > 2) {
         frameHandler[3]();
@@ -825,16 +859,9 @@
     }
     download(byteArray, 'replay.dat', 'application/octet-stream');
   });
+
   exportTxtButton.addEventListener('click', () => {
-    // Gross, but it works well enough
-    let result = replayDiv.innerHTML;
-    result = result.replace(/<(\/?span|\/div)>/g, '');
-    let lineBreak = '\n';
-    if (/Win/.test(navigator.platform)) {
-      // Probably good enough?
-      lineBreak = '\r\n';
-    }
-    result = result.replace(/<(br|div)>/g, lineBreak);
+    let result = getTextRecursively(replayDiv, true);
     download(result, 'replay.txt', 'text/plain');
   });
 })();
