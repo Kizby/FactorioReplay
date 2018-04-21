@@ -1,3 +1,32 @@
+const appendElement = (node, tag, contents) => {
+  const element = document.createElement(tag);
+  if (undefined !== contents) {
+    element.textContent = contents;
+  }
+  node.appendChild(element);
+};
+
+const loadText = (text) => {
+  let result = document.createElement('div');
+  result.id = 'replayDiv';
+  result.contentEditable = true;
+
+  const lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].length == 0 && i == lines.length - 1) {
+      // Don't add spurious line for last linebreak
+      break;
+    }
+    appendElement(result, 'span', lines[i]);
+    appendElement(result, 'br');
+  }
+  replayDiv.parentNode.replaceChild(result, replayDiv);
+  exportDatButton.hidden = false;
+  exportTxtButton.hidden = false;
+  sortByTickButton.hidden = false;
+  sortByPlayerButton.hidden = false;
+};
+
 (() => {
   let buffer, curIndex, curTick, curPlayer, datString, isSinglePlayer;
 
@@ -690,14 +719,6 @@
     }
   };
 
-  const appendElement = (node, tag, contents) => {
-    const element = document.createElement(tag);
-    if (undefined !== contents) {
-      element.textContent = contents;
-    }
-    node.appendChild(element);
-  };
-
   document.body.addEventListener('dragover', (event) => {
     if (event.dataTransfer.items &&
       event.dataTransfer.items.length > 0 &&
@@ -705,28 +726,14 @@
       event.preventDefault();
     }
   });
+
   document.body.addEventListener('drop', (event) => {
     event.preventDefault();
     const file = event.dataTransfer.items[0].getAsFile();
     const reader = new FileReader();
     if (file.name.toLowerCase().endsWith('.txt')) {
       reader.addEventListener('loadend', () => {
-        let result = document.createElement('div');
-        result.id = 'replayDiv';
-        result.contentEditable = true;
-
-        const lines = reader.result.split(/\r?\n/);
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].length == 0 && i == lines.length - 1) {
-            // Don't add spurious line for last linebreak
-            break;
-          }
-          appendElement(result, 'span', lines[i]);
-          appendElement(result, 'br');
-        }
-        replayDiv.parentNode.replaceChild(result, replayDiv);
-        exportDatButton.hidden = false;
-        exportTxtButton.hidden = false;
+        loadText(reader.result);
       });
       reader.readAsText(file);
     } else {
@@ -759,6 +766,8 @@
         replayDiv.parentNode.replaceChild(result, replayDiv);
         exportDatButton.hidden = false;
         exportTxtButton.hidden = false;
+        sortByTickButton.hidden = false;
+        sortByPlayerButton.hidden = false;
       });
       reader.readAsArrayBuffer(file);
     }
@@ -841,5 +850,70 @@
   exportTxtButton.addEventListener('click', () => {
     let result = getTextRecursively(replayDiv, true);
     download(result, 'replay.txt', 'text/plain');
+  });
+
+  // Logic stolen from https://medium.com/@fsufitch/is-javascript-array-sort-stable-46b90822543f
+  const stableSort = (array, compare) => {
+    let keyedArray = array.map((el, index) => [el, index]);
+    keyedArray.sort((a, b) => {
+      const rawCompare = compare(a[0], b[0]);
+      if (rawCompare != 0) {
+        return rawCompare;
+      }
+      return a[1] - b[1];
+    });
+    for (let i = 0; i < array.length; i++) {
+      array[i] = keyedArray[i][0];
+    }
+  };
+
+  const sortReplayLines = (compare) => {
+    const initialText = getTextRecursively(replayDiv);
+    let lines = initialText.split('\n');
+    stableSort(lines, compare);
+    const finalText = lines.join('\n');
+    if (initialText != finalText) {
+      loadText(finalText);
+    }
+  };
+
+  sortByTickButton.addEventListener('click', () => {
+    sortReplayLines((a, b) => {
+      let aTick = 0x100000000, bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
+      if (a.startsWith('@')) {
+        const parsedTick = parseInt(a.substring(1));
+        if (!isNaN(parsedTick)) {
+          aTick = parsedTick;
+        }
+      }
+      if (b.startsWith('@')) {
+        const parsedTick = parseInt(b.substring(1));
+        if (!isNaN(parsedTick)) {
+          bTick = parsedTick;
+        }
+      }
+      return aTick - bTick;
+    });
+  });
+
+  sortByPlayerButton.addEventListener('click', () => {
+    sortReplayLines((a, b) => {
+      let aPlayer = 0x10000, bPlayer = 0x10000; // If we don't get a valid player, put these elements at the end
+      const openPosA = a.indexOf('(');
+      if (openPosA != -1) {
+        const parsedPlayer = parseInt(a.substring(openPosA + 1));
+        if (!isNaN(parsedPlayer)) {
+          aPlayer = parsedPlayer;
+        }
+      }
+      const openPosB = b.indexOf('(');
+      if (openPosB != -1) {
+        const parsedPlayer = parseInt(b.substring(openPosB + 1));
+        if (!isNaN(parsedPlayer)) {
+          bPlayer = parsedPlayer;
+        }
+      }
+      return aPlayer - bPlayer;
+    });
   });
 })();
