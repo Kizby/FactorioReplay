@@ -1,5 +1,5 @@
 (() => {
-  let buffer, curIndex, curTick, datString;
+  let buffer, curIndex, curTick, datString, isSinglePlayer;
 
   const skipCommaAndSpaces = () => {
     if (buffer[curIndex] == ',') {
@@ -314,16 +314,43 @@
     [0x09, 'DisconnectTrain'],
     [0x0A, 'ClearSelection'],
     [0x0B, 'ClearCursor'],
+    [0x0D, 'OpenTechnologies'],
     [0x10, 'OpenBlueprintLibrary'],
     [0x11, 'OpenProductionStatistics'],
     [0x12, 'OpenKillStatistics'],
     [0x16, 'CopyEntitySettings'],
     [0x19, 'ShowInfo'],
-    [0x1a, 'Unknown1a', () => {
-      return `${readUint8()}, ${readUint8()}`
+    [0x1a, 'JoinSinglePlayer', () => {
+      isSinglePlayer = true;
+      const unknown1 = readUint8();
+      const unknown2 = readUint8();
+      const unknowns = (unknown1 == 255 || unknown2 == 0) ? '' : `${unknown1}, ${unknown2}`;
+      return unknowns;
     }, () => {
-      writeUint8();
-      writeUint8();
+      isSinglePlayer = true;
+      if (buffer[curIndex] != '\n') {
+        writeUint8();
+        writeUint8();
+      } else {
+        writeUint8(255);
+        writeUint8(0);
+      }
+    }],
+    [0x1b, 'JoinMultiPlayer', () => {
+      isSinglePlayer = false;
+      const unknown1 = readUint8();
+      const unknown2 = readUint8();
+      const unknowns = (unknown1 == 255 || unknown2 == 255) ? '' : `${unknown1}, ${unknown2}`;
+      return unknowns;
+    }, () => {
+      isSinglePlayer = false;
+      if (buffer[curIndex] != '\n') {
+        writeUint8();
+        writeUint8();
+      } else {
+        writeUint8(255);
+        writeUint8(255);
+      }
     }],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
@@ -522,7 +549,7 @@
       writeUint16(inventoryContext);
       writeUint16();
     }],
-    [0x42, 'ChooseTechnology', readUint16, writeUint16],
+    [0x43, 'ChooseTechnology', readUint16, writeUint16],
     [0x48, 'Chat', readString, writeString],
     [0x4C, 'ChooseCraftingItemGroup', readUint8, writeUint8],
     [0x56, 'LimitSlots', () => {
@@ -565,11 +592,11 @@
       writeUint16(unknown2);
       writeUint8(unknown3);
     }],
-    [0x6F, 'AddPlayer?', () => {
+    [0x6F, 'AddPlayer', () => {
       const unknown1 = readUint8(); // Always 0xff?
-      const unknown2 = readUint16(); // Always 0?
+      const unknown2 = readUint16();
       const unknown3 = readUint8(); // Always 1? Maybe force?
-      const unknowns = (unknown1 != 0xff || unknown2 != 0 || unknown3 != 1) ?
+      const unknowns = (unknown1 != 0xff || unknown2 != (isSinglePlayer ? 0 : 0xff) || unknown3 != 1) ?
         `, ${unknown1}, ${unknown2}, ${unknown3}` : '';
       const name = readString();
       return `${name}${unknowns}`;
@@ -581,7 +608,7 @@
         writeUint8();
       } else {
         writeUint8(0xff);
-        writeUint16(0);
+        writeUint16(isSinglePlayer ? 0 : 0xff);
         writeUint8(1);
       }
       writeString(true, name);
@@ -791,6 +818,7 @@
       while (buffer[curIndex] != ' ' && buffer[curIndex] != '\n') {
         name += buffer[curIndex++];
       }
+      skipCommaAndSpaces();
       let frameHandler = inputActionNameToFrameHandler[name];
       if (!frameHandler) {
         console.error(`Can't handle InputAction "${name}"; only emitting before tick ${tick}`);
