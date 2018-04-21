@@ -780,13 +780,21 @@
     let result = '';
     const nodes = node.childNodes;
     for (let i = 0; i < nodes.length; i++) {
-      result += getTextRecursively(nodes[i], respectPlatform);
+      const next = getTextRecursively(nodes[i], respectPlatform);
+      if (result != '' && nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV' && !result.endsWith('\n')) {
+        result = `${result}\n${next}`;
+      } else {
+        result = `${result}${next}`;
+      }
     }
     return result;
   }
 
   exportDatButton.addEventListener('click', () => {
     buffer = getTextRecursively(replayDiv, false);
+    if (!buffer.endsWith('\n')) {
+      buffer = `${buffer}\n`;
+    }
     curIndex = 0;
     datString = '';
     let failed = false;
