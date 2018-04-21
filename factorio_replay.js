@@ -151,8 +151,10 @@
     return result;
   };
 
-  const writeString = (stopAtComma) => {
-    const val = fetchString(stopAtComma);
+  const writeString = (stopAtComma, val) => {
+    if (undefined === val) {
+      val = fetchString(stopAtComma);
+    }
     writeOptUint(val.length);
     for (let i = 0; i < val.length; i++) {
       writeUint8(val.charCodeAt(i));
@@ -232,17 +234,22 @@
     datString += fetchCheckSum();
   };
 
-  const inventories = ['Invalid?', 'Player', 'Toolbelt', 'Gun', 'Armor', 'Ammo', 'Tool'];
-  const readInventory = () => {
-    return inventories[readUint8()];
+  const inventories = [[],
+  [undefined, 'Player', 'Toolbelt', 'Gun', 'Armor', 'Ammo', 'Tool'],
+  [],
+  [],
+  [undefined, 'FuelOrContainer', 'Input', 'Output']];
+  const getInventory = (context, which) => {
+    return inventories[context][which];
   };
 
-  const writeInventory = () => {
+  const getIndicesForInventory = () => {
     const inventory = fetchString(true);
     for (let i = 0; i < inventories.length; i++) {
-      if (inventories[i] == inventory) {
-        writeUint8(i);
-        break;
+      for (let j = 0; j < inventories[i].length; j++) {
+        if (inventories[i][j] == inventory) {
+          return [i, j];
+        }
       }
     }
   };
@@ -312,6 +319,12 @@
     [0x12, 'OpenKillStatistics'],
     [0x16, 'CopyEntitySettings'],
     [0x19, 'ShowInfo'],
+    [0x1a, 'Unknown1a', () => {
+      return `${readUint8()}, ${readUint8()}`
+    }, () => {
+      writeUint8();
+      writeUint8();
+    }],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
       return `${readFixed32()}, ${readFixed32()}`;
@@ -348,49 +361,76 @@
     }],
     [0x2b, 'Run', readDirection, writeDirection],
     [0x31, 'ClickItemStack', () => {
-      const inventory = readInventory();
+      const whichInventory = readUint8();
       const slot = readUint16();
-      const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      const contextString = context == 1 ? '' : `, ${context}`;
-      return `${inventory}, ${slot}${contextString}`;
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
     }, () => {
-      writeInventory();
-      writeUint16();
-      if (buffer[curIndex] != '\n') {
-        writeUint16();
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
       } else {
-        writeUint16(1);
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
       }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
     }],
     [0x32, 'SplitItemStack', () => {
-      const inventory = readInventory();
+      const whichInventory = readUint8();
       const slot = readUint16();
-      const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      const contextString = context == 1 ? '' : `, ${context}`;
-      return `${inventory}, ${slot}${contextString}`;
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
     }, () => {
-      writeInventory();
-      writeUint16();
-      if (buffer[curIndex] != '\n') {
-        writeUint16();
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
       } else {
-        writeUint16(1);
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
       }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
     }],
     [0x33, 'TransferItemStack', () => {
-      const inventory = readInventory();
+      const whichInventory = readUint8();
       const slot = readUint16();
-      const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      const contextString = context == 1 ? '' : `, ${context}`;
-      return `${inventory}, ${slot}${contextString}`;
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
     }, () => {
-      writeInventory();
-      writeUint16();
-      if (buffer[curIndex] != '\n') {
-        writeUint16();
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
       } else {
-        writeUint16(1);
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
       }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
+    }],
+    [0x34, 'TransferInventory', () => {
+      const whichInventory = readUint8();
+      const slot = readUint16();
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
+    }, () => {
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
+      }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
     }],
     [0x35, 'CheckSum', () => {
       const checkSum = readCheckSum();
@@ -444,27 +484,65 @@
       writeFixed32();
     }],
     [0x3B, 'Pipette'],
-    [0x3F, 'ToggleFilter', () => {
-      const inventory = readInventory();
+    [0x3D, 'SplitInventory', () => {
+      const whichInventory = readUint8();
       const slot = readUint16();
-      const context = readUint16(); // Usually 1, but 4 for the fuel slot of a furnace
-      const itemId = readUint16();
-      const contextString = context == 1 ? '' : `, ${context}`;
-      return `${inventory}, ${slot}, ${itemId}${contextString}`;
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
     }, () => {
-      writeInventory();
-      writeUint16();
-      const itemId = fetchNum();
-      let context = 1;
-      if (buffer[curIndex] != '\n') {
-        context = fetchNum();
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
       }
-      writeUint16(context);
-      writeUint16(itemId);
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
+    }],
+    [0x3F, 'ToggleFilter', () => {
+      const whichInventory = readUint8();
+      const slot = readUint16();
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      const itemId = readUint16();
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}, ${itemId}`;
+    }, () => {
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
+      }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
+      writeUint16();
     }],
     [0x42, 'ChooseTechnology', readUint16, writeUint16],
     [0x48, 'Chat', readString, writeString],
     [0x4C, 'ChooseCraftingItemGroup', readUint8, writeUint8],
+    [0x56, 'LimitSlots', () => {
+      const whichInventory = readUint8();
+      const slotCount = readUint16();
+      const inventoryContext = readUint16();
+      const inventory = getInventory(inventoryContext, whichInventory);
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slotCount}`;
+    }, () => {
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        [inventoryContext, whichInventory] = getIndicesForInventory();
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
+      }
+      writeUint8(whichInventory);
+      writeUint16();
+      writeUint16(inventoryContext);
+    }],
     [0x68, 'CheckSum68?', () => {
       const unknown1 = readUint32(); // No ideas, always 0?
       const checkSum = readCheckSum();
@@ -486,6 +564,27 @@
       datString += checkSum;
       writeUint16(unknown2);
       writeUint8(unknown3);
+    }],
+    [0x6F, 'AddPlayer?', () => {
+      const unknown1 = readUint8(); // Always 0xff?
+      const unknown2 = readUint16(); // Always 0?
+      const unknown3 = readUint8(); // Always 1? Maybe force?
+      const unknowns = (unknown1 != 0xff || unknown2 != 0 || unknown3 != 1) ?
+        `, ${unknown1}, ${unknown2}, ${unknown3}` : '';
+      const name = readString();
+      return `${name}${unknowns}`;
+    }, () => {
+      const name = fetchString(true);
+      if (buffer[curIndex] != '\n') {
+        writeUint8();
+        writeUint16();
+        writeUint8();
+      } else {
+        writeUint8(0xff);
+        writeUint16(0);
+        writeUint8(1);
+      }
+      writeString(true, name);
     }],
     [0x76, 'PlaceArea', () => {
       const x = readFixed32();
@@ -650,11 +749,6 @@
         result.contentEditable = true;
         result.style = 'font-family: monospace';
 
-        appendElement(result, 'span', `Header: ${readBytes(18)}`);
-        appendElement(result, 'br');
-        appendElement(result, 'span', `Name: ${readString()}`);
-        appendElement(result, 'br');
-
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
         while (frameHandler) {
@@ -684,18 +778,8 @@
     buffer = replayDiv.innerHTML.replace(/<(\/?span|\/div)>/g, '').replace(/<(br|div)>/g, '\n');
     curIndex = 0;
     datString = '';
-    if (!expect('Header: ')) {
-      console.error('Can\'t find header declaration!');
-      return;
-    }
-    writeBytes(18);
-    if (!expect('\nName: ')) {
-      console.error('Can\'t find name declaration!');
-      return;
-    }
-    writeString();
     let failed = false;
-    while (expect('\n@')) {
+    while (expect('@')) {
       let colonIndex = buffer.indexOf(':', curIndex);
       let [tick, unknown] = getTick(buffer.substring(curIndex, colonIndex));
       curIndex = colonIndex + 1;
@@ -721,8 +805,9 @@
       if (frameHandler.length > 2) {
         frameHandler[3]();
       }
+      expect('\n');
     }
-    if (!failed && expect('\nUnhandled bytes:\n')) {
+    if (!failed && expect('Unhandled bytes:\n')) {
       writeBytes((buffer.length - curIndex) / 3);
     }
 

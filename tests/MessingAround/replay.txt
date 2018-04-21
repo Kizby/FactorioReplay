@@ -1,5 +1,5 @@
-Header: 1a 00 00 00 00 ff ff 00 6f 00 00 00 00 ff ff 00 00 01
-Name: Murray65536
+@0(255): Unknown1a 255, 0
+@0(255): AddPlayer? Murray65536
 @1: CheckSum68? 5ad3c174
 @1: UnknownA7 1
 @1: UpdateResolution 1920, 1080
@@ -120,7 +120,7 @@ Name: Murray65536
 @1920: CheckSum 84c7980e
 @1968: SplitItemStack Player, 0
 @1980: CheckSum fa8eb08c
-@2015: SplitItemStack Player, 0, 4
+@2015: SplitItemStack FuelOrContainer, 0
 @2039: CloseWindow
 @2040: CheckSum 9724c2a9
 @2047: MoveSelectionSmall -2, 0
@@ -134,7 +134,7 @@ Name: Murray65536
 @2234: OpenTargetInventory
 @2235: ClearSelection
 @2280: CheckSum 744d5614
-@2290: TransferItemStack Player, 0, 4
+@2290: TransferItemStack FuelOrContainer, 0
 @2332: CloseWindow
 @2340: CheckSum 12f52da6
 @2400: CheckSum 6d8fda2e
@@ -179,7 +179,7 @@ Name: Murray65536
 @3420: CheckSum 164a2b8e
 @3420: OpenTargetInventory
 @3421: ClearSelection
-@3477: TransferItemStack Player, 0, 4
+@3477: TransferItemStack FuelOrContainer, 0
 @3480: CheckSum b7cb57ff
 @3501: CloseWindow
 @3510: MoveSelectionSmall 0, -1
@@ -236,7 +236,7 @@ Name: Murray65536
 @4688: OpenTargetInventory
 @4689: ClearSelection
 @4740: CheckSum 2f4918e2
-@4794: TransferItemStack Gun, 0, 4
+@4794: TransferItemStack Output, 0
 @4800: CheckSum 6bb5b949
 @4844: CloseWindow
 @4860: CheckSum b0fe12e6
@@ -295,3 +295,83 @@ Name: Murray65536
 @6048: Run N
 @6060: CheckSum 7525f668
 @6083: StopRunning
+@6104(255): Unknown1a 255, 0
+@6104: CheckSum68? 5ad3c174
+@6120: CheckSum 5b11db3c
+@6162: Run N
+@6172: Run NW
+@6180: CheckSum b5a9b806
+@6181: Run N
+@6185: OpenPlayerInventory
+@6218: Run NW
+@6240: CheckSum 9f9ed5c9
+@6245: Run N
+@6284: ChooseCraftingItemGroup 3
+@6285: Run NW
+@6300: CheckSum dece9ebe
+@6330: Run W
+@6348: Craft 191, 1
+@6360: CheckSum 07884748
+@6363: CloseWindow
+@6370: MoveSelection -12.296875, -30.53125
+@6376: MoveSelectionSmall -1, 1
+@6383: MoveSelectionSmall -1, 0
+@6390: MoveSelectionSmall -1, 0
+@6392: Run SW
+@6398: MoveSelectionSmall -1, 0
+@6400: MoveSelectionSmall 0, 1
+@6407: MoveSelectionSmall -1, 0
+@6410: MoveSelectionSmall 0, 1
+@6417: MoveSelectionSmall -1, 0
+@6419: MoveSelectionSmall 0, 1
+@6420: CheckSum a4fba35a
+@6426: MoveSelectionSmall -1, 0
+@6429: ClearSelection
+@6433: Run W
+@6441: StopRunning
+@6467: Toolbelt 1
+@6469: MoveSelectionSmall -2, 0
+@6473: MoveSelectionSmall 1, 0
+@6480: CheckSum e9de411c
+@6480: MoveSelectionSmall 0, -1
+@6482: MoveSelectionSmall 1, 0
+@6484: MoveSelectionSmall 0, -1
+@6493: Build 25.5, -39.5, N
+@6494: MoveSelectionSmall 0, 0
+@6505: MoveSelectionSmall 0, 1
+@6521: MoveSelectionSmall 0, -1
+@6537: OpenTargetInventory
+@6538: ClearSelection
+@6540: CheckSum dacf2302
+@6582: TransferInventory Player, 28
+@6600: CheckSum 3250c51c
+@6637: TransferInventory FuelOrContainer, 13
+@6660: CheckSum 81e595cc
+@6719: TransferItemStack Player, 26
+@6720: CheckSum 1d59dd08
+@6780: CheckSum 891df7b0
+@6809: SplitInventory Player, 26
+@6840: CheckSum 9494bc49
+@6900: CheckSum 5e52d62f
+@6960: CheckSum 968162d5
+@6991: TransferInventory FuelOrContainer, 1
+@7020: CheckSum db6a8ba7
+@7057: SplitInventory FuelOrContainer, 0
+@7080: CheckSum 6dd51a4c
+@7112: TransferInventory Player, 0
+@7140: CheckSum 1e0d236e
+@7148: SplitInventory Player, 0
+@7200: CheckSum 4dd0693f
+@7236: SplitInventory Player, 11
+@7260: CheckSum 7edcf073
+@7276: TransferInventory Player, 31
+@7320: CheckSum 3a6ea911
+@7380: CheckSum a93a119c
+@7406: LimitSlots FuelOrContainer, 4
+@7440: CheckSum c168f7b8
+@7454: LimitSlots FuelOrContainer, 16
+@7471: ClickItemStack FuelOrContainer, 15
+@7500: CheckSum 2aec4fea
+@7548: LimitSlots FuelOrContainer, 13
+@7560: CheckSum 4c180547
+@7578: CloseWindow
