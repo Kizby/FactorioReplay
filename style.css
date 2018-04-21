@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+
+body {
+  font-family: "Ubuntu Mono", "monospace";
+  line-height: 1.2rem;
+  color: #34495e;
+  background: #f0f0ea;
+  margin: 0;
+  padding: 1rem;
+  min-height: calc(100vh - 2rem);
+}
+
+h1 {
+  text-align: center;
+}
+
+button {
+  font-family: "Ubuntu Mono", "monospace"; 
+  font-size: 1rem;
+  padding: 0.6rem;
+  margin: 0.5rem;
+  background: #137ed9;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+}
+
+#replayDiv {
+  background: white;
+  margin: 0 6rem;
+  border-radius: 0.3rem;
+  padding: 1rem;
+}
+
+.export-buttons {
+  display: flex;
+  justify-content: center;
+}

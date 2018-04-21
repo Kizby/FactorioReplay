@@ -25,10 +25,7 @@
     return buffer[curIndex++];
   };
 
-  const writeUint8 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint8 = (num = fetchNum()) => {
     let result = num.toString(16);
     if (result.length < 2) {
       result = '0' + result;
@@ -41,10 +38,7 @@
       + (buffer[curIndex++] * 0x100);
   };
 
-  const writeUint16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint16 = (num = fetchNum()) => {
     writeUint8(num & 0xff);
     writeUint8((num / 0x100) & 0xff);
   };
@@ -56,10 +50,7 @@
       + (buffer[curIndex++] * 0x1000000);
   };
 
-  const writeUint32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint32 = (num = fetchNum()) => {
     writeUint16(num & 0xffff);
     writeUint16((num / 0x10000) & 0xffff);
   };
@@ -72,10 +63,7 @@
     return num;
   };
 
-  const writeInt16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeInt16 = (num = fetchNum()) => {
     if (num < 0) {
       num += 0x10000;
     }
@@ -90,10 +78,7 @@
     return num;
   };
 
-  const writeInt32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeInt32 = (num = fetchNum()) => {
     if (num < 0) {
       num += 0x100000000;
     }
@@ -104,10 +89,7 @@
     return readInt16() / 256;
   };
 
-  const writeFixed16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeFixed16 = (num = fetchNum()) => {
     writeInt16(num * 256);
   };
 
@@ -115,10 +97,7 @@
     return readInt32() / 256;
   };
 
-  const writeFixed32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeFixed32 = (num = fetchNum()) => {
     writeInt32(num * 256);
   };
 
@@ -130,10 +109,7 @@
     return num;
   };
 
-  const writeOptUint = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeOptUint = (num = fetchNum()) => {
     if (num > 254) {
       writeUint8(255);
       writeUint32(num);
@@ -756,7 +732,6 @@
         let result = document.createElement('div');
         result.id = 'replayDiv';
         result.contentEditable = true;
-        result.style = 'font-family: monospace';
 
         const lines = reader.result.split(/\r?\n/);
         for (let i = 0; i < lines.length; i++) {
@@ -780,7 +755,6 @@
         let result = document.createElement('div');
         result.id = 'replayDiv';
         result.contentEditable = true;
-        result.style = 'font-family: monospace';
 
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
