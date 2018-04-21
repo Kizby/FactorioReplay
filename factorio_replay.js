@@ -531,7 +531,7 @@ const loadText = (text) => {
       writeFixed32();
       writeFixed32();
     }],
-    [0x3B, 'Unknown3B', readUint16, writeUint16],
+    [0x3B, 'Pipette', readUint16, writeUint16],
     [0x3D, 'SplitInventory', () => {
       const whichInventory = readUint8();
       const slot = readUint16();
