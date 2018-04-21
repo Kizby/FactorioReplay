@@ -82,6 +82,23 @@
     writeUint16(num);
   };
 
+  const readOptUint16 = () => {
+    let num = readUint8();
+    if (255 == num) {
+      num = readUint16();
+    }
+    return num;
+  };
+
+  const writeOptUint16 = (num = fetchNum()) => {
+    if (num > 254) {
+      writeUint8(255);
+      writeUint16(num);
+    } else {
+      writeUint8(num);
+    }
+  };
+
   const readInt32 = () => {
     let num = readUint32();
     if (num >= 0x80000000) {
@@ -113,7 +130,7 @@
     writeInt32(num * 256);
   };
 
-  const readOptUint = () => {
+  const readOptUint32 = () => {
     let num = readUint8();
     if (255 == num) {
       num = readUint32();
@@ -121,7 +138,7 @@
     return num;
   };
 
-  const writeOptUint = (num = fetchNum()) => {
+  const writeOptUint32 = (num = fetchNum()) => {
     if (num > 254) {
       writeUint8(255);
       writeUint32(num);
@@ -131,7 +148,7 @@
   };
 
   const readString = () => {
-    const len = readOptUint();
+    const len = readOptUint32();
     let result = '';
     for (let i = 0; i < len; i++) {
       result += String.fromCharCode(buffer[curIndex++]);
@@ -143,7 +160,7 @@
     if (undefined === val) {
       val = fetchString(stopAtComma);
     }
-    writeOptUint(val.length);
+    writeOptUint32(val.length);
     for (let i = 0; i < val.length; i++) {
       writeUint8(val.charCodeAt(i));
     }
@@ -267,7 +284,7 @@
 
   const tickHandler = () => {
     curTick = readUint32();
-    curPlayer = readUint8();
+    curPlayer = readOptUint16();
     return `@${curTick}(${curPlayer}): `;
   };
 
@@ -300,38 +317,8 @@
     [0x12, 'OpenKillStatistics'],
     [0x16, 'CopyEntitySettings'],
     [0x19, 'ShowInfo'],
-    [0x1a, 'JoinSinglePlayer', () => {
-      isSinglePlayer = true;
-      const unknown1 = readUint8();
-      const unknown2 = readUint8();
-      const unknowns = (unknown1 == 255 || unknown2 == 0) ? '' : `${unknown1}, ${unknown2}`;
-      return unknowns;
-    }, () => {
-      isSinglePlayer = true;
-      if (buffer[curIndex] != '\n') {
-        writeUint8();
-        writeUint8();
-      } else {
-        writeUint8(255);
-        writeUint8(0);
-      }
-    }],
-    [0x1b, 'JoinMultiPlayer', () => {
-      isSinglePlayer = false;
-      const unknown1 = readUint8();
-      const unknown2 = readUint8();
-      const unknowns = (unknown1 == 255 || unknown2 == 255) ? '' : `${unknown1}, ${unknown2}`;
-      return unknowns;
-    }, () => {
-      isSinglePlayer = false;
-      if (buffer[curIndex] != '\n') {
-        writeUint8();
-        writeUint8();
-      } else {
-        writeUint8(255);
-        writeUint8(255);
-      }
-    }],
+    [0x1a, 'JoinSinglePlayer'],
+    [0x1b, 'JoinMultiPlayer'],
     [0x23, 'Lag?'],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
@@ -580,31 +567,14 @@
       writeUint24(unknown2);
     }],
     [0x6F, 'AddPlayer', () => {
-      const playerNumber = readUint8();
-      let unknown2;
-      if (0xff == playerNumber) {
-        // I think this means this player is hosting?
-        unknown2 = readUint16();
-      }
-      const unknown3 = readUint8(); // Always 1? Maybe force?
-      const unknowns = (playerNumber != 0xff || unknown2 != (isSinglePlayer ? 0 : 0xff) || unknown3 != 1) ?
-        `, ${playerNumber}${playerNumber == 0xff ? `, ${unknown2}` : ''}, ${unknown3}` : '';
+      const playerNumber = readOptUint16();
+      const force = readUint8(); // Always 1? Maybe force?
       const name = readString();
-      return `${name}${unknowns}`;
+      return `${name}, ${playerNumber}, ${force}`;
     }, () => {
       const name = fetchString(true);
-      if (buffer[curIndex] != '\n') {
-        const playerNumber = fetchNum();
-        writeUint8(playerNumber);
-        if (playerNumber == 0xff) {
-          writeUint16();
-        }
-        writeUint8();
-      } else {
-        writeUint8(0xff);
-        writeUint16(isSinglePlayer ? 0 : 0xff);
-        writeUint8(1);
-      }
+      writeOptUint16();
+      writeUint8();
       writeString(true, name);
     }],
     [0x76, 'PlaceArea', () => {
@@ -842,7 +812,7 @@
 
       writeUint8(frameHandler[0]);
       writeUint32(tick);
-      writeUint8(player);
+      writeOptUint16(player);
 
       if (frameHandler.length > 2) {
         frameHandler[3]();
