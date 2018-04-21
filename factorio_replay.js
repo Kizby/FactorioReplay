@@ -25,10 +25,7 @@
     return buffer[curIndex++];
   };
 
-  const writeUint8 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint8 = (num = fetchNum()) => {
     let result = num.toString(16);
     if (result.length < 2) {
       result = '0' + result;
@@ -38,28 +35,22 @@
 
   const readUint16 = () => {
     return buffer[curIndex++]
-        + (buffer[curIndex++] * 0x100);
+      + (buffer[curIndex++] * 0x100);
   };
 
-  const writeUint16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint16 = (num = fetchNum()) => {
     writeUint8(num & 0xff);
     writeUint8((num / 0x100) & 0xff);
   };
 
   const readUint32 = () => {
     return buffer[curIndex++]
-        + (buffer[curIndex++] * 0x100)
-        + (buffer[curIndex++] * 0x10000)
-        + (buffer[curIndex++] * 0x1000000);
+      + (buffer[curIndex++] * 0x100)
+      + (buffer[curIndex++] * 0x10000)
+      + (buffer[curIndex++] * 0x1000000);
   };
 
-  const writeUint32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeUint32 = (num = fetchNum()) => {
     writeUint16(num & 0xffff);
     writeUint16((num / 0x10000) & 0xffff);
   };
@@ -72,10 +63,7 @@
     return num;
   };
 
-  const writeInt16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeInt16 = (num = fetchNum()) => {
     if (num < 0) {
       num += 0x10000;
     }
@@ -90,10 +78,7 @@
     return num;
   };
 
-  const writeInt32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeInt32 = (num = fetchNum()) => {
     if (num < 0) {
       num += 0x100000000;
     }
@@ -104,10 +89,7 @@
     return readInt16() / 256;
   };
 
-  const writeFixed16 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeFixed16 = (num = fetchNum()) => {
     writeInt16(num * 256);
   };
 
@@ -115,10 +97,7 @@
     return readInt32() / 256;
   };
 
-  const writeFixed32 = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeFixed32 = (num = fetchNum()) => {
     writeInt32(num * 256);
   };
 
@@ -130,10 +109,7 @@
     return num;
   };
 
-  const writeOptUint = (num) => {
-    if (undefined === num) {
-      num = fetchNum();
-    }
+  const writeOptUint = (num = fetchNum()) => {
     if (num > 254) {
       writeUint8(255);
       writeUint32(num);
@@ -275,9 +251,9 @@
     const unknown = readUint8();
     if (unknown != 0) {
       // Does this ever happen? Maybe
-      return `@${ curTick }(${ unknown }): `;
+      return `@${curTick}(${unknown}): `;
     }
-    return `@${ curTick }: `;
+    return `@${curTick}: `;
   };
 
   const getTick = (tickStr) => {
@@ -314,7 +290,7 @@
     [0x19, 'ShowInfo'],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
-      return readFixed32() + ', ' + readFixed32();
+      return `${readFixed32()}, ${readFixed32()}`;
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -326,10 +302,8 @@
       const unknown1 = readUint8(); // Sometimes get a duplicate build frame with this = 1, but usually 0
       const isGhost = readBool();
       const unknown2 = readUint8(); // Maybe force?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
-      return [x, y, direction, (isGhost ? 'Ghost' : null), unknowns]
-        .filter(x => x !== null)
-        .join(', ');
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
+      return `${x}, ${y}, ${direction}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -397,7 +371,7 @@
     [0x35, 'CheckSum', () => {
       const checkSum = readCheckSum();
       const previousTick = readUint32();
-      return checkSum + (previousTick == curTick - 1 ? '' : `, ${previousTick}`);
+      return `${checkSum}${previousTick == curTick - 1 ? '' : `, ${previousTick}`}`;
     }, () => {
       writeCheckSum();
       if (buffer[curIndex] != '\n') {
@@ -412,7 +386,7 @@
       if (0xffffffff == quantity) {
         quantity = 'all';
       }
-      return recipeId + ', ' + quantity;
+      return `${recipeId}, ${quantity}`;
     }, () => {
       writeUint16();
       if (buffer[curIndex] == 'a') {
@@ -424,7 +398,7 @@
     }],
     [0x38, 'Shoot', () => {
       const shotTypes = ['None', 'Enemy', 'Selected'];
-      return `${ shotTypes[readUint8()] }, ${ readFixed32() }, ${ readFixed32() }`
+      return `${shotTypes[readUint8()]}, ${readFixed32()}, ${readFixed32()}`
     }, () => {
       const shotType = fetchString(true);
       let rawShotType = -1;
@@ -440,7 +414,7 @@
       writeFixed32();
     }],
     [0x3A, 'MoveSelectionLarge', () => {
-      return `${ readFixed32() }, ${ readFixed32() }`
+      return `${readFixed32()}, ${readFixed32()}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -475,7 +449,7 @@
       const unknowns = (unknown1 == 0 && unknown2 == 0 && unknown3 == 0)
         ? ''
         : `, ${unknown1}, ${unknown2}, ${unknown3}`;
-      return checkSum + unknowns;
+      return `${checkSum}${unknowns}`;
     }, () => {
       const checkSum = fetchCheckSum();
       let unknown1 = 0, unknown2 = 0, unknown3 = 0;
@@ -497,10 +471,8 @@
       const sideLength = readUint8();
       const isGhost = readBool();
       const unknown2 = readUint8(); // No ideas?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? null : `${unknown1}, ${unknown2}`;
-      return [x, y, direction, sideLength, (isGhost ? 'Ghost' : null), unknowns]
-        .filter(x => x !== null)
-        .join(', ');
+      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
+      return `${x}, ${y}, ${direction}, ${sideLength}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
       writeFixed32();
       writeFixed32();
@@ -524,7 +496,7 @@
       writeUint8(unknown2);
     }],
     [0x91, 'UpdateResolution', () => {
-      return readUint32() + ', ' + readUint32();
+      return `${readUint32()}, ${readUint32()}`;
     }, () => {
       writeUint32();
       writeUint32();
@@ -540,7 +512,7 @@
       writeUint8((x + 8) * 16 + (y + 8));
     }],
     [0x96, 'MoveSelectionTiny?', () => {
-      return (readUint8() - 128) / 256 + ', ' + (readUint8() - 128) / 256;
+      return `${(readUint8() - 128) / 256}, ${(readUint8() - 128) / 256}`;
     }, () => {
       writeUint8((fetchNum() * 256) + 128);
       writeUint8((fetchNum() * 256) + 128);
@@ -604,6 +576,14 @@
     }
   };
 
+  const appendElement = (node, tag, contents) => {
+    const element = document.createElement(tag);
+    if (undefined !== contents) {
+      element.textContent = contents;
+    }
+    node.appendChild(element);
+  };
+
   document.body.addEventListener('dragover', (event) => {
     if (event.dataTransfer.items &&
       event.dataTransfer.items.length > 0 &&
@@ -617,16 +597,20 @@
     const reader = new FileReader();
     if (file.name.toLowerCase().endsWith('.txt')) {
       reader.addEventListener('loadend', () => {
-        let result = '';
+        let result = document.createElement('div');
+        result.id = 'replayDiv';
+        result.contentEditable = true;
+
         const lines = reader.result.split(/\r?\n/);
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].length == 0 && i == lines.length - 1) {
             // Don't add spurious line for last linebreak
             break;
           }
-          result += '<span>' + lines[i] + '</span><br>';
+          appendElement(result, 'span', lines[i]);
+          appendElement(result, 'br');
         }
-        replayDiv.innerHTML = result;
+        replayDiv.parentNode.replaceChild(result, replayDiv);
         exportDatButton.hidden = false;
         exportTxtButton.hidden = false;
       });
@@ -635,17 +619,21 @@
       reader.addEventListener('loadend', () => {
         buffer = new Uint8Array(reader.result);
         curIndex = 0;
-        let result = `<span>Header: ${ readBytes(18) }</span><br>`;
-        result += `<span>Name: ${ readString() }</span><br>`;
+
+        let result = document.createElement('div');
+        result.id = 'replayDiv';
+        result.contentEditable = true;
+
+        appendElement(result, 'span', `Header: ${readBytes(18)}`);
+        appendElement(result, 'br');
+        appendElement(result, 'span', `Name: ${readString()}`);
+        appendElement(result, 'br');
 
         let inputAction = readUint8();
         let frameHandler = inputActionByteToFrameHandler[inputAction];
         while (frameHandler) {
-          result += '<span>' + tickHandler() + frameHandler[1];
-          if (frameHandler.length > 2) {
-            result += ' ' + frameHandler[2]();
-          }
-          result += '</span><br>';
+          appendElement(result, 'span', `${tickHandler()}${frameHandler[1]}${frameHandler.length > 2 ? ` ${frameHandler[2]()}` : ''}`);
+          appendElement(result, 'br');
           if (curIndex == buffer.length) {
             break;
           }
@@ -654,14 +642,12 @@
         }
         if (curIndex < buffer.length) {
           --curIndex; // Take back the byte we interpreted as an InputAction
-          result += `
-            <span>Unhandled bytes:</span>
-            <br>
-            <span>${ readBytes(buffer.length - curIndex) }</span>
-            <br>
-          `;
+          appendElement(result, 'span', 'Unhandled bytes:');
+          appendElement(result, 'br');
+          appendElement(result, 'span', `${readBytes(buffer.length - curIndex)}`);
+          appendElement(result, 'br');
         }
-        replayDiv.innerHTML = result;
+        replayDiv.parentNode.replaceChild(result, replayDiv);
         exportDatButton.hidden = false;
         exportTxtButton.hidden = false;
       });
@@ -669,7 +655,7 @@
     }
   });
   exportDatButton.addEventListener('click', () => {
-    buffer = replayDiv.innerHTML.replace(/<\/?span>/g, '').replace(/<br>/g, '\n');
+    buffer = replayDiv.innerHTML.replace(/<(\/?span|\/div)>/g, '').replace(/<(br|div)>/g, '\n');
     curIndex = 0;
     datString = '';
     if (!expect('Header: ')) {
@@ -723,13 +709,13 @@
   exportTxtButton.addEventListener('click', () => {
     // Gross, but it works well enough
     let result = replayDiv.innerHTML;
-    result = result.replace(/<\/?span>/g, '');
+    result = result.replace(/<(\/?span|\/div)>/g, '');
     let lineBreak = '\n';
     if (/Win/.test(navigator.platform)) {
       // Probably good enough?
       lineBreak = '\r\n';
     }
-    result = result.replace(/<br>/g, lineBreak);
+    result = result.replace(/<(br|div)>/g, lineBreak);
     download(result, 'replay.txt', 'text/plain');
   });
 })();

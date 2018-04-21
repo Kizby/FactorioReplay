@@ -1,12 +1,19 @@
 <html>
 
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+
 <body>
-  <div id="replayDiv" contenteditable="true" style="font-family: monospace">
-    Drag a replay.dat or replay.txt file here!
+  <h1>Factorio Replay</h1>
+  <div id="replayDiv" contenteditable="true">
+    Drag a replay.dat or replay.txt file anywhere on this page!
   </div>
   <br/>
-  <button id="exportDatButton" hidden="true">Export replay.dat</button>
-  <button id="exportTxtButton" hidden="true">Export replay.txt</button>
+  <div class="export-buttons">
+    <button id="exportDatButton" hidden="true">Export replay.dat</button>
+    <button id="exportTxtButton" hidden="true">Export replay.txt</button>
+  </div>
 </body>
 <script src="factorio_replay.js"></script>
 
