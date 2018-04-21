@@ -379,8 +379,8 @@
       }
       let unknown1 = 0, unknown2 = 0;
       if (buffer[curIndex] != '\n') {
-        unknown1 = fetchNum;
-        unknown2 = fetchNum;
+        unknown1 = fetchNum();
+        unknown2 = fetchNum();
       }
       writeUint8(unknown1);
       writeBool(isGhost);
@@ -504,13 +504,19 @@
       writeFixed32();
       writeFixed32();
     }],
+    [0x39, 'ChooseRecipe', () => {
+      return `${readUint8()}, ${readUint8()}`;
+    }, () => {
+      writeUint8();
+      writeUint8();
+    }],
     [0x3A, 'MoveSelectionLarge', () => {
       return `${readFixed32()}, ${readFixed32()}`
     }, () => {
       writeFixed32();
       writeFixed32();
     }],
-    [0x3B, 'Pipette'],
+    [0x3B, 'Unknown3B', readUint16, writeUint16],
     [0x3D, 'SplitInventory', () => {
       const whichInventory = readUint8();
       const slot = readUint16();
