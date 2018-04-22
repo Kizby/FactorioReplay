@@ -303,6 +303,21 @@ const loadText = (text) => {
     }
   };
 
+  const leaveReasons = ['', 'Dropped', 'Reconnecting', 'MalformedData', 'Desynced', 'CouldNotKeepUp', 'AFK'];
+  const readLeaveReason = () => {
+    return leaveReasons[readUint8()];
+  };
+
+  const writeLeaveReason = () => {
+    const leaveReason = fetchString(true);
+    for (let i = 0; i < leaveReasons.length; i++) {
+      if (leaveReasons[i] == leaveReason) {
+        writeUint8(i);
+        break;
+      }
+    }
+  };
+
   const expect = (val) => {
     if (buffer.substring(curIndex, curIndex + val.length) == val) {
       curIndex += val.length;
@@ -608,14 +623,18 @@ const loadText = (text) => {
       writeUint16();
       writeUint16(inventoryContext);
     }],
-    [0x68, 'PlayerId?', () => {
+    [0x68, 'ConnectionInfo?', () => {
       const playerNumber = readUint8();
       const unknown1 = readUint24(); // No ideas, always 0?
       const checkSum = readCheckSum();
       const unknown2 = readUint24(); // No ideas, always 0?
+      let unknown3 = '';
+      if (256 == unknown2) {
+        unknown3 = readBytes(30); // This random blob happens on connections in lan games
+      }
       const extras = (playerNumber == curPlayer && unknown1 == 0 && unknown2 == 0)
         ? ''
-        : `, ${playerNumber}, ${unknown1}, ${unknown2}`;
+        : `, ${playerNumber}, ${unknown1}, ${unknown2}, ${unknown3}`;
       return `${checkSum}${extras}`;
     }, () => {
       const checkSum = fetchCheckSum();
@@ -629,6 +648,9 @@ const loadText = (text) => {
       writeUint24(unknown1);
       datString += checkSum;
       writeUint24(unknown2);
+      if (256 == unknown2) {
+        writeBytes(30);
+      }
     }],
     [0x6F, 'AddPlayer', () => {
       const playerNumber = readOptUint16();
@@ -689,7 +711,7 @@ const loadText = (text) => {
       const x = fetchNum(), y = fetchNum();
       writeUint8((x + 8) * 16 + (y + 8));
     }],
-    [0x96, 'MoveSelectionTiny?', () => {
+    [0x96, 'MoveSelectionTiny', () => {
       return `${(readUint8() - 128) / 256}, ${(readUint8() - 128) / 256}`;
     }, () => {
       writeUint8((fetchNum() * 256) + 128);
@@ -725,7 +747,7 @@ const loadText = (text) => {
       writeBool(fetchString() == 'In');
     }],
     [0xA7, 'UnknownA7', readUint8, writeUint8],
-    [0xB4, 'LeaveGame']
+    [0xB4, 'LeaveGame', readLeaveReason, writeLeaveReason],
   ];
 
   let inputActionByteToFrameHandler = [], inputActionNameToFrameHandler = [];
