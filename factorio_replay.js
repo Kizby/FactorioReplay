@@ -28,7 +28,7 @@ const loadText = (text) => {
 };
 
 (() => {
-  let buffer, curIndex, curTick, curPlayer, datString, isSinglePlayer;
+  let buffer, curIndex, curTick, curPlayer, datString, error = '';
 
   const skipCommaAndSpaces = () => {
     if (buffer[curIndex] == ',') {
@@ -298,9 +298,10 @@ const loadText = (text) => {
     for (let i = 0; i < directions.length; i++) {
       if (directions[i] == direction) {
         writeUint8(i);
-        break;
+        return;
       }
     }
+    error = `Can't parse direction "${direction}"`;
   };
 
   const leaveReasons = ['', 'Dropped', 'Reconnecting', 'MalformedData', 'Desynced', 'CouldNotKeepUp', 'AFK'];
@@ -313,9 +314,10 @@ const loadText = (text) => {
     for (let i = 0; i < leaveReasons.length; i++) {
       if (leaveReasons[i] == leaveReason) {
         writeUint8(i);
-        break;
+        return;
       }
     }
+    error = `Can't parse leave reason "${leaveReason}"`;
   };
 
   const expect = (val) => {
@@ -591,19 +593,40 @@ const loadText = (text) => {
     [0x51, 'PlaceInEquipmentGrid', () => {
       const column = readUint32();
       const row = readUint32();
-      const whichInventory = readUint8();
-      const inventory = getInventory(1, whichInventory);
-      return `${column}, ${row}, ${inventory ? inventory : whichInventory}`;
+      const unknown = readUint8();
+      return `${column}, ${row}${unknown == 4 ? '' : unknown}`;
     }, () => {
       writeUint32();
       writeUint32();
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
+      if (buffer[curIndex] != '\n') {
+        writeUint8();
       } else {
-        whichInventory = fetchNum();
+        writeUint8(4);
       }
-      writeUint8(whichInventory);
+    }],
+    [0x52, 'TransferFromEquipmentGrid', () => {
+      const column = readUint32();
+      const row = readUint32();
+      const rawHowMany = readUint8();
+      let howMany = rawHowMany;
+      if (rawHowMany == 1) {
+        howMany = 'One'
+      } else if (rawHowMany == 2) {
+        howMany = 'All'
+      }
+      return `${column}, ${row}, ${howMany}`;
+    }, () => {
+      writeUint32();
+      writeUint32();
+      if (buffer[curIndex] == 'O') {
+        fetchString();
+        writeUint8(1);
+      } else if (buffer[curIndex] == 'A') {
+        fetchString();
+        writeUint8(2);
+      } else {
+        writeUint8();
+      }
     }],
     [0x56, 'LimitSlots', () => {
       const whichInventory = readUint8();
@@ -851,6 +874,9 @@ const loadText = (text) => {
       const next = getTextRecursively(nodes[i], respectPlatform);
       if (result != '' && nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV' && !result.endsWith('\n')) {
         result = `${result}\n${next}`;
+        if (!result.endsWith('\n')) {
+          result = `${result}\n`;
+        }
       } else {
         result = `${result}${next}`;
       }
@@ -890,17 +916,25 @@ const loadText = (text) => {
       skipCommaAndSpaces();
       let frameHandler = inputActionNameToFrameHandler[name];
       if (!frameHandler) {
-        console.error(`Can't handle InputAction "${name}"; only emitting before tick ${tick}`);
+        console.error(`Can't handle InputAction "${name}"; only emitting before @${tick}(${player})`);
         failed = true;
         break;
       }
 
+      let lengthBeforeFrame = datString.length;
       writeUint8(frameHandler[0]);
       writeUint32(tick);
       writeOptUint16(player);
 
       if (frameHandler.length > 2) {
         frameHandler[3]();
+      }
+      if ('' != error) {
+        console.error(`Parse failed with error "${error}"; only emitting before @${tick}(${player}) `);
+        error = '';
+        datString = datString.substring(0, lengthBeforeFrame);
+        failed = true;
+        break;
       }
       expect('\n');
       skipComments();
