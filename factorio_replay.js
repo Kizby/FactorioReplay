@@ -623,6 +623,7 @@ const loadText = (text) => {
       writeUint16();
       writeUint16(inventoryContext);
     }],
+    [0x57, 'ChooseFilterCategory', readUint8, readUint8],
     [0x68, 'ConnectionInfo?', () => {
       const playerNumber = readUint8();
       const unknown1 = readUint24(); // No ideas, always 0?
@@ -701,6 +702,7 @@ const loadText = (text) => {
       writeUint32();
       writeUint32();
     }],
+    [0x9c, 'EnableAutoLaunch', readBool, writeBool],
     [0x94, 'PickUpNearbyItems', readBool, writeBool],
     [0x95, 'MoveSelectionSmall', () => {
       const rawDelta = readUint8();
@@ -856,6 +858,14 @@ const loadText = (text) => {
     return result;
   }
 
+  const skipComments = () => {
+    while (curIndex < buffer.length && buffer[curIndex] != '@' && buffer.substring(curIndex, curIndex + 17) != 'UnhandledBytes:\n') {
+      // Any line not starting with an @ is treated as a comment
+      fetchString();
+      expect('\n');
+    }
+  };
+
   exportDatButton.addEventListener('click', () => {
     buffer = getTextRecursively(replayDiv, false);
     if (!buffer.endsWith('\n')) {
@@ -864,6 +874,7 @@ const loadText = (text) => {
     curIndex = 0;
     datString = '';
     let failed = false;
+    skipComments();
     while (expect('@')) {
       let colonIndex = buffer.indexOf(':', curIndex);
       let [tick, player] = getTick(buffer.substring(curIndex, colonIndex));
@@ -892,6 +903,7 @@ const loadText = (text) => {
         frameHandler[3]();
       }
       expect('\n');
+      skipComments();
     }
     if (!failed && expect('Unhandled bytes:\n')) {
       writeBytes((buffer.length - curIndex) / 3);
