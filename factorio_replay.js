@@ -377,28 +377,32 @@ const loadText = (text) => {
       const x = readFixed32();
       const y = readFixed32();
       const direction = readDirection();
-      const unknown1 = readUint8(); // Sometimes get a duplicate build frame with this = 1, but usually 0
+      const isDragging = readBool();
       const isGhost = readBool();
-      const unknown2 = readUint8(); // Maybe force?
-      const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
-      return `${x}, ${y}, ${direction}${isGhost ? ', Ghost' : ''}${unknowns}`
+      const unknown = readUint8();
+      const unknowns = (unknown == 0) ? '' : `, ${unknown}`;
+      return `${x}, ${y}, ${direction}${isDragging ? ', Dragging' : ''}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
       writeFixed32();
       writeFixed32();
       writeDirection();
+      let isDragging = false;
+      if (buffer[curIndex] == 'D') {
+        fetchString();
+        isDragging = true;
+      }
+      writeBool(isDragging);
       let isGhost = false;
       if (buffer[curIndex] == 'G') {
         fetchString();
         isGhost = true;
       }
-      let unknown1 = 0, unknown2 = 0;
-      if (buffer[curIndex] != '\n') {
-        unknown1 = fetchNum();
-        unknown2 = fetchNum();
-      }
-      writeUint8(unknown1);
       writeBool(isGhost);
-      writeUint8(unknown2);
+      let unknown = 0;
+      if (buffer[curIndex] != '\n') {
+        unknown = fetchNum();
+      }
+      writeUint8(unknown);
     }],
     [0x2b, 'Run', readDirection, writeDirection],
     [0x2e, 'OpenEquipmentGrid', () => {
