@@ -34,7 +34,7 @@ const loadText = (text) => {
     if (buffer[curIndex] == ',') {
       curIndex++;
     }
-    while (buffer[curIndex] == ' ') {
+    while ('\n' != buffer[curIndex] && /\s/.test(buffer[curIndex])) {
       curIndex++;
     }
   };
@@ -225,11 +225,34 @@ const loadText = (text) => {
   };
 
   const writeBytes = (count) => {
-    for (let i = 0; i < count; i++) {
-      if (buffer[curIndex] == ' ') {
-        curIndex++; // Consume the space
+    for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
+      const char = buffer[curIndex];
+      if (char == '\n') {
+        if (count === undefined) {
+          // No more bytes
+          break;
+        }
+        // Permit newlines in byte sequence if we're looking for a certain number of bytes
+        continue;
       }
-      datString += buffer.substring(curIndex, curIndex += 2);
+      if (/\s/.test(char)) {
+        continue; // Consume the space
+      }
+      const byte = buffer.substring(curIndex, curIndex + 2);
+      if (!/[a-fA-F0-9][a-fA-F0-9]/.test(byte)) {
+        error = "Bad character in byte sequence";
+        return;
+      }
+      datString += byte;
+      ++curIndex; // Increment a second time to consume both characters
+      if (count !== undefined) {
+        --count;
+      }
+    }
+    if (undefined !== count && count > 0) {
+      error = "Not enough bytes at end of input";
+    } else if (0 === count) {
+      skipCommaAndSpaces();
     }
   };
 
@@ -844,9 +867,7 @@ const loadText = (text) => {
         }
         if (curIndex < buffer.length) {
           --curIndex; // Take back the byte we interpreted as an InputAction
-          appendElement(result, 'span', 'Unhandled bytes:');
-          appendElement(result, 'br');
-          appendElement(result, 'span', `${readBytes(buffer.length - curIndex)}`);
+          appendElement(result, 'span', `?: ${readBytes(buffer.length - curIndex)}`);
           appendElement(result, 'br');
         }
         replayDiv.parentNode.replaceChild(result, replayDiv);
@@ -904,47 +925,66 @@ const loadText = (text) => {
     curIndex = 0;
     datString = '';
     let failed = false;
-    skipComments();
-    while (expect('@')) {
-      let colonIndex = buffer.indexOf(':', curIndex);
-      let [tick, player] = getTick(buffer.substring(curIndex, colonIndex));
-      curIndex = colonIndex + 1;
-      while (buffer[curIndex] == ' ') {
-        curIndex++;
-      }
+    for (let lineType = buffer[curIndex]; !failed && curIndex < buffer.length; lineType = buffer[curIndex]) {
+      // Used in a couple of the cases
+      const colonIndex = buffer.indexOf(':', curIndex);
+      switch (lineType) {
+        default:
+          // Unrecognized line types are treated as comments
+          curIndex = buffer.indexOf('\n', curIndex) + 1;
+          if (0 == curIndex) {
+            // Got to then end of input
+            curIndex = buffer.length;
+            break;
+          }
+          continue;
+        case '?':
+          // Arbitrary bytes
+          curIndex++;
+          if (-1 != colonIndex) {
+            curIndex = colonIndex + 1;
+          }
+          writeBytes();
+          expect('\n');
+          continue;
+        case '@':
+          // Typical case - command at a given tick
+          curIndex++;
+          const [tick, player] = getTick(buffer.substring(curIndex, colonIndex));
+          curIndex = colonIndex + 1;
+          while (buffer[curIndex] == ' ') {
+            curIndex++;
+          }
 
-      let name = '';
-      while (buffer[curIndex] != ' ' && buffer[curIndex] != '\n') {
-        name += buffer[curIndex++];
-      }
-      skipCommaAndSpaces();
-      let frameHandler = inputActionNameToFrameHandler[name];
-      if (!frameHandler) {
-        console.error(`Can't handle InputAction "${name}"; only emitting before @${tick}(${player})`);
-        failed = true;
-        break;
-      }
+          let name = '';
+          while (buffer[curIndex] != ' ' && buffer[curIndex] != '\n') {
+            name += buffer[curIndex++];
+          }
+          skipCommaAndSpaces();
+          const frameHandler = inputActionNameToFrameHandler[name];
+          if (!frameHandler) {
+            console.error(`Can't handle InputAction "${name}"; only emitting before @${tick}(${player})`);
+            failed = true;
+            break;
+          }
 
-      let lengthBeforeFrame = datString.length;
-      writeUint8(frameHandler[0]);
-      writeUint32(tick);
-      writeOptUint16(player);
+          const lengthBeforeFrame = datString.length;
+          writeUint8(frameHandler[0]);
+          writeUint32(tick);
+          writeOptUint16(player);
 
-      if (frameHandler.length > 2) {
-        frameHandler[3]();
+          if (frameHandler.length > 2) {
+            frameHandler[3]();
+          }
+          if ('' != error) {
+            console.error(`Parse failed with error "${error}"; only emitting before @${tick}(${player}) `);
+            error = '';
+            datString = datString.substring(0, lengthBeforeFrame);
+            failed = true;
+            break;
+          }
+          expect('\n');
       }
-      if ('' != error) {
-        console.error(`Parse failed with error "${error}"; only emitting before @${tick}(${player}) `);
-        error = '';
-        datString = datString.substring(0, lengthBeforeFrame);
-        failed = true;
-        break;
-      }
-      expect('\n');
-      skipComments();
-    }
-    if (!failed && expect('Unhandled bytes:\n')) {
-      writeBytes((buffer.length - curIndex) / 3);
     }
 
     const byteArray = new Uint8Array(datString.length / 2);
