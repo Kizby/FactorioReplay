@@ -866,8 +866,11 @@ const loadText = (text) => {
           frameHandler = inputActionByteToFrameHandler[inputAction];
         }
         if (curIndex < buffer.length) {
-          --curIndex; // Take back the byte we interpreted as an InputAction
-          appendElement(result, 'span', `?: ${readBytes(buffer.length - curIndex)}`);
+          const startIndex = curIndex - 1;
+          let tickGuess = tickHandler();
+          tickGuess = tickGuess.replace('@', '?');
+          curIndex = startIndex; // Take back the bytes we've tried to interpret
+          appendElement(result, 'span', `${tickGuess}${readBytes(buffer.length - curIndex)}`);
           appendElement(result, 'br');
         }
         replayDiv.parentNode.replaceChild(result, replayDiv);
@@ -1027,13 +1030,13 @@ const loadText = (text) => {
   sortByTickButton.addEventListener('click', () => {
     sortReplayLines((a, b) => {
       let aTick = 0x100000000, bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
-      if (a.startsWith('@')) {
+      if (a.startsWith('@') || a.startsWith('?')) {
         const parsedTick = parseInt(a.substring(1));
         if (!isNaN(parsedTick)) {
           aTick = parsedTick;
         }
       }
-      if (b.startsWith('@')) {
+      if (b.startsWith('@') || b.startsWith('?')) {
         const parsedTick = parseInt(b.substring(1));
         if (!isNaN(parsedTick)) {
           bTick = parsedTick;
