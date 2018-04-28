@@ -368,6 +368,9 @@ const loadText = (text) => {
   };
 
   const frameHandlers = [
+    // IgnoreRemaining seems to stop replay parsing and makes the replay continue playing forever
+    // instead of stopping at the tick at offset 0x37 in level.dat
+    [0x00, 'IgnoreRemaining'],
     [0x01, 'StopRunning'],
     [0x02, 'StartMining'],
     [0x03, 'StopMining'],
@@ -379,15 +382,26 @@ const loadText = (text) => {
     [0x09, 'DisconnectTrain'],
     [0x0A, 'ClearSelection'],
     [0x0B, 'ClearCursor'],
+    [0x0C, 'Unknown0C'],
     [0x0D, 'OpenTechnologies'],
+    [0x0E, 'Unknown0E'],
     [0x0F, 'Unknown0F'],
     [0x10, 'OpenBlueprintLibrary'],
     [0x11, 'OpenProductionStatistics'],
     [0x12, 'OpenKillStatistics'],
+    [0x13, 'Unknown13'],
+    [0x14, 'Unknown14'],
+    [0x15, 'Unknown15'],
     [0x16, 'CopyEntitySettings'],
+    [0x17, 'Unknown17'],
+    [0x18, 'Unknown18'],
     [0x19, 'ShowInfo'],
-    [0x1a, 'JoinSinglePlayer'],
-    [0x1b, 'JoinMultiPlayer'],
+    [0x1A, 'JoinSinglePlayer'],
+    [0x1B, 'JoinMultiPlayer'],
+    [0x1C, 'Unknown1C'],
+    [0x1D, 'OpenBonuses'],
+    [0x1E, 'OpenTrains'],
+    [0x1F, 'OpenAchievements'],
     [0x23, 'Lag?'],
     [0x27, 'OpenLogisticNetworks'],
     [0x29, 'DropItem', () => {
