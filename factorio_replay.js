@@ -828,6 +828,42 @@ const loadText = (text) => {
     }
   };
 
+  const tryFindHeartbeat = () => {
+    // Factorio emits CheckSum frames every second, on the second, so try to find the next one
+    while (curTick % 60 != 0) {
+      curTick++;
+    }
+
+    // datString should always be unused when this is called, but just in case
+    const savedDatString = datString;
+    datString = '';
+    const frameHandler = inputActionNameToFrameHandler['CheckSum'];
+    writeUint8(frameHandler[0]);
+    writeUint32(curTick);
+    writeOptUint16(0);
+
+    const byteArray = new Uint8Array(datString.length / 2);
+    for (let i = 0; i < datString.length / 2; i++) {
+      byteArray[i] = parseInt(datString.substring(2 * i, 2 * i + 2), 16);
+    }
+    datString = savedDatString;
+
+    // Find the next CheckSum frame
+    outerLoop:
+    for (let searchIndex = curIndex; searchIndex + byteArray.length <= buffer.length; searchIndex++) {
+      for (let i = 0; i < byteArray.length; i++) {
+        if (byteArray[i] != buffer[searchIndex + i]) {
+          // Almost as bad as a goto - js could really use first-class multi-level continue/break
+          continue outerLoop;
+        }
+      }
+      // Found a matching frame!
+      return searchIndex;
+    }
+    // Didn't find anything, so just consume the rest of the buffer
+    return buffer.length;
+  };
+
   document.body.addEventListener('dragover', (event) => {
     if (event.dataTransfer.items &&
       event.dataTransfer.items.length > 0 &&
@@ -854,23 +890,19 @@ const loadText = (text) => {
         result.id = 'replayDiv';
         result.contentEditable = true;
 
-        let inputAction = readUint8();
-        let frameHandler = inputActionByteToFrameHandler[inputAction];
-        while (frameHandler) {
-          appendElement(result, 'span', `${tickHandler()}${frameHandler[1]}${frameHandler.length > 2 ? ` ${frameHandler[2]()}` : ''}`);
-          appendElement(result, 'br');
-          if (curIndex == buffer.length) {
-            break;
+        while (curIndex < buffer.length) {
+          let inputAction = readUint8();
+          let frameHandler = inputActionByteToFrameHandler[inputAction];
+          if (frameHandler) {
+            appendElement(result, 'span', `${tickHandler()}${frameHandler[1]}${frameHandler.length > 2 ? ` ${frameHandler[2]()}` : ''}`);
+          } else if (curIndex < buffer.length) {
+            const startIndex = curIndex - 1;
+            let tickGuess = tickHandler();
+            tickGuess = tickGuess.replace('@', '?');
+            curIndex = startIndex; // Take back the bytes we've tried to interpret
+            const endIndex = tryFindHeartbeat();
+            appendElement(result, 'span', `${tickGuess}${readBytes(endIndex - curIndex)}`);
           }
-          inputAction = readUint8();
-          frameHandler = inputActionByteToFrameHandler[inputAction];
-        }
-        if (curIndex < buffer.length) {
-          const startIndex = curIndex - 1;
-          let tickGuess = tickHandler();
-          tickGuess = tickGuess.replace('@', '?');
-          curIndex = startIndex; // Take back the bytes we've tried to interpret
-          appendElement(result, 'span', `${tickGuess}${readBytes(buffer.length - curIndex)}`);
           appendElement(result, 'br');
         }
         replayDiv.parentNode.replaceChild(result, replayDiv);
