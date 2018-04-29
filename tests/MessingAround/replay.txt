@@ -1,6 +1,6 @@
 @0(255): JoinSinglePlayer
 @0(255): AddPlayer Murray65536, 0, 1
-@1(0): PlayerId? 5ad3c174
+@1(0): ConnectionInfo? 5ad3c174
 @1(0): UnknownA7 1
 @1(0): UpdateResolution 1920, 1080
 @41(0): Run N
@@ -112,7 +112,7 @@
 @1808(0): ClearSelection
 @1828(0): Build 18, -41, W
 @1829(0): MoveSelectionSmall 0, 1
-@1850(0): MoveSelectionTiny? 0.05078125, 0.11328125
+@1850(0): MoveSelectionTiny 0.05078125, 0.11328125
 @1852(0): MoveSelectionSmall 1, 0
 @1860(0): CheckSum 71b2f87c
 @1867(0): OpenTargetInventory
@@ -296,7 +296,7 @@
 @6060(0): CheckSum 7525f668
 @6083(0): StopRunning
 @6104(255): JoinSinglePlayer
-@6104(0): PlayerId? 5ad3c174
+@6104(0): ConnectionInfo? 5ad3c174
 @6120(0): CheckSum 5b11db3c
 @6162(0): Run N
 @6172(0): Run NW

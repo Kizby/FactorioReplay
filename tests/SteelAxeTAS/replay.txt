@@ -3,55 +3,55 @@
 @0(0): ShowInfo
 @0(0): Craft 83, 1
 @0(0): Run SW
-@0(0): MoveSelection -9.0, 7.0
+@0(0): MoveSelection -9, 7
 @2(0): AddPlayer CopperMiner1, 1, 1
 @2(1): Craft 83, 2
 @2(1): MoveSelection 1.5, 1.5
 @2(1): StartMining
 @2(1): Toolbelt 1
-@2(1): Build -4.0, -3.0, N
+@2(1): Build -4, -3, N
 @2(0): AddPlayer CopperMiner2, 2, 1
 @2(2): Craft 83, 2
 @2(2): MoveSelection 1.5, 0.5
 @2(2): StartMining
 @2(2): Toolbelt 1
-@2(2): Build -2.0, -3.0, N
+@2(2): Build -2, -3, N
 @2(0): AddPlayer CopperMiner3, 3, 1
 @2(3): Craft 83, 2
 @2(3): MoveSelection 1.5, -1.5
 @2(3): StartMining
 @2(3): Toolbelt 1
-@2(3): Build 0.0, -3.0, N
+@2(3): Build 0, -3, N
 @2(0): AddPlayer CopperMiner4, 4, 1
 @2(4): Craft 83, 2
 @2(4): MoveSelection 0.5, 1.5
 @2(4): StartMining
 @2(4): Toolbelt 1
-@2(4): Build 2.0, -3.0, N
+@2(4): Build 2, -3, N
 @2(0): AddPlayer CopperMiner5, 5, 1
 @2(5): Craft 83, 2
 @2(5): MoveSelection 1.5, 1.5
 @2(5): StartMining
 @2(5): Toolbelt 1
-@2(5): Build 4.0, -3.0, N
+@2(5): Build 4, -3, N
 @2(0): AddPlayer CopperMiner6, 6, 1
 @2(6): Craft 83, 2
 @2(6): MoveSelection 1.5, 0.5
 @2(6): StartMining
 @2(6): Toolbelt 1
-@2(6): Build -2.0, -5.0, N
+@2(6): Build -2, -5, N
 @2(0): AddPlayer CopperMiner7, 7, 1
 @2(7): Craft 83, 2
 @2(7): MoveSelection 1.5, -1.5
 @2(7): StartMining
 @2(7): Toolbelt 1
-@2(7): Build 0.0, -5.0, N
+@2(7): Build 0, -5, N
 @2(0): AddPlayer CopperMiner8, 8, 1
 @2(8): Craft 83, 2
 @2(8): MoveSelection 0.5, 1.5
 @2(8): StartMining
 @2(8): Toolbelt 1
-@2(8): Build 2.0, -5.0, N
+@2(8): Build 2, -5, N
 @2(0): AddPlayer CoalMiner1, 9, 1
 @2(9): Craft 83, 2
 @2(9): MoveSelection 1.5, -0.5
@@ -163,169 +163,169 @@
 @22(0): AddPlayer BeltCrafter5, 55, 1
 @22(55): Craft 185, 2
 @53(17): Toolbelt 2
-@53(17): Build -4.0, -2.0, N
+@53(17): Build -4, -2, N
 @53(17): LeaveGame
 @53(0): AddPlayer IronMule1, 56, 1
 @53(56): ClickItemStack Player, 0
-@53(56): MoveSelection -4.0, -2.0
+@53(56): MoveSelection -4, -2
 @53(56): TransferEntityStack In
 @53(56): LeaveGame
 @53(0): AddPlayer IronMule2, 57, 1
 @53(57): ClickItemStack Player, 0
-@53(57): MoveSelection -4.0, -2.0
+@53(57): MoveSelection -4, -2
 @53(57): TransferEntityStack In
 @53(57): LeaveGame
 @64(0): StartMining
 @64(0): StopRunning
-@84(18): MoveSelection -4.0, -2.0
+@84(18): MoveSelection -4, -2
 @84(18): ClickItemStack Toolbelt, 2
 @84(18): TransferEntityStack In
 @84(18): LeaveGame
-@84(19): MoveSelection -4.0, -2.0
+@84(19): MoveSelection -4, -2
 @84(19): ClickItemStack Toolbelt, 2
 @84(19): TransferEntityStack In
 @84(19): LeaveGame
-@84(20): MoveSelection -4.0, -2.0
+@84(20): MoveSelection -4, -2
 @84(20): ClickItemStack Toolbelt, 2
 @84(20): TransferEntityStack In
 @84(20): LeaveGame
-@84(21): MoveSelection -4.0, -2.0
+@84(21): MoveSelection -4, -2
 @84(21): ClickItemStack Toolbelt, 2
 @84(21): TransferEntityStack In
 @84(21): LeaveGame
-@84(22): MoveSelection -4.0, -2.0
+@84(22): MoveSelection -4, -2
 @84(22): ClickItemStack Toolbelt, 2
 @84(22): TransferEntityStack In
 @84(22): LeaveGame
-@146(23): MoveSelection -4.0, -2.0
+@146(23): MoveSelection -4, -2
 @146(23): ClickItemStack Player, 0
 @146(23): TransferEntityStack In
 @146(23): LeaveGame
-@146(24): MoveSelection -4.0, -2.0
+@146(24): MoveSelection -4, -2
 @146(24): ClickItemStack Player, 0
 @146(24): TransferEntityStack In
 @146(24): LeaveGame
-@146(25): MoveSelection -4.0, -2.0
+@146(25): MoveSelection -4, -2
 @146(25): ClickItemStack Player, 0
 @146(25): TransferEntityStack In
 @146(25): LeaveGame
-@146(26): MoveSelection -4.0, -2.0
+@146(26): MoveSelection -4, -2
 @146(26): ClickItemStack Player, 0
 @146(26): TransferEntityStack In
 @146(26): LeaveGame
-@146(27): MoveSelection -4.0, -2.0
+@146(27): MoveSelection -4, -2
 @146(27): ClickItemStack Player, 0
 @146(27): TransferEntityStack In
 @146(27): LeaveGame
-@146(28): MoveSelection -4.0, -2.0
+@146(28): MoveSelection -4, -2
 @146(28): ClickItemStack Player, 0
 @146(28): TransferEntityStack In
 @146(28): LeaveGame
-@146(29): MoveSelection -4.0, -2.0
+@146(29): MoveSelection -4, -2
 @146(29): ClickItemStack Player, 0
 @146(29): TransferEntityStack In
 @146(29): LeaveGame
-@146(30): MoveSelection -4.0, -2.0
+@146(30): MoveSelection -4, -2
 @146(30): ClickItemStack Player, 0
 @146(30): TransferEntityStack In
 @146(30): LeaveGame
-@146(31): MoveSelection -4.0, -2.0
+@146(31): MoveSelection -4, -2
 @146(31): ClickItemStack Player, 0
 @146(31): TransferEntityStack In
 @146(31): LeaveGame
-@146(32): MoveSelection -4.0, -2.0
+@146(32): MoveSelection -4, -2
 @146(32): ClickItemStack Player, 0
 @146(32): TransferEntityStack In
 @146(32): LeaveGame
-@146(33): MoveSelection -4.0, -2.0
+@146(33): MoveSelection -4, -2
 @146(33): ClickItemStack Player, 0
 @146(33): TransferEntityStack In
 @146(33): LeaveGame
-@146(34): MoveSelection -4.0, -2.0
+@146(34): MoveSelection -4, -2
 @146(34): ClickItemStack Player, 0
 @146(34): TransferEntityStack In
 @146(34): LeaveGame
-@146(35): MoveSelection -4.0, -2.0
+@146(35): MoveSelection -4, -2
 @146(35): ClickItemStack Player, 0
 @146(35): TransferEntityStack In
 @146(35): LeaveGame
-@146(36): MoveSelection -4.0, -2.0
+@146(36): MoveSelection -4, -2
 @146(36): ClickItemStack Player, 0
 @146(36): TransferEntityStack In
 @146(36): LeaveGame
-@146(37): MoveSelection -4.0, -2.0
+@146(37): MoveSelection -4, -2
 @146(37): ClickItemStack Player, 0
 @146(37): TransferEntityStack In
 @146(37): LeaveGame
-@146(38): MoveSelection -4.0, -2.0
+@146(38): MoveSelection -4, -2
 @146(38): ClickItemStack Player, 0
 @146(38): TransferEntityStack In
 @146(38): LeaveGame
-@146(39): MoveSelection -4.0, -2.0
+@146(39): MoveSelection -4, -2
 @146(39): ClickItemStack Player, 0
 @146(39): TransferEntityStack In
 @146(39): LeaveGame
-@146(40): MoveSelection -4.0, -2.0
+@146(40): MoveSelection -4, -2
 @146(40): ClickItemStack Player, 0
 @146(40): TransferEntityStack In
 @146(40): LeaveGame
-@146(41): MoveSelection -4.0, -2.0
+@146(41): MoveSelection -4, -2
 @146(41): ClickItemStack Player, 0
 @146(41): TransferEntityStack In
 @146(41): LeaveGame
-@146(42): MoveSelection -4.0, -2.0
+@146(42): MoveSelection -4, -2
 @146(42): ClickItemStack Player, 0
 @146(42): TransferEntityStack In
 @146(42): LeaveGame
-@146(43): MoveSelection -4.0, -2.0
+@146(43): MoveSelection -4, -2
 @146(43): ClickItemStack Player, 0
 @146(43): TransferEntityStack In
 @146(43): LeaveGame
-@146(44): MoveSelection -4.0, -2.0
+@146(44): MoveSelection -4, -2
 @146(44): ClickItemStack Player, 0
 @146(44): TransferEntityStack In
 @146(44): LeaveGame
-@146(45): MoveSelection -4.0, -2.0
+@146(45): MoveSelection -4, -2
 @146(45): ClickItemStack Player, 0
 @146(45): TransferEntityStack In
 @146(45): LeaveGame
-@146(46): MoveSelection -4.0, -2.0
+@146(46): MoveSelection -4, -2
 @146(46): ClickItemStack Player, 0
 @146(46): TransferEntityStack In
 @146(46): LeaveGame
-@146(47): MoveSelection -4.0, -2.0
+@146(47): MoveSelection -4, -2
 @146(47): ClickItemStack Player, 0
 @146(47): TransferEntityStack In
 @146(47): LeaveGame
-@146(48): MoveSelection -4.0, -2.0
+@146(48): MoveSelection -4, -2
 @146(48): ClickItemStack Player, 0
 @146(48): TransferEntityStack In
 @146(48): LeaveGame
-@146(49): MoveSelection -4.0, -2.0
+@146(49): MoveSelection -4, -2
 @146(49): ClickItemStack Player, 0
 @146(49): TransferEntityStack In
 @146(49): LeaveGame
-@146(50): MoveSelection -4.0, -2.0
+@146(50): MoveSelection -4, -2
 @146(50): ClickItemStack Player, 0
 @146(50): TransferEntityStack In
 @146(50): LeaveGame
-@146(51): MoveSelection -4.0, -2.0
+@146(51): MoveSelection -4, -2
 @146(51): ClickItemStack Toolbelt, 2
 @146(51): TransferEntityStack In
 @146(51): LeaveGame
-@146(52): MoveSelection -4.0, -2.0
+@146(52): MoveSelection -4, -2
 @146(52): ClickItemStack Toolbelt, 2
 @146(52): TransferEntityStack In
 @146(52): LeaveGame
-@146(53): MoveSelection -4.0, -2.0
+@146(53): MoveSelection -4, -2
 @146(53): ClickItemStack Toolbelt, 2
 @146(53): TransferEntityStack In
 @146(53): LeaveGame
-@146(54): MoveSelection -4.0, -2.0
+@146(54): MoveSelection -4, -2
 @146(54): ClickItemStack Toolbelt, 2
 @146(54): TransferEntityStack In
 @146(54): LeaveGame
-@146(55): MoveSelection -4.0, -2.0
+@146(55): MoveSelection -4, -2
 @146(55): ClickItemStack Toolbelt, 2
 @146(55): TransferEntityStack In
 @146(55): LeaveGame
@@ -333,7 +333,7 @@
 @164(0): Craft 190, 1
 @164(0): Craft 190, 1
 @164(0): Run N
-@164(0): MoveSelection 5.0, -9.0
+@164(0): MoveSelection 5, -9
 @215(1): StopMining
 @215(1): ClickItemStack Player, 0
 @215(1): MoveSelection -5.5, -4.5
@@ -532,75 +532,75 @@
 @340(16): MoveSelection -0.5, 4.5
 @340(16): StartMining
 @429(0): AddPlayer CopperFetcher, 58, 1
-@429(58): MoveSelection -4.0, -3.0
+@429(58): MoveSelection -4, -3
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection -6.0, -2.0
+@429(58): MoveSelection -6, -2
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection 2.0, 0.0
+@429(58): MoveSelection 2, 0
 @429(58): OpenTargetInventory
 @429(58): TransferItemStack Output, 0
 @429(58): TransferItemStack FuelOrContainer, 0
 @429(58): CloseWindow
-@429(58): MoveSelection -6.0, 3.0
+@429(58): MoveSelection -6, 3
 @429(58): OpenTargetInventory
 @429(58): TransferInventory Player, 31
 @429(58): CloseWindow
 @429(0): AddPlayer CableCrafter1, 59, 1
-@429(59): MoveSelection -4.0, -2.0
+@429(59): MoveSelection -4, -2
 @429(59): OpenTargetInventory
 @429(0): AddPlayer CableCrafter2, 60, 1
-@429(60): MoveSelection -4.0, -2.0
+@429(60): MoveSelection -4, -2
 @429(60): OpenTargetInventory
 @429(0): AddPlayer CableCrafter3, 61, 1
-@429(61): MoveSelection -4.0, -2.0
+@429(61): MoveSelection -4, -2
 @429(61): OpenTargetInventory
 @429(0): AddPlayer Placeholder1, 62, 1
 @429(0): AddPlayer CableCrafter4, 63, 1
 @429(62): LeaveGame
-@429(63): MoveSelection -4.0, -2.0
+@429(63): MoveSelection -4, -2
 @429(63): OpenTargetInventory
 @429(0): AddPlayer Placeholder1, 62, 1
 @429(0): AddPlayer CableCrafter5, 64, 1
 @429(62): LeaveGame
-@429(64): MoveSelection -4.0, -2.0
+@429(64): MoveSelection -4, -2
 @429(64): OpenTargetInventory
 @429(0): AddPlayer Placeholder1, 62, 1
 @429(0): AddPlayer Placeholder2, 65, 1
 @429(0): AddPlayer CableCrafter6, 66, 1
 @429(65): LeaveGame
 @429(62): LeaveGame
-@429(66): MoveSelection -4.0, -2.0
+@429(66): MoveSelection -4, -2
 @429(66): OpenTargetInventory
 @429(0): AddPlayer Placeholder1, 62, 1
 @429(0): AddPlayer Placeholder2, 65, 1
@@ -627,7 +627,7 @@
 @429(67): LeaveGame
 @429(65): LeaveGame
 @429(62): LeaveGame
-@429(77): MoveSelection -4.0, -2.0
+@429(77): MoveSelection -4, -2
 @429(77): OpenTargetInventory
 @429(0): AddPlayer Placeholder1, 62, 1
 @429(0): AddPlayer Placeholder2, 65, 1
@@ -656,7 +656,7 @@
 @429(67): LeaveGame
 @429(65): LeaveGame
 @429(62): LeaveGame
-@429(79): MoveSelection -4.0, -2.0
+@429(79): MoveSelection -4, -2
 @429(79): OpenTargetInventory
 @429(59): TransferInventory FuelOrContainer, 31
 @429(59): Craft 31, 1
@@ -725,7 +725,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(80): MoveSelection -4.0, -2.0
+@460(80): MoveSelection -4, -2
 @460(80): OpenTargetInventory
 @460(0): AddPlayer Placeholder1, 62, 1
 @460(0): AddPlayer Placeholder2, 65, 1
@@ -754,7 +754,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(81): MoveSelection -4.0, -2.0
+@460(81): MoveSelection -4, -2
 @460(81): OpenTargetInventory
 @460(0): AddPlayer Placeholder1, 62, 1
 @460(0): AddPlayer Placeholder2, 65, 1
@@ -783,7 +783,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(82): MoveSelection -4.0, -2.0
+@460(82): MoveSelection -4, -2
 @460(82): OpenTargetInventory
 @460(0): AddPlayer Placeholder1, 62, 1
 @460(0): AddPlayer Placeholder2, 65, 1
@@ -814,7 +814,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(84): MoveSelection -4.0, -2.0
+@460(84): MoveSelection -4, -2
 @460(84): OpenTargetInventory
 @460(0): AddPlayer Placeholder1, 62, 1
 @460(0): AddPlayer Placeholder2, 65, 1
@@ -849,7 +849,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(87): MoveSelection -4.0, -2.0
+@460(87): MoveSelection -4, -2
 @460(87): OpenTargetInventory
 @460(0): AddPlayer Placeholder1, 62, 1
 @460(0): AddPlayer Placeholder2, 65, 1
@@ -886,7 +886,7 @@
 @460(67): LeaveGame
 @460(65): LeaveGame
 @460(62): LeaveGame
-@460(89): MoveSelection -4.0, -2.0
+@460(89): MoveSelection -4, -2
 @460(89): OpenTargetInventory
 @460(80): TransferInventory FuelOrContainer, 31
 @460(80): Craft 46, 1
@@ -990,7 +990,7 @@
 @561(0): Build -11.5, -26.5, N
 @561(0): Toolbelt 1
 @561(0): Build -11, -24.5, E
-@561(0): MoveSelection -7.0, -22.5
+@561(0): MoveSelection -7, -22.5
 @561(0): Toolbelt 9
 @561(0): TransferEntityStack In
 @561(0): Toolbelt 4
@@ -1049,39 +1049,39 @@
 @590(8): StartMining
 @615(0): Toolbelt 1
 @624(0): Build -4.5, -7.5, E
-@639(58): MoveSelection 0.0, -1.0
+@639(58): MoveSelection 0, -1
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection -6.0, -2.0
+@639(58): MoveSelection -6, -2
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection 2.0, 0.0
+@639(58): MoveSelection 2, 0
 @639(58): OpenTargetInventory
 @639(58): TransferItemStack Output, 0
 @639(58): CloseWindow
-@639(58): MoveSelection -6.0, 3.0
+@639(58): MoveSelection -6, 3
 @639(58): OpenTargetInventory
 @639(58): TransferInventory Player, 31
 @639(58): CloseWindow
@@ -1108,7 +1108,7 @@
 @639(77): TransferInventory Player, 31
 @669(0): Build -4.5, -0.5, E
 @669(0): StopRunning
-@669(0): MoveSelection 7.0, 22.5
+@669(0): MoveSelection 7, 22.5
 @669(0): ToggleFilter Toolbelt, 8, 193
 @669(0): ToggleFilter Toolbelt, 9, 35
 @670(59): TransferInventory Player, 31
@@ -1217,7 +1217,7 @@
 @731(67): LeaveGame
 @731(65): LeaveGame
 @731(62): LeaveGame
-@731(90): MoveSelection -4.0, -2.0
+@731(90): MoveSelection -4, -2
 @731(90): OpenTargetInventory
 @731(90): TransferInventory FuelOrContainer, 31
 @731(90): Craft 152, 1
@@ -1270,39 +1270,39 @@
 @840(8): TransferEntityStack In
 @840(8): MoveSelection -1.5, 6.5
 @840(8): StartMining
-@849(58): MoveSelection 0.0, -1.0
+@849(58): MoveSelection 0, -1
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection -6.0, -2.0
+@849(58): MoveSelection -6, -2
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection 2.0, 0.0
+@849(58): MoveSelection 2, 0
 @849(58): OpenTargetInventory
 @849(58): TransferItemStack Output, 0
 @849(58): CloseWindow
-@849(58): MoveSelection -6.0, 3.0
+@849(58): MoveSelection -6, 3
 @849(58): OpenTargetInventory
 @849(58): TransferInventory Player, 31
 @849(58): CloseWindow
@@ -1422,39 +1422,39 @@
 @1032(0): Toolbelt 9
 @1032(0): TransferEntityStack In
 @1032(0): MoveSelection 2.5, 9.5
-@1059(58): MoveSelection 0.0, -1.0
+@1059(58): MoveSelection 0, -1
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection -6.0, -2.0
+@1059(58): MoveSelection -6, -2
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection 2.0, 0.0
+@1059(58): MoveSelection 2, 0
 @1059(58): OpenTargetInventory
 @1059(58): TransferItemStack Output, 0
 @1059(58): CloseWindow
-@1059(58): MoveSelection -6.0, 3.0
+@1059(58): MoveSelection -6, 3
 @1059(58): OpenTargetInventory
 @1059(58): TransferInventory Player, 31
 @1059(58): CloseWindow
@@ -1606,39 +1606,39 @@
 @1215(8): TransferEntityStack In
 @1215(8): MoveSelection -1.5, 6.5
 @1215(8): StartMining
-@1269(58): MoveSelection 0.0, -1.0
+@1269(58): MoveSelection 0, -1
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection -6.0, -2.0
+@1269(58): MoveSelection -6, -2
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection 2.0, 0.0
+@1269(58): MoveSelection 2, 0
 @1269(58): OpenTargetInventory
 @1269(58): TransferItemStack Output, 0
 @1269(58): CloseWindow
-@1269(58): MoveSelection -6.0, 3.0
+@1269(58): MoveSelection -6, 3
 @1269(58): OpenTargetInventory
 @1269(58): TransferInventory Player, 31
 @1269(58): CloseWindow
@@ -1777,7 +1777,7 @@
 @1361(67): LeaveGame
 @1361(65): LeaveGame
 @1361(62): LeaveGame
-@1361(91): MoveSelection -4.0, -2.0
+@1361(91): MoveSelection -4, -2
 @1361(91): OpenTargetInventory
 @1361(91): TransferInventory FuelOrContainer, 31
 @1361(91): Craft 152, 1
@@ -1830,39 +1830,39 @@
 @1465(8): TransferEntityStack In
 @1465(8): MoveSelection -1.5, 6.5
 @1465(8): StartMining
-@1479(58): MoveSelection 0.0, -1.0
+@1479(58): MoveSelection 0, -1
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection -6.0, -2.0
+@1479(58): MoveSelection -6, -2
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection 2.0, 0.0
+@1479(58): MoveSelection 2, 0
 @1479(58): OpenTargetInventory
 @1479(58): TransferItemStack Output, 0
 @1479(58): CloseWindow
-@1479(58): MoveSelection -6.0, 3.0
+@1479(58): MoveSelection -6, 3
 @1479(58): OpenTargetInventory
 @1479(58): TransferInventory Player, 31
 @1479(58): CloseWindow
@@ -1985,39 +1985,39 @@
 @1662(0): Toolbelt 9
 @1662(0): TransferEntityStack In
 @1662(0): MoveSelection 2.5, 6.5
-@1689(58): MoveSelection 0.0, -1.0
+@1689(58): MoveSelection 0, -1
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection -6.0, -2.0
+@1689(58): MoveSelection -6, -2
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection 2.0, 0.0
+@1689(58): MoveSelection 2, 0
 @1689(58): OpenTargetInventory
 @1689(58): TransferItemStack Output, 0
 @1689(58): CloseWindow
-@1689(58): MoveSelection -6.0, 3.0
+@1689(58): MoveSelection -6, 3
 @1689(58): OpenTargetInventory
 @1689(58): TransferInventory Player, 31
 @1689(58): CloseWindow
@@ -2152,7 +2152,7 @@
 @1781(67): LeaveGame
 @1781(65): LeaveGame
 @1781(62): LeaveGame
-@1781(92): MoveSelection -4.0, -2.0
+@1781(92): MoveSelection -4, -2
 @1781(92): OpenTargetInventory
 @1781(92): TransferInventory FuelOrContainer, 31
 @1781(92): Craft 152, 1
@@ -2205,39 +2205,39 @@
 @1840(8): TransferEntityStack In
 @1840(8): MoveSelection -1.5, 6.5
 @1840(8): StartMining
-@1899(58): MoveSelection 0.0, -1.0
+@1899(58): MoveSelection 0, -1
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection -6.0, -2.0
+@1899(58): MoveSelection -6, -2
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection 2.0, 0.0
+@1899(58): MoveSelection 2, 0
 @1899(58): OpenTargetInventory
 @1899(58): TransferItemStack Output, 0
 @1899(58): CloseWindow
-@1899(58): MoveSelection -6.0, 3.0
+@1899(58): MoveSelection -6, 3
 @1899(58): OpenTargetInventory
 @1899(58): TransferInventory Player, 31
 @1899(58): CloseWindow
@@ -2412,39 +2412,39 @@
 @2090(8): TransferEntityStack In
 @2090(8): MoveSelection -1.5, 6.5
 @2090(8): StartMining
-@2109(58): MoveSelection 0.0, -1.0
+@2109(58): MoveSelection 0, -1
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection -6.0, -2.0
+@2109(58): MoveSelection -6, -2
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection 2.0, 0.0
+@2109(58): MoveSelection 2, 0
 @2109(58): OpenTargetInventory
 @2109(58): TransferItemStack Output, 0
 @2109(58): CloseWindow
-@2109(58): MoveSelection -6.0, 3.0
+@2109(58): MoveSelection -6, 3
 @2109(58): OpenTargetInventory
 @2109(58): TransferInventory Player, 31
 @2109(58): CloseWindow
@@ -2560,39 +2560,39 @@
 @2264(0): Toolbelt 9
 @2264(0): TransferEntityStack In
 @2264(0): MoveSelection 2.5, 6.5
-@2319(58): MoveSelection 0.0, -1.0
+@2319(58): MoveSelection 0, -1
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection -6.0, -2.0
+@2319(58): MoveSelection -6, -2
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection 2.0, 0.0
+@2319(58): MoveSelection 2, 0
 @2319(58): OpenTargetInventory
 @2319(58): TransferItemStack Output, 0
 @2319(58): CloseWindow
-@2319(58): MoveSelection -6.0, 3.0
+@2319(58): MoveSelection -6, 3
 @2319(58): OpenTargetInventory
 @2319(58): TransferInventory Player, 31
 @2319(58): CloseWindow
@@ -2731,7 +2731,7 @@
 @2411(67): LeaveGame
 @2411(65): LeaveGame
 @2411(62): LeaveGame
-@2411(93): MoveSelection -4.0, -2.0
+@2411(93): MoveSelection -4, -2
 @2411(93): OpenTargetInventory
 @2411(93): TransferInventory FuelOrContainer, 31
 @2411(93): Craft 152, 1
@@ -2776,39 +2776,39 @@
 @2465(8): MoveSelection 1.5, -6.5
 @2465(8): TransferEntityStack In
 @2465(8): LeaveGame
-@2529(58): MoveSelection 0.0, -1.0
+@2529(58): MoveSelection 0, -1
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection -6.0, -2.0
+@2529(58): MoveSelection -6, -2
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection 2.0, 0.0
+@2529(58): MoveSelection 2, 0
 @2529(58): OpenTargetInventory
 @2529(58): TransferItemStack Output, 0
 @2529(58): CloseWindow
-@2529(58): MoveSelection -6.0, 3.0
+@2529(58): MoveSelection -6, 3
 @2529(58): OpenTargetInventory
 @2529(58): TransferInventory Player, 31
 @2529(58): CloseWindow
@@ -2895,39 +2895,39 @@
 @2712(0): Toolbelt 9
 @2712(0): TransferEntityStack In
 @2712(0): MoveSelection 2.5, 0.5
-@2739(58): MoveSelection 0.0, -1.0
+@2739(58): MoveSelection 0, -1
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection -6.0, -2.0
+@2739(58): MoveSelection -6, -2
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection 2.0, 0.0
+@2739(58): MoveSelection 2, 0
 @2739(58): OpenTargetInventory
 @2739(58): TransferItemStack Output, 0
 @2739(58): CloseWindow
-@2739(58): MoveSelection -6.0, 3.0
+@2739(58): MoveSelection -6, 3
 @2739(58): OpenTargetInventory
 @2739(58): TransferInventory Player, 31
 @2739(58): CloseWindow
@@ -3002,39 +3002,39 @@
 @2866(0): Toolbelt 9
 @2866(0): TransferEntityStack In
 @2866(0): MoveSelection 2.5, 6.5
-@2949(58): MoveSelection 0.0, -1.0
+@2949(58): MoveSelection 0, -1
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection -6.0, -2.0
+@2949(58): MoveSelection -6, -2
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection 2.0, 0.0
+@2949(58): MoveSelection 2, 0
 @2949(58): OpenTargetInventory
 @2949(58): TransferItemStack Output, 0
 @2949(58): CloseWindow
-@2949(58): MoveSelection -6.0, 3.0
+@2949(58): MoveSelection -6, 3
 @2949(58): OpenTargetInventory
 @2949(58): TransferInventory Player, 31
 @2949(58): CloseWindow
@@ -3132,7 +3132,7 @@
 @3041(67): LeaveGame
 @3041(65): LeaveGame
 @3041(62): LeaveGame
-@3041(94): MoveSelection -4.0, -2.0
+@3041(94): MoveSelection -4, -2
 @3041(94): OpenTargetInventory
 @3041(94): TransferInventory FuelOrContainer, 31
 @3041(94): Craft 152, 1
@@ -3149,39 +3149,39 @@
 @3139(0): Toolbelt 9
 @3139(0): TransferEntityStack In
 @3139(0): MoveSelection 2.5, 9.5
-@3159(58): MoveSelection 0.0, -1.0
+@3159(58): MoveSelection 0, -1
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection -6.0, -2.0
+@3159(58): MoveSelection -6, -2
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection 2.0, 0.0
+@3159(58): MoveSelection 2, 0
 @3159(58): OpenTargetInventory
 @3159(58): TransferItemStack Output, 0
 @3159(58): CloseWindow
-@3159(58): MoveSelection -6.0, 3.0
+@3159(58): MoveSelection -6, 3
 @3159(58): OpenTargetInventory
 @3159(58): TransferInventory Player, 31
 @3159(58): CloseWindow
@@ -3240,39 +3240,39 @@
 @3342(0): Toolbelt 9
 @3342(0): TransferEntityStack In
 @3342(0): MoveSelection 2.5, -2.5
-@3369(58): MoveSelection 0.0, -1.0
+@3369(58): MoveSelection 0, -1
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection -6.0, -2.0
+@3369(58): MoveSelection -6, -2
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection 2.0, 0.0
+@3369(58): MoveSelection 2, 0
 @3369(58): OpenTargetInventory
 @3369(58): TransferItemStack Output, 0
 @3369(58): CloseWindow
-@3369(58): MoveSelection -6.0, 3.0
+@3369(58): MoveSelection -6, 3
 @3369(58): OpenTargetInventory
 @3369(58): TransferInventory Player, 31
 @3369(58): CloseWindow
@@ -3300,39 +3300,39 @@
 @3468(0): Toolbelt 9
 @3468(0): TransferEntityStack In
 @3468(0): MoveSelection 2.5, 6.5
-@3579(58): MoveSelection 0.0, -1.0
+@3579(58): MoveSelection 0, -1
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection -6.0, -2.0
+@3579(58): MoveSelection -6, -2
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection 2.0, 0.0
+@3579(58): MoveSelection 2, 0
 @3579(58): OpenTargetInventory
 @3579(58): TransferItemStack Output, 0
 @3579(58): CloseWindow
-@3579(58): MoveSelection -6.0, 3.0
+@3579(58): MoveSelection -6, 3
 @3579(58): OpenTargetInventory
 @3579(58): TransferInventory Player, 31
 @3579(58): CloseWindow
@@ -3396,39 +3396,39 @@
 @3769(0): Toolbelt 9
 @3769(0): TransferEntityStack In
 @3769(0): MoveSelection 2.5, 6.5
-@3789(58): MoveSelection 0.0, -1.0
+@3789(58): MoveSelection 0, -1
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection -6.0, -2.0
+@3789(58): MoveSelection -6, -2
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection 2.0, 0.0
+@3789(58): MoveSelection 2, 0
 @3789(58): OpenTargetInventory
 @3789(58): TransferItemStack Output, 0
 @3789(58): CloseWindow
-@3789(58): MoveSelection -6.0, 3.0
+@3789(58): MoveSelection -6, 3
 @3789(58): OpenTargetInventory
 @3789(58): TransferInventory Player, 31
 @3789(58): CloseWindow
@@ -3468,39 +3468,39 @@
 @3944(0): Toolbelt 9
 @3944(0): TransferEntityStack In
 @3944(0): MoveSelection 2.5, -2.5
-@3999(58): MoveSelection 0.0, -1.0
+@3999(58): MoveSelection 0, -1
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection -6.0, -2.0
+@3999(58): MoveSelection -6, -2
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection 2.0, 0.0
+@3999(58): MoveSelection 2, 0
 @3999(58): OpenTargetInventory
 @3999(58): TransferItemStack Output, 0
 @3999(58): CloseWindow
-@3999(58): MoveSelection -6.0, 3.0
+@3999(58): MoveSelection -6, 3
 @3999(58): OpenTargetInventory
 @3999(58): TransferInventory Player, 31
 @3999(58): CloseWindow
@@ -3540,39 +3540,39 @@
 @4189(0): Toolbelt 9
 @4189(0): TransferEntityStack In
 @4189(0): MoveSelection 2.5, 3.5
-@4209(58): MoveSelection 0.0, -1.0
+@4209(58): MoveSelection 0, -1
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection -6.0, -2.0
+@4209(58): MoveSelection -6, -2
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection 2.0, 0.0
+@4209(58): MoveSelection 2, 0
 @4209(58): OpenTargetInventory
 @4209(58): TransferItemStack Output, 0
 @4209(58): CloseWindow
-@4209(58): MoveSelection -6.0, 3.0
+@4209(58): MoveSelection -6, 3
 @4209(58): OpenTargetInventory
 @4209(58): TransferInventory Player, 31
 @4209(58): CloseWindow
@@ -3624,39 +3624,39 @@
 @4371(0): Toolbelt 9
 @4371(0): TransferEntityStack In
 @4371(0): MoveSelection 2.5, 6.5
-@4419(58): MoveSelection 0.0, -1.0
+@4419(58): MoveSelection 0, -1
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection -6.0, -2.0
+@4419(58): MoveSelection -6, -2
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection 2.0, 0.0
+@4419(58): MoveSelection 2, 0
 @4419(58): OpenTargetInventory
 @4419(58): TransferItemStack Output, 0
 @4419(58): CloseWindow
-@4419(58): MoveSelection -6.0, 3.0
+@4419(58): MoveSelection -6, 3
 @4419(58): OpenTargetInventory
 @4419(58): TransferInventory Player, 31
 @4419(58): CloseWindow
@@ -3807,17 +3807,17 @@
 @5148(0): Toolbelt 9
 @5148(0): TransferEntityStack In
 @5148(0): MoveSelection 2.5, -2.5
-@5180(0): MoveSelection 0.0, -1.0
+@5180(0): MoveSelection 0, -1
 @5180(0): OpenTargetInventory
 @5180(0): AddPlayer SteelCrafter, 95, 1
 @5180(95): ToggleFilter Toolbelt, 2, 69
-@5180(95): MoveSelection -4.0, -2.0
+@5180(95): MoveSelection -4, -2
 @5180(95): OpenTargetInventory
 @5180(95): TransferInventory FuelOrContainer, 31
 @5180(95): TransferInventory Player, 31
 @5180(95): ClickItemStack Toolbelt, 2
 @5180(95): CloseWindow
-@5180(95): MoveSelection 0.0, -1.0
+@5180(95): MoveSelection 0, -1
 @5180(95): OpenTargetInventory
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
@@ -3825,7 +3825,7 @@
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
 @5180(95): CloseWindow
-@5180(95): MoveSelection 2.0, 0.0
+@5180(95): MoveSelection 2, 0
 @5180(95): OpenTargetInventory
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
@@ -3833,7 +3833,7 @@
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
 @5180(95): CloseWindow
-@5180(95): MoveSelection 2.0, 0.0
+@5180(95): MoveSelection 2, 0
 @5180(95): OpenTargetInventory
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
@@ -3841,7 +3841,7 @@
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
 @5180(95): CloseWindow
-@5180(95): MoveSelection 2.0, 0.0
+@5180(95): MoveSelection 2, 0
 @5180(95): OpenTargetInventory
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
@@ -3849,7 +3849,7 @@
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
 @5180(95): CloseWindow
-@5180(95): MoveSelection 2.0, 0.0
+@5180(95): MoveSelection 2, 0
 @5180(95): OpenTargetInventory
 @5180(95): SplitItemStack Input, 0
 @5180(95): SplitItemStack Input, 0
@@ -3859,22 +3859,22 @@
 @5180(95): ClearCursor
 @5180(95): Craft 87, 1
 @6231(95): CloseWindow
-@6231(95): MoveSelection -8.0, 0.0
+@6231(95): MoveSelection -8, 0
 @6231(95): TransferEntityStack Out
-@6231(95): MoveSelection 2.0, 0.0
+@6231(95): MoveSelection 2, 0
 @6231(95): TransferEntityStack Out
-@6231(95): MoveSelection 2.0, 0.0
+@6231(95): MoveSelection 2, 0
 @6231(95): TransferEntityStack Out
-@6231(95): MoveSelection 2.0, 0.0
+@6231(95): MoveSelection 2, 0
 @6231(95): TransferEntityStack Out
-@6231(95): MoveSelection 2.0, 0.0
+@6231(95): MoveSelection 2, 0
 @6231(95): TransferEntityStack Out
-@6231(95): MoveSelection -8.0, 1.0
+@6231(95): MoveSelection -8, 1
 @6231(95): OpenTargetInventory
 @6231(95): TransferInventory Player, 31
 @6231(95): LeaveGame
 @6231(0): CloseWindow
-@6231(0): MoveSelection 0.0, 1.0
+@6231(0): MoveSelection 0, 1
 @6231(0): OpenTargetInventory
 @6231(0): TransferInventory FuelOrContainer, 31
 @6231(0): Craft 171, 1

@@ -52,151 +52,6 @@ const loadText = (text) => {
     return result;
   };
 
-  const readUint8 = () => {
-    return buffer[curIndex++];
-  };
-
-  const writeUint8 = (num = fetchNum()) => {
-    let result = num.toString(16);
-    if (result.length < 2) {
-      result = '0' + result;
-    }
-    datString += result;
-  };
-
-  const readUint16 = () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100);
-  };
-
-  const writeUint16 = (num = fetchNum()) => {
-    writeUint8(num & 0xff);
-    writeUint8((num / 0x100) & 0xff);
-  };
-
-  // Doubt these actually exist, but useful for unknowns
-  const readUint24 = () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100)
-      + (buffer[curIndex++] * 0x10000);
-  };
-
-  const writeUint24 = (num = fetchNum()) => {
-    writeUint16(num & 0xffff);
-    writeUint8((num / 0x10000) & 0xff);
-  };
-
-  const readUint32 = () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100)
-      + (buffer[curIndex++] * 0x10000)
-      + (buffer[curIndex++] * 0x1000000);
-  };
-
-  const writeUint32 = (num = fetchNum()) => {
-    writeUint16(num & 0xffff);
-    writeUint16((num / 0x10000) & 0xffff);
-  };
-
-  const readInt16 = () => {
-    let num = readUint16();
-    if (num >= 0x8000) {
-      num -= 0x10000;
-    }
-    return num;
-  };
-
-  const writeInt16 = (num = fetchNum()) => {
-    if (num < 0) {
-      num += 0x10000;
-    }
-    writeUint16(num);
-  };
-
-  const readOptUint16 = () => {
-    let num = readUint8();
-    if (255 == num) {
-      num = readUint16();
-    }
-    return num;
-  };
-
-  const writeOptUint16 = (num = fetchNum()) => {
-    if (num > 254) {
-      writeUint8(255);
-      writeUint16(num);
-    } else {
-      writeUint8(num);
-    }
-  };
-
-  const readInt32 = () => {
-    let num = readUint32();
-    if (num >= 0x80000000) {
-      num -= 0x100000000;
-    }
-    return num;
-  };
-
-  const writeInt32 = (num = fetchNum()) => {
-    if (num < 0) {
-      num += 0x100000000;
-    }
-    writeUint32(num);
-  };
-
-  const readFixed16 = () => {
-    return readInt16() / 256;
-  };
-
-  const writeFixed16 = (num = fetchNum()) => {
-    writeInt16(num * 256);
-  };
-
-  const readFixed32 = () => {
-    return readInt32() / 256;
-  };
-
-  const writeFixed32 = (num = fetchNum()) => {
-    writeInt32(num * 256);
-  };
-
-  const readOptUint32 = () => {
-    let num = readUint8();
-    if (255 == num) {
-      num = readUint32();
-    }
-    return num;
-  };
-
-  const writeOptUint32 = (num = fetchNum()) => {
-    if (num > 254) {
-      writeUint8(255);
-      writeUint32(num);
-    } else {
-      writeUint8(num);
-    }
-  };
-
-  const readString = () => {
-    const len = readOptUint32();
-    let result = '';
-    for (let i = 0; i < len; i++) {
-      result += String.fromCharCode(buffer[curIndex++]);
-    }
-    return result;
-  };
-
-  const writeString = (stopAtComma, val) => {
-    if (undefined === val) {
-      val = fetchString(stopAtComma);
-    }
-    writeOptUint32(val.length);
-    for (let i = 0; i < val.length; i++) {
-      writeUint8(val.charCodeAt(i));
-    }
-  };
-
   const fetchString = (stopAtComma) => {
     let endIndex = buffer.indexOf('\n', curIndex);
     if (stopAtComma) {
@@ -211,73 +66,6 @@ const loadText = (text) => {
     return result;
   };
 
-  const readBytes = (length) => {
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      let byte = readUint8().toString(16);
-      if (byte.length == 1) {
-        byte = '0' + byte;
-      }
-      if (i > 0) {
-        result += ' ';
-      }
-      result += byte;
-    }
-    return result;
-  };
-
-  const writeBytes = (count) => {
-    for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
-      const char = buffer[curIndex];
-      if (char == '\n') {
-        if (count === undefined) {
-          // No more bytes
-          break;
-        }
-        // Permit newlines in byte sequence if we're looking for a certain number of bytes
-        continue;
-      }
-      if (/\s/.test(char)) {
-        continue; // Consume the space
-      }
-      const byte = buffer.substring(curIndex, curIndex + 2);
-      if (!/[a-fA-F0-9][a-fA-F0-9]/.test(byte)) {
-        error = "Bad character in byte sequence";
-        return;
-      }
-      datString += byte;
-      ++curIndex; // Increment a second time to consume both characters
-      if (count !== undefined) {
-        --count;
-      }
-    }
-    if (undefined !== count && count > 0) {
-      error = "Not enough bytes at end of input";
-    } else if (0 === count) {
-      skipCommaAndSpaces();
-    }
-  };
-
-  const readBool = () => {
-    return readUint8() == 1;
-  };
-
-  const writeBool = (val) => {
-    if (undefined === val) {
-      val = (fetchString() == 'true');
-    }
-    writeUint8(val ? 1 : 0);
-  };
-
-  const readCheckSum = () => {
-    const rawCheckSum = readUint32();
-    let checkSum = rawCheckSum.toString(16);
-    while (checkSum.length < 8) {
-      checkSum = '0' + checkSum;
-    }
-    return checkSum;
-  };
-
   const fetchCheckSum = () => {
     let checkSum = fetchString(true);
     let result = '';
@@ -289,60 +77,265 @@ const loadText = (text) => {
     return result;
   };
 
-  const writeCheckSum = () => {
-    datString += fetchCheckSum();
-  };
-
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const leaveReasons = ['', 'Dropped', 'Reconnecting', 'MalformedData', 'Desynced', 'CouldNotKeepUp', 'AFK'];
   const inventories = [[],
   [undefined, 'Player', 'Toolbelt', 'Gun', 'Ammo', 'Armor', 'Tool'],
   [],
   [],
   [undefined, 'FuelOrContainer', 'Input', 'Output']];
-  const getInventory = (context, which) => {
-    return inventories[context][which];
+
+  const read = {
+    uint8: () => {
+      return buffer[curIndex++];
+    },
+    uint16: () => {
+      return buffer[curIndex++]
+        + (buffer[curIndex++] * 0x100);
+    },
+    // Doubt these actually exist, but useful for unknowns
+    uint24: () => {
+      return buffer[curIndex++]
+        + (buffer[curIndex++] * 0x100)
+        + (buffer[curIndex++] * 0x10000);
+    },
+    uint32: () => {
+      return buffer[curIndex++]
+        + (buffer[curIndex++] * 0x100)
+        + (buffer[curIndex++] * 0x10000)
+        + (buffer[curIndex++] * 0x1000000);
+    },
+    int16: () => {
+      let num = read.uint16();
+      if (num >= 0x8000) {
+        num -= 0x10000;
+      }
+      return num;
+    },
+    int32: () => {
+      let num = read.uint32();
+      if (num >= 0x80000000) {
+        num -= 0x100000000;
+      }
+      return num;
+    },
+    optUint16: () => {
+      let num = read.uint8();
+      if (255 == num) {
+        num = read.uint16();
+      }
+      return num;
+    },
+    optUint32: () => {
+      let num = read.uint8();
+      if (255 == num) {
+        num = read.uint32();
+      }
+      return num;
+    },
+    fixed16: () => {
+      return read.int16() / 256;
+    },
+    fixed32: () => {
+      return read.int32() / 256;
+    },
+    string: () => {
+      const len = read.optUint32();
+      let result = '';
+      for (let i = 0; i < len; i++) {
+        result += String.fromCharCode(buffer[curIndex++]);
+      }
+      return result;
+    },
+    bytes: (length) => {
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        let byte = read.uint8().toString(16);
+        if (byte.length == 1) {
+          byte = '0' + byte;
+        }
+        if (i > 0) {
+          result += ' ';
+        }
+        result += byte;
+      }
+      return result;
+    },
+    bool: () => {
+      return read.uint8() == 1;
+    },
+    checkSum: () => {
+      const rawCheckSum = read.uint32();
+      let checkSum = rawCheckSum.toString(16);
+      while (checkSum.length < 8) {
+        checkSum = '0' + checkSum;
+      }
+      return checkSum;
+    },
+    direction: () => {
+      return directions[read.uint8()];
+    },
+    leaveReason: () => {
+      return leaveReasons[read.uint8()];
+    },
+    slotInInventory: () => {
+      const whichInventory = read.uint8();
+      const slot = read.uint16();
+      const inventoryContext = read.uint16();
+      const inventory = inventories[inventoryContext][whichInventory];
+      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
+    },
   };
 
-  const getIndicesForInventory = () => {
-    const inventory = fetchString(true);
-    for (let i = 0; i < inventories.length; i++) {
-      for (let j = 0; j < inventories[i].length; j++) {
-        if (inventories[i][j] == inventory) {
-          return [i, j];
+  const write = {
+    uint8: (num = fetchNum()) => {
+      let result = num.toString(16);
+      if (result.length < 2) {
+        result = '0' + result;
+      }
+      datString += result;
+    },
+    uint16: (num = fetchNum()) => {
+      write.uint8(num & 0xff);
+      write.uint8((num / 0x100) & 0xff);
+    },
+    uint24: (num = fetchNum()) => {
+      write.uint16(num & 0xffff);
+      write.uint8((num / 0x10000) & 0xff);
+    },
+    uint32: (num = fetchNum()) => {
+      write.uint16(num & 0xffff);
+      write.uint16((num / 0x10000) & 0xffff);
+    },
+    int16: (num = fetchNum()) => {
+      if (num < 0) {
+        num += 0x10000;
+      }
+      write.uint16(num);
+    },
+    optUint16: (num = fetchNum()) => {
+      if (num > 254) {
+        write.uint8(255);
+        write.uint16(num);
+      } else {
+        write.uint8(num);
+      }
+    },
+    int32: (num = fetchNum()) => {
+      if (num < 0) {
+        num += 0x100000000;
+      }
+      write.uint32(num);
+    },
+    fixed16: (num = fetchNum()) => {
+      write.int16(num * 256);
+    },
+    fixed32: (num = fetchNum()) => {
+      write.int32(num * 256);
+    },
+    optUint32: (num = fetchNum()) => {
+      if (num > 254) {
+        write.uint8(255);
+        write.uint32(num);
+      } else {
+        write.uint8(num);
+      }
+    },
+    string: (stopAtComma, val) => {
+      if (undefined === val) {
+        val = fetchString(stopAtComma);
+      }
+      write.optUint32(val.length);
+      for (let i = 0; i < val.length; i++) {
+        write.uint8(val.charCodeAt(i));
+      }
+    },
+    bytes: (count) => {
+      for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
+        const char = buffer[curIndex];
+        if (char == '\n') {
+          if (count === undefined) {
+            // No more bytes
+            break;
+          }
+          // Permit newlines in byte sequence if we're looking for a certain number of bytes
+          continue;
+        }
+        if (/\s/.test(char)) {
+          continue; // Consume the space
+        }
+        const byte = buffer.substring(curIndex, curIndex + 2);
+        if (!/[a-fA-F0-9][a-fA-F0-9]/.test(byte)) {
+          error = "Bad character in byte sequence";
+          return;
+        }
+        datString += byte;
+        ++curIndex; // Increment a second time to consume both characters
+        if (count !== undefined) {
+          --count;
         }
       }
-    }
-  };
-
-  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  const readDirection = () => {
-    return directions[readUint8()];
-  };
-
-  const writeDirection = () => {
-    const direction = fetchString(true);
-    for (let i = 0; i < directions.length; i++) {
-      if (directions[i] == direction) {
-        writeUint8(i);
-        return;
+      if (undefined !== count && count > 0) {
+        error = "Not enough bytes at end of input";
+      } else if (0 === count) {
+        skipCommaAndSpaces();
       }
-    }
-    error = `Can't parse direction "${direction}"`;
-  };
-
-  const leaveReasons = ['', 'Dropped', 'Reconnecting', 'MalformedData', 'Desynced', 'CouldNotKeepUp', 'AFK'];
-  const readLeaveReason = () => {
-    return leaveReasons[readUint8()];
-  };
-
-  const writeLeaveReason = () => {
-    const leaveReason = fetchString(true);
-    for (let i = 0; i < leaveReasons.length; i++) {
-      if (leaveReasons[i] == leaveReason) {
-        writeUint8(i);
-        return;
+    },
+    bool: (val) => {
+      if (undefined === val) {
+        val = (fetchString() == 'true');
       }
-    }
-    error = `Can't parse leave reason "${leaveReason}"`;
+      write.uint8(val ? 1 : 0);
+    },
+    checkSum: () => {
+      datString += fetchCheckSum();
+    },
+    direction: () => {
+      const direction = fetchString(true);
+      for (let i = 0; i < directions.length; i++) {
+        if (directions[i] == direction) {
+          write.uint8(i);
+          return;
+        }
+      }
+      error = `Can't parse direction "${direction}"`;
+    },
+    leaveReason: () => {
+      const leaveReason = fetchString(true);
+      for (let i = 0; i < leaveReasons.length; i++) {
+        if (leaveReasons[i] == leaveReason) {
+          write.uint8(i);
+          return;
+        }
+      }
+      error = `Can't parse leave reason "${leaveReason}"`;
+    },
+    slotInInventory: () => {
+      let inventoryContext, whichInventory;
+      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
+        const inventory = fetchString(true);
+        var found = false;
+        for (let i = 0; !found && i < inventories.length; i++) {
+          for (let j = 0; j < inventories[i].length; j++) {
+            if (inventories[i][j] == inventory) {
+              inventoryContext = i;
+              whichInventory = j;
+              found = true;
+              break;
+            }
+          }
+        }
+        if (!found) {
+          error = `Can't parse inventory "${inventory}"`;
+        }
+      } else {
+        whichInventory = fetchNum();
+        inventoryContext = fetchNum();
+      }
+      write.uint8(whichInventory);
+      write.uint16();
+      write.uint16(inventoryContext);
+    },
   };
 
   const expect = (val) => {
@@ -354,8 +347,8 @@ const loadText = (text) => {
   };
 
   const tickHandler = () => {
-    curTick = readUint32();
-    curPlayer = readOptUint16();
+    curTick = read.uint32();
+    curPlayer = read.optUint16();
     return `@${curTick}(${curPlayer}): `;
   };
 
@@ -406,165 +399,75 @@ const loadText = (text) => {
     [0x1F, 'OpenAchievements'],
     [0x23, 'Lag?'],
     [0x27, 'OpenLogisticNetworks'],
-    [0x29, 'DropItem', () => {
-      return `${readFixed32()}, ${readFixed32()}`;
-    }, () => {
-      writeFixed32();
-      writeFixed32();
-    }],
+    [0x29, 'DropItem', ['fixed32', 'fixed32']],
     [0x2a, 'Build', () => {
-      const x = readFixed32();
-      const y = readFixed32();
-      const direction = readDirection();
-      const isDragging = readBool();
-      const isGhost = readBool();
-      const unknown = readUint8();
+      const x = read.fixed32();
+      const y = read.fixed32();
+      const direction = read.direction();
+      const isDragging = read.bool();
+      const isGhost = read.bool();
+      const unknown = read.uint8();
       const unknowns = (unknown == 0) ? '' : `, ${unknown}`;
       return `${x}, ${y}, ${direction}${isDragging ? ', Dragging' : ''}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
-      writeFixed32();
-      writeFixed32();
-      writeDirection();
+      write.fixed32();
+      write.fixed32();
+      write.direction();
       let isDragging = false;
       if (buffer[curIndex] == 'D') {
         fetchString();
         isDragging = true;
       }
-      writeBool(isDragging);
+      write.bool(isDragging);
       let isGhost = false;
       if (buffer[curIndex] == 'G') {
         fetchString();
         isGhost = true;
       }
-      writeBool(isGhost);
+      write.bool(isGhost);
       let unknown = 0;
       if (buffer[curIndex] != '\n') {
         unknown = fetchNum();
       }
-      writeUint8(unknown);
+      write.uint8(unknown);
     }],
-    [0x2b, 'Run', readDirection, writeDirection],
-    [0x2e, 'OpenEquipmentGrid', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x31, 'ClickItemStack', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x32, 'SplitItemStack', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x33, 'TransferItemStack', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x34, 'TransferInventory', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
+    [0x2b, 'Run', 'direction'],
+    [0x2e, 'OpenEquipmentGrid', 'slotInInventory'],
+    [0x31, 'ClickItemStack', 'slotInInventory'],
+    [0x32, 'SplitItemStack', 'slotInInventory'],
+    [0x33, 'TransferItemStack', 'slotInInventory'],
+    [0x34, 'TransferInventory', 'slotInInventory'],
     [0x35, 'CheckSum', () => {
-      const checkSum = readCheckSum();
-      const previousTick = readUint32();
+      const checkSum = read.checkSum();
+      const previousTick = read.uint32();
       return `${checkSum}${previousTick == curTick - 1 ? '' : `, ${previousTick}`}`;
     }, () => {
-      writeCheckSum();
+      write.checkSum();
       if (buffer[curIndex] != '\n') {
-        writeUint32();
+        write.uint32();
       } else {
-        writeUint32(curTick - 1);
+        write.uint32(curTick - 1);
       }
     }],
     [0x36, 'Craft', () => {
-      const recipeId = readUint16();
-      let quantity = readUint32();
+      const recipeId = read.uint16();
+      let quantity = read.uint32();
       if (0xffffffff == quantity) {
         quantity = 'all';
       }
       return `${recipeId}, ${quantity}`;
     }, () => {
-      writeUint16();
+      write.uint16();
       if (buffer[curIndex] == 'a') {
         fetchString();
-        writeUint32(0xffffffff);
+        write.uint32(0xffffffff);
       } else {
-        writeUint32();
+        write.uint32();
       }
     }],
     [0x38, 'Shoot', () => {
       const shotTypes = ['None', 'Enemy', 'Selected'];
-      return `${shotTypes[readUint8()]}, ${readFixed32()}, ${readFixed32()}`
+      return `${shotTypes[read.uint8()]}, ${read.fixed32()}, ${read.fixed32()}`
     }, () => {
       const shotType = fetchString(true);
       let rawShotType = -1;
@@ -575,82 +478,36 @@ const loadText = (text) => {
       } else if (shotType == 'Selected') {
         rawShotType = 2;
       }
-      writeUint8(rawShotType);
-      writeFixed32();
-      writeFixed32();
+      write.uint8(rawShotType);
+      write.fixed32();
+      write.fixed32();
     }],
-    [0x39, 'ChooseRecipe', () => {
-      return `${readUint8()}, ${readUint8()}`;
-    }, () => {
-      writeUint8();
-      writeUint8();
-    }],
-    [0x3A, 'MoveSelectionLarge', () => {
-      return `${readFixed32()}, ${readFixed32()}`
-    }, () => {
-      writeFixed32();
-      writeFixed32();
-    }],
-    [0x3B, 'Pipette', readUint16, writeUint16],
-    [0x3D, 'SplitInventory', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x3F, 'ToggleFilter', () => {
-      const whichInventory = readUint8();
-      const slot = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      const itemId = readUint16();
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}, ${itemId}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-      writeUint16();
-    }],
-    [0x43, 'ChooseTechnology', readUint16, writeUint16],
-    [0x48, 'Chat', readString, writeString],
-    [0x4C, 'ChooseCraftingItemGroup', readUint8, writeUint8],
+    [0x39, 'ChooseRecipe', ['uint8', 'uint8']],
+    [0x3A, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
+    [0x3B, 'Pipette', 'uint16'],
+    [0x3D, 'SplitInventory', 'slotInInventory'],
+    [0x3F, 'ToggleFilter', ['slotInInventory', 'uint16']],
+    [0x43, 'ChooseTechnology', 'uint16'],
+    [0x48, 'Chat', 'string'],
+    [0x4C, 'ChooseCraftingItemGroup', 'uint8'],
     [0x51, 'PlaceInEquipmentGrid', () => {
-      const column = readUint32();
-      const row = readUint32();
-      const unknown = readUint8();
+      const column = read.uint32();
+      const row = read.uint32();
+      const unknown = read.uint8();
       return `${column}, ${row}${unknown == 4 ? '' : unknown}`;
     }, () => {
-      writeUint32();
-      writeUint32();
+      write.uint32();
+      write.uint32();
       if (buffer[curIndex] != '\n') {
-        writeUint8();
+        write.uint8();
       } else {
-        writeUint8(4);
+        write.uint8(4);
       }
     }],
     [0x52, 'TransferFromEquipmentGrid', () => {
-      const column = readUint32();
-      const row = readUint32();
-      const rawHowMany = readUint8();
+      const column = read.uint32();
+      const row = read.uint32();
+      const rawHowMany = read.uint8();
       let howMany = rawHowMany;
       if (rawHowMany == 1) {
         howMany = 'One'
@@ -659,45 +516,28 @@ const loadText = (text) => {
       }
       return `${column}, ${row}, ${howMany}`;
     }, () => {
-      writeUint32();
-      writeUint32();
+      write.uint32();
+      write.uint32();
       if (buffer[curIndex] == 'O') {
         fetchString();
-        writeUint8(1);
+        write.uint8(1);
       } else if (buffer[curIndex] == 'A') {
         fetchString();
-        writeUint8(2);
+        write.uint8(2);
       } else {
-        writeUint8();
+        write.uint8();
       }
     }],
-    [0x56, 'LimitSlots', () => {
-      const whichInventory = readUint8();
-      const slotCount = readUint16();
-      const inventoryContext = readUint16();
-      const inventory = getInventory(inventoryContext, whichInventory);
-      return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slotCount}`;
-    }, () => {
-      let inventoryContext, whichInventory;
-      if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-        [inventoryContext, whichInventory] = getIndicesForInventory();
-      } else {
-        whichInventory = fetchNum();
-        inventoryContext = fetchNum();
-      }
-      writeUint8(whichInventory);
-      writeUint16();
-      writeUint16(inventoryContext);
-    }],
-    [0x57, 'ChooseFilterCategory', readUint8, readUint8],
+    [0x56, 'LimitSlots', 'slotInInventory'],
+    [0x57, 'ChooseFilterCategory', 'uint8'],
     [0x68, 'ConnectionInfo?', () => {
-      const playerNumber = readUint8();
-      const unknown1 = readUint24(); // No ideas, always 0?
-      const checkSum = readCheckSum();
-      const unknown2 = readUint24(); // No ideas, always 0?
+      const playerNumber = read.uint8();
+      const unknown1 = read.uint24(); // No ideas, always 0?
+      const checkSum = read.checkSum();
+      const unknown2 = read.uint24(); // No ideas, always 0?
       let unknown3 = '';
       if (256 == unknown2) {
-        unknown3 = readBytes(30); // This random blob happens on connections in lan games
+        unknown3 = read.bytes(30); // This random blob happens on connections in lan games
       }
       const extras = (playerNumber == curPlayer && unknown1 == 0 && unknown2 == 0)
         ? ''
@@ -711,39 +551,39 @@ const loadText = (text) => {
         unknown1 = fetchNum();
         unknown2 = fetchNum();
       }
-      writeUint8(playerNumber);
-      writeUint24(unknown1);
+      write.uint8(playerNumber);
+      write.uint24(unknown1);
       datString += checkSum;
-      writeUint24(unknown2);
+      write.uint24(unknown2);
       if (256 == unknown2) {
-        writeBytes(30);
+        write.bytes(30);
       }
     }],
     [0x6F, 'AddPlayer', () => {
-      const playerNumber = readOptUint16();
-      const force = readUint8(); // Always 1? Maybe force?
-      const name = readString();
+      const playerNumber = read.optUint16();
+      const force = read.uint8(); // Always 1? Maybe force?
+      const name = read.string();
       return `${name}, ${playerNumber}, ${force}`;
     }, () => {
       const name = fetchString(true);
-      writeOptUint16();
-      writeUint8();
-      writeString(true, name);
+      write.optUint16();
+      write.uint8();
+      write.string(true, name);
     }],
     [0x76, 'PlaceArea', () => {
-      const x = readFixed32();
-      const y = readFixed32();
-      const direction = readDirection();
-      const unknown1 = readUint8(); // No ideas?
-      const sideLength = readUint8();
-      const isGhost = readBool();
-      const unknown2 = readUint8(); // No ideas?
+      const x = read.fixed32();
+      const y = read.fixed32();
+      const direction = read.direction();
+      const unknown1 = read.uint8(); // No ideas?
+      const sideLength = read.uint8();
+      const isGhost = read.bool();
+      const unknown2 = read.uint8(); // No ideas?
       const unknowns = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown1}, ${unknown2}`;
       return `${x}, ${y}, ${direction}, ${sideLength}${isGhost ? ', Ghost' : ''}${unknowns}`
     }, () => {
-      writeFixed32();
-      writeFixed32();
-      writeDirection();
+      write.fixed32();
+      write.fixed32();
+      write.direction();
       const sideLength = fetchNum();
       let isGhost = false;
       if (buffer[curIndex] == 'G') {
@@ -757,65 +597,60 @@ const loadText = (text) => {
         unknown1 = fetchNum();
         unknown2 = fetchNum();
       }
-      writeUint8(unknown1);
-      writeUint8(sideLength);
-      writeBool(isGhost);
-      writeUint8(unknown2);
+      write.uint8(unknown1);
+      write.uint8(sideLength);
+      write.bool(isGhost);
+      write.uint8(unknown2);
     }],
-    [0x91, 'UpdateResolution', () => {
-      return `${readUint32()}, ${readUint32()}`;
-    }, () => {
-      writeUint32();
-      writeUint32();
-    }],
-    [0x9c, 'EnableAutoLaunch', readBool, writeBool],
-    [0x94, 'PickUpNearbyItems', readBool, writeBool],
+    [0x91, 'UpdateResolution', ['uint32', 'uint32']],
+    [0x9c, 'EnableAutoLaunch', 'bool'],
+    [0x94, 'PickUpNearbyItems', 'bool'],
     [0x95, 'MoveSelectionSmall', () => {
-      const rawDelta = readUint8();
+      const rawDelta = read.uint8();
       const x = ((rawDelta & 0xf0) / 0x10) - 8;
       const y = (rawDelta & 0xf) - 8;
       return `${x}, ${y}`
     }, () => {
       const x = fetchNum(), y = fetchNum();
-      writeUint8((x + 8) * 16 + (y + 8));
+      write.uint8((x + 8) * 16 + (y + 8));
     }],
     [0x96, 'MoveSelectionTiny', () => {
-      return `${(readUint8() - 128) / 256}, ${(readUint8() - 128) / 256}`;
+      return `${(read.uint8() - 128) / 256}, ${(read.uint8() - 128) / 256}`;
     }, () => {
-      writeUint8((fetchNum() * 256) + 128);
-      writeUint8((fetchNum() * 256) + 128);
+      write.uint8((fetchNum() * 256) + 128);
+      write.uint8((fetchNum() * 256) + 128);
     }],
     [0x97, 'MoveSelection', () => {
-      const y = readFixed16();
-      const x = readFixed16();
+      const y = read.fixed16();
+      const x = read.fixed16();
       return `${x}, ${y}`
     }, () => {
       const x = fetchNum();
-      writeFixed16(); // Write y first
-      writeFixed16(x);
+      write.fixed16(); // Write y first
+      write.fixed16(x);
     }],
-    [0x99, 'Toolbelt', readUint16, writeUint16],
-    [0x9A, 'ChooseWeapon', readUint16, writeUint16],
+    [0x99, 'Toolbelt', 'uint16'],
+    [0x9A, 'ChooseWeapon', 'uint16'],
     [0xA1, 'TransferEntityStack', () => {
-      const isInto = readBool();
+      const isInto = read.bool();
       return isInto ? 'In' : 'Out';
     }, () => {
-      writeBool(fetchString() == 'In');
+      write.bool(fetchString() == 'In');
     }],
     [0xA2, 'RotateEntity', () => {
-      const isCounterClockwise = readBool();
+      const isCounterClockwise = read.bool();
       return isCounterClockwise ? 'CCW' : 'CW';
     }, () => {
-      writeBool(fetchString() == 'CCW');
+      write.bool(fetchString() == 'CCW');
     }],
     [0xA3, 'SplitEntityStack', () => {
-      const isInto = readBool();
+      const isInto = read.bool();
       return isInto ? 'In' : 'Out';
     }, () => {
-      writeBool(fetchString() == 'In');
+      write.bool(fetchString() == 'In');
     }],
-    [0xA7, 'UnknownA7', readUint8, writeUint8],
-    [0xB4, 'LeaveGame', readLeaveReason, writeLeaveReason],
+    [0xA7, 'UnknownA7', 'uint8'],
+    [0xB4, 'LeaveGame', 'leaveReason'],
   ];
 
   let inputActionByteToFrameHandler = [], inputActionNameToFrameHandler = [];
@@ -854,9 +689,9 @@ const loadText = (text) => {
     const savedDatString = datString;
     datString = '';
     const frameHandler = inputActionNameToFrameHandler['CheckSum'];
-    writeUint8(frameHandler[0]);
-    writeUint32(curTick);
-    writeOptUint16(0);
+    write.uint8(frameHandler[0]);
+    write.uint32(curTick);
+    write.optUint16(0);
 
     const byteArray = new Uint8Array(datString.length / 2);
     for (let i = 0; i < datString.length / 2; i++) {
@@ -907,17 +742,36 @@ const loadText = (text) => {
         result.contentEditable = true;
 
         while (curIndex < buffer.length) {
-          let inputAction = readUint8();
+          let inputAction = read.uint8();
+          let tickStr = tickHandler();
           let frameHandler = inputActionByteToFrameHandler[inputAction];
           if (frameHandler) {
-            appendElement(result, 'span', `${tickHandler()}${frameHandler[1]}${frameHandler.length > 2 ? ` ${frameHandler[2]()}` : ''}`);
+            let frameArgs = '';
+            if (frameHandler.length == 4) {
+              // Arbitrary read/write functions
+              frameArgs = ` ${frameHandler[2]()}`;
+            } else if (frameHandler.length == 3) {
+              // Simple sequence of reads
+              if (Array.isArray(frameHandler[2])) {
+                for (let arg = 0; arg < frameHandler[2].length; arg++) {
+                  if (frameArgs.length > 0) {
+                    frameArgs = `${frameArgs}, `;
+                  }
+                  frameArgs = `${frameArgs}${read[frameHandler[2][arg]]()}`;
+                }
+                frameArgs = ` ${frameArgs}`;
+              } else {
+                frameArgs = ` ${read[frameHandler[2]]()}`;
+              }
+            }
+            appendElement(result, 'span', `${tickStr}${frameHandler[1]}${frameArgs}`.trim());
           } else if (curIndex < buffer.length) {
             const startIndex = curIndex - 1;
             let tickGuess = tickHandler();
             tickGuess = tickGuess.replace('@', '?');
             curIndex = startIndex; // Take back the bytes we've tried to interpret
             const endIndex = tryFindHeartbeat();
-            appendElement(result, 'span', `${tickGuess}${readBytes(endIndex - curIndex)}`);
+            appendElement(result, 'span', `${tickGuess}${read.bytes(endIndex - curIndex)}`);
           }
           appendElement(result, 'br');
         }
@@ -960,14 +814,6 @@ const loadText = (text) => {
     return result;
   }
 
-  const skipComments = () => {
-    while (curIndex < buffer.length && buffer[curIndex] != '@' && buffer.substring(curIndex, curIndex + 17) != 'UnhandledBytes:\n') {
-      // Any line not starting with an @ is treated as a comment
-      fetchString();
-      expect('\n');
-    }
-  };
-
   exportDatButton.addEventListener('click', () => {
     buffer = getTextRecursively(replayDiv, false);
     if (!buffer.endsWith('\n')) {
@@ -995,7 +841,7 @@ const loadText = (text) => {
           if (-1 != colonIndex) {
             curIndex = colonIndex + 1;
           }
-          writeBytes();
+          write.bytes();
           expect('\n');
           continue;
         case '@':
@@ -1011,7 +857,6 @@ const loadText = (text) => {
           while (buffer[curIndex] != ' ' && buffer[curIndex] != '\n') {
             name += buffer[curIndex++];
           }
-          skipCommaAndSpaces();
           const frameHandler = inputActionNameToFrameHandler[name];
           if (!frameHandler) {
             console.error(`Can't handle InputAction "${name}"; only emitting before @${tick}(${player})`);
@@ -1020,12 +865,22 @@ const loadText = (text) => {
           }
 
           const lengthBeforeFrame = datString.length;
-          writeUint8(frameHandler[0]);
-          writeUint32(tick);
-          writeOptUint16(player);
+          write.uint8(frameHandler[0]);
+          write.uint32(tick);
+          write.optUint16(player);
 
-          if (frameHandler.length > 2) {
+          if (frameHandler.length == 4) {
+            // Arbitrary read/write functions
             frameHandler[3]();
+          } else if (frameHandler.length == 3) {
+            // Simple sequence of writes
+            if (Array.isArray(frameHandler[2])) {
+              for (let arg = 0; arg < frameHandler[2].length; arg++) {
+                write[frameHandler[2][arg]]();
+              }
+            } else {
+              write[frameHandler[2]]();
+            }
           }
           if ('' != error) {
             console.error(`Parse failed with error "${error}"; only emitting before @${tick}(${player}) `);
