@@ -1,3 +1,5 @@
+'use strict';
+
 const appendElement = (node, tag, contents) => {
   const element = document.createElement(tag);
   if (undefined !== contents) {
