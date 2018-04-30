@@ -1,3 +1,5 @@
+import { fromIEEE754Double, fromIEEE754Single } from './parse_ieee.js';
+
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
 
 const fetch = {
@@ -234,6 +236,14 @@ const read = {
       return 'In';
     }
     return 'Out';
+  },
+  float: () => {
+    const bytes = buffer.slice(curIndex, curIndex += 4);
+    return fromIEEE754Single(bytes.reverse());
+  },
+  double: () => {
+    const bytes = buffer.slice(curIndex, curIndex += 8);
+    return fromIEEE754Double(bytes.reverse());
   }
 };
 
@@ -481,4 +491,12 @@ const eof = () => {
   return curIndex >= buffer.length;
 };
 
-export { read, write, fetch, setBuffer, eof, datString, error };
+const expect = (func, data) => {
+  let lastIndex = curIndex;
+  let nextBytes = func();
+  if (nextBytes != data) {
+    console.log(`Unexpected bytes (0x${nextBytes.toString(16)}) at offset 0x${lastIndex.toString(16)}`);
+  }
+};
+
+export { read, write, fetch, setBuffer, expect, eof, datString, error };
