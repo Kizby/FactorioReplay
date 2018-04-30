@@ -195,7 +195,7 @@ exportDatButton.addEventListener('click', () => {
 
       write.uint8(frameHandler[0]);
       write.uint32(tick);
-      write.optUint16(player);
+      write.optUint16(player, 'player');
 
       if (frameHandler.length == 4) {
         // Arbitrary read/write functions

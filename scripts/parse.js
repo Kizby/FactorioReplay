@@ -1,4 +1,5 @@
 import { fromIEEE754Double, fromIEEE754Single } from './parse_ieee.js';
+import { idMapTypes, idMaps } from './id_maps.js';
 
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
 
@@ -36,7 +37,7 @@ const fetch = {
   },
   string: (delimiter) => {
     let endIndex = buffer.indexOf('\n', curIndex);
-    if (typeof delimiter !== undefined) {
+    if (delimiter !== undefined) {
       const commaIndex = buffer.indexOf(delimiter, curIndex);
       if (-1 != commaIndex && commaIndex < endIndex) {
         endIndex = commaIndex;
@@ -66,14 +67,17 @@ const fetch = {
     let openIndex = tickStr.indexOf('(');
     curTick = parseInt(tickStr.substring(0, openIndex));
     let closeIndex = tickStr.indexOf(')', openIndex + 1);
-    curPlayer = parseInt(tickStr.substring(openIndex + 1, closeIndex));
+    curPlayer = tickStr.substring(openIndex + 1, closeIndex);
+    if (/[0123456789]/.test(curPlayer[0])) {
+      curPlayer = mapValIfPossible(curPlayer, 'player');
+    }
     curIndex = colonIndex + 1;
 
     return [curTick, curPlayer];
   },
   unhandledBytes: () => {
     const startIndex = curIndex - 1;
-    let tickGuess = fetch.tick();
+    let tickGuess = read.tick();
     tickGuess = tickGuess.replace('@', '?');
     curIndex = startIndex; // Take back the bytes we've tried to interpret
     const endIndex = tryFindHeartbeat();
@@ -98,13 +102,24 @@ const inventories = [[],
 const shotTargets = ['None', 'Enemy', 'Selected'];
 const transferCounts = [undefined, 'One', 'All'];
 
+const mapValIfPossible = (val, category) => {
+  let idMap, mapped;
+  if (category !== undefined &&
+    (idMap = idMaps[category]) !== undefined &&
+    (mapped = idMap[val]) !== undefined) {
+    return mapped;
+  }
+  return val;
+}
+
 const read = {
-  uint8: () => {
-    return buffer[curIndex++];
+  uint8: (category) => {
+    return mapValIfPossible(buffer[curIndex++], category);
   },
-  uint16: () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100);
+  uint16: (category) => {
+    return mapValIfPossible(
+      buffer[curIndex++]
+      + (buffer[curIndex++] * 0x100), category)
   },
   // Doubt these actually exist, but useful for unknowns
   uint24: () => {
@@ -132,10 +147,10 @@ const read = {
     }
     return num;
   },
-  optUint16: () => {
-    let num = read.uint8();
+  optUint16: (category) => {
+    let num = read.uint8(category);
     if (255 == num) {
-      num = read.uint16();
+      num = read.uint16(category);
     }
     return num;
   },
@@ -200,7 +215,7 @@ const read = {
   },
   tick: () => {
     curTick = read.uint32();
-    curPlayer = read.optUint16();
+    curPlayer = read.optUint16('player');
     return `@${curTick}(${curPlayer}): `;
   },
   isDragging: () => {
@@ -244,18 +259,33 @@ const read = {
   double: () => {
     const bytes = buffer.slice(curIndex, curIndex += 8);
     return fromIEEE754Double(bytes.reverse());
-  }
+  },
+  curPlayer: () => {
+    const playerNum = read.uint32();
+    if (mapValIfPossible(playerNum, 'player') == curPlayer) {
+      return '';
+    }
+    return playerNum;
+  },
 };
 
 const write = {
-  uint8: (num = fetch.num()) => {
+  uint8: (val = fetch.string(','), category) => {
+    let num = parseInt(val);
+    if (isNaN(num) && category !== undefined) {
+      num = mapValIfPossible(val, category);
+    }
     let result = num.toString(16);
     if (result.length < 2) {
       result = '0' + result;
     }
     datString += result;
   },
-  uint16: (num = fetch.num()) => {
+  uint16: (val = fetch.string(','), category) => {
+    let num = parseInt(val);
+    if (isNaN(num) && category !== undefined) {
+      num = mapValIfPossible(val, category);
+    }
     write.uint8(num & 0xff);
     write.uint8((num / 0x100) & 0xff);
   },
@@ -273,7 +303,8 @@ const write = {
     }
     write.uint16(num);
   },
-  optUint16: (num = fetch.num()) => {
+  optUint16: (val = fetch.string(), category) => {
+    const num = parseInt(mapValIfPossible(val, category));
     if (num > 254) {
       write.uint8(255);
       write.uint16(num);
@@ -303,7 +334,7 @@ const write = {
   },
   string: (stopAtComma, val) => {
     if (undefined === val) {
-      val = fetch.string(',');
+      val = fetch.string(stopAtComma ? ',' : undefined);
     }
     write.optUint32(val.length);
     for (let i = 0; i < val.length; i++) {
@@ -342,16 +373,17 @@ const write = {
     }
   },
   bool: (val) => {
-    if (typeof val === undefined) {
+    if (val === undefined) {
       val = (fetch.string() == 'true');
     }
     write.uint8(val ? 1 : 0);
   },
   checkSum: (checkSum) => {
-    if (typeof checkSum === undefined) {
+    if (checkSum === undefined) {
       checkSum = fetch.checkSum();
     }
     datString += checkSum;
+    fetch.commaAndWhitespace();
   },
   direction: () => {
     const direction = fetch.string(',');
@@ -409,6 +441,11 @@ const write = {
     const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
     write.uint8(num);
   },
+  uint24ProbablyZero: () => {
+    const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
+    write.uint24(num);
+    return num;
+  },
   uint8ProbablyFour: () => {
     const num = (buffer[curIndex] == '\n') ? 4 : fetch.num();
     write.uint8(num);
@@ -443,8 +480,18 @@ const write = {
   },
   inOut: () => {
     write.bool(fetch.string() == 'In');
-  }
+  },
+  curPlayer: () => {
+    const num = (buffer[curIndex] == '\n') ? mapValIfPossible(curPlayer, 'player') : fetch.num();
+    write.uint32(num);
+  },
 };
+
+// Add convenience functions to directly parse known mapped ids (read.item() etc.)
+for (let i = 0; i < idMapTypes.length; i++) {
+  read[idMapTypes[i][0]] = () => read[idMapTypes[i][1]](idMapTypes[i][0]);
+  write[idMapTypes[i][0]] = () => write[idMapTypes[i][1]](fetch.string(','), idMapTypes[i][0]);
+}
 
 const tryFindHeartbeat = () => {
   // Factorio emits CheckSum frames every second, on the second, so try to find the next one
@@ -499,4 +546,4 @@ const expect = (func, data) => {
   }
 };
 
-export { read, write, fetch, setBuffer, expect, eof, datString, error };
+export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps };

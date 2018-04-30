@@ -1,6 +1,5 @@
 import { read, write, fetch, setBuffer, expect, eof } from './parse.js';
-
-const idMaps = {};
+import { idMapTypes, idMaps } from './id_maps.js';
 
 const loadLevelDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
@@ -225,50 +224,28 @@ const loadLevelDat = (arrayBuffer) => {
   const parseDataValues = (name, readNum) => {
     idMaps[name] = {};
     const numData = readNum();
-    if (numData > 0) {
-      console.log(`${name[0].toUpperCase()}${name.substring(1)} data:`);
-    }
+    console.log(` ${name}: {`);
     for (let i = 0; i < numData; i++) {
       const category = read.string();
-      console.log(` ${category}:`);
+      console.log(`  // ${category}:`);
       const numItems = readNum();
       for (let j = 0; j < numItems; j++) {
         const itemName = read.string();
         const itemId = readNum();
         idMaps[name][itemName] = itemId;
         idMaps[name][itemId] = itemName;
-        console.log(`  ${itemName}: ${itemId}`);
+        console.log(`   "${itemName}": ${itemId},`);
+        console.info(`   ${itemId}: "${itemName}",`);
       }
     }
+    console.info(`},`);
   }
 
-  parseDataValues('mod', read.uint16);
-  parseDataValues('grid', read.uint8);
-  parseDataValues('item', read.uint16);
-  parseDataValues('tile', read.uint8);
-  parseDataValues('decoration', read.uint8);
-  parseDataValues('technology', read.uint16);
-  parseDataValues('entity', read.uint16);
-  parseDataValues('recipeCategory', read.uint16);
-  parseDataValues('itemSubgroup', read.uint16);
-  parseDataValues('itemSubgroup', read.uint8);
-  parseDataValues('fluid', read.uint16);
-  parseDataValues('signal', read.uint16);
-  parseDataValues('ammoCategory', read.uint8);
-  parseDataValues('railCategory', read.uint8);
-  parseDataValues('fuelCategory', read.uint8);
-  parseDataValues('resourceCategory', read.uint8);
-  parseDataValues('equipment', read.uint16);
-  parseDataValues('noiseLayer', read.uint16);
-  parseDataValues('noiseExpression', read.uint32);
-  parseDataValues('autoplaceControl', read.uint8);
-  parseDataValues('damageType', read.uint8);
-  parseDataValues('recipe', read.uint16);
-  parseDataValues('achievement', read.uint16);
-  parseDataValues('moduleCategory', read.uint8);
-  parseDataValues('equipmentCategory', read.uint8);
-  parseDataValues('unknown1', read.uint16);
-  parseDataValues('smoke', read.uint8);
+  console.log('idMaps = {');
+  // We skip the last one (force) for now since that's handled below
+  for (let i = 0; i < idMapTypes.length - 1; i++) {
+    parseDataValues(idMapTypes[i][0], read[idMapTypes[i][1]]);
+  }
 
   expect(read.uint32, 1);
   expect(read.uint32, 1);
@@ -292,19 +269,22 @@ const loadLevelDat = (arrayBuffer) => {
   const numForces = read.uint32();
   idMaps.force = {};
   if (numForces > 0) {
-    console.log(`Forces:`);
+    console.log(` force: {`);
   }
   for (let i = 0; i < numForces; i++) {
     const forceId = read.uint8();
     const forceName = read.string();
     idMaps.force[forceId] = forceName;
     idMaps.force[forceName] = forceId;
-    console.log(` ${forceName}: ${forceId}`);
+    console.log(`   "${forceName}": ${forceId},`);
+    console.info(`   ${forceId}: "${forceName}",`);
     // Boatload of data for each force, (check LuaForce for a small sample)
     // We'll just cheat to skip it now, but it may be worth parsing someday
     // Hope this doesn't change size much...
     read.bytes(49314);
   }
+  console.log(' };');
+  console.log('};');
 
   // Look for the start of the second resource spec
   let byteQueue = [read.uint8(), read.uint8(), read.uint8()];
@@ -362,7 +342,7 @@ const loadLevelDat = (arrayBuffer) => {
   console.log(` Frequency: ${cliff.frequency}${cliffFrequencyString}`)
   console.log(` Size: ${cliff.size}${cliffSizeString}`)
 
-  // Cheat again because this seems to be variable size
+  // Cheat again because this block seems to be variable size
   let targetQueue = [6, 'n'.charCodeAt(0), 'a'.charCodeAt(0), 'u'.charCodeAt(0), 'v'.charCodeAt(0), 'i'.charCodeAt(0), 's'.charCodeAt(0)];
   let foundNauvis = true;
   for (let i = 0; i < targetQueue.length; i++) {

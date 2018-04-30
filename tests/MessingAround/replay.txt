@@ -1,377 +1,377 @@
 @0(255): JoinSinglePlayer
-@0(255): AddPlayer Murray65536, 0, 1
-@1(0): ConnectionInfo? 5ad3c174
-@1(0): UnknownA7 1
-@1(0): UpdateResolution 1920, 1080
-@41(0): Run N
-@60(0): CheckSum 58cc2f82
-@61(0): Run NW
-@83(0): Run N
-@104(0): Run NW
-@112(0): Run W
-@120(0): CheckSum 67ce7be8
-@180(0): CheckSum 8b4c2ed6
-@240(0): CheckSum 481eee0d
-@300(0): CheckSum 66bda226
-@360(0): CheckSum bf5215e9
-@420(0): CheckSum 75054c0c
-@427(0): Run NW
-@438(0): Run W
-@480(0): CheckSum cfee562b
-@539(0): Run NW
-@540(0): CheckSum 6f64b75e
-@545(0): Run W
-@546(0): StopRunning
-@560(0): MoveSelection -68.859375, -11.32421875
-@578(0): StartMining
-@600(0): CheckSum addf0705
-@658(0): StopMining
-@660(0): CheckSum 17a2023b
-@665(0): OpenPlayerInventory
-@666(0): ClearSelection
-@712(0): ChooseCraftingItemGroup 4
-@720(0): CheckSum 27e9dd9e
-@748(0): Craft 83, 1
-@771(0): CloseWindow
-@780(0): CheckSum 85395ec3
-@813(0): MoveSelectionSmall -1, -2
-@832(0): StartMining
-@840(0): CheckSum 7692c50b
-@900(0): CheckSum 4359b0c7
-@920(0): StopMining
-@924(0): Run E
-@960(0): CheckSum dff5e030
-@974(0): Run NE
-@1004(0): Run E
-@1020(0): CheckSum 4baa22fb
-@1080(0): CheckSum a306b116
-@1140(0): CheckSum 46143dbe
-@1200(0): CheckSum 260df216
-@1202(0): Run NE
-@1211(0): MoveSelection 89.08203125, -24.63671875
-@1212(0): MoveSelectionSmall 1, -2
-@1213(0): MoveSelectionSmall 2, -4
-@1214(0): MoveSelectionSmall 0, -1
-@1215(0): MoveSelectionSmall 0, -1
-@1218(0): MoveSelectionSmall 1, 0
-@1224(0): MoveSelectionSmall 0, -1
-@1225(0): MoveSelectionSmall 0, 1
-@1226(0): MoveSelectionSmall 0, 1
-@1228(0): MoveSelectionSmall -1, 0
-@1229(0): MoveSelectionSmall 0, 1
-@1230(0): MoveSelectionSmall 0, 1
-@1231(0): MoveSelectionSmall -1, 0
-@1235(0): MoveSelectionSmall 0, 1
-@1236(0): MoveSelectionSmall 0, -1
-@1237(0): MoveSelectionSmall -1, 1
-@1238(0): MoveSelectionSmall -1, 0
-@1239(0): MoveSelectionSmall 0, 1
-@1240(0): MoveSelectionSmall -1, 0
-@1241(0): ClearSelection
-@1260(0): CheckSum dac5d681
-@1320(0): CheckSum 71fc175e
-@1380(0): CheckSum 4c7d9654
-@1388(0): Run E
-@1440(0): CheckSum 5abaf6b7
-@1474(0): Run NE
-@1484(0): Run E
-@1500(0): CheckSum 45af349e
-@1525(0): Toolbelt 0
-@1541(0): Run NE
-@1553(0): Run N
-@1560(0): CheckSum 2127d16c
-@1561(0): MoveSelectionSmall 1, 3
-@1562(0): StopRunning
-@1576(0): Run E
-@1577(0): Run NE
-@1578(0): MoveSelectionSmall 0, -1
-@1581(0): MoveSelectionSmall 1, 0
-@1584(0): Run N
-@1587(0): StopRunning
-@1590(0): MoveSelectionSmall -1, 0
-@1598(0): MoveSelectionSmall 0, -1
-@1599(0): MoveSelectionSmall 1, 0
-@1620(0): CheckSum c6ef371f
-@1680(0): CheckSum 64e3fc4b
-@1704(0): Build 20, -41, W
-@1705(0): MoveSelectionSmall -1, -1
-@1714(0): MoveSelectionSmall 1, 2
-@1715(0): MoveSelectionSmall 0, 1
-@1716(0): MoveSelectionSmall 0, 1
-@1717(0): ClearSelection
-@1740(0): CheckSum 5b7b517c
-@1770(0): MoveSelectionSmall -1, -1
-@1772(0): ClearSelection
-@1782(0): MoveSelectionSmall -1, -2
-@1783(0): MoveSelectionSmall 0, -1
-@1785(0): MoveSelectionSmall -1, -1
-@1788(0): MoveSelectionSmall 0, -1
-@1789(0): Toolbelt 1
-@1796(0): MoveSelectionSmall 0, 1
-@1800(0): CheckSum 09da65dc
-@1808(0): ClearSelection
-@1828(0): Build 18, -41, W
-@1829(0): MoveSelectionSmall 0, 1
-@1850(0): MoveSelectionTiny 0.05078125, 0.11328125
-@1852(0): MoveSelectionSmall 1, 0
-@1860(0): CheckSum 71b2f87c
-@1867(0): OpenTargetInventory
-@1868(0): ClearSelection
-@1920(0): CheckSum 84c7980e
-@1968(0): SplitItemStack Player, 0
-@1980(0): CheckSum fa8eb08c
-@2015(0): SplitItemStack FuelOrContainer, 0
-@2039(0): CloseWindow
-@2040(0): CheckSum 9724c2a9
-@2047(0): MoveSelectionSmall -2, 0
-@2085(0): TransferEntityStack In
-@2100(0): CheckSum e4de502f
-@2101(0): ClearSelection
-@2142(0): ClearCursor
-@2160(0): CheckSum 16b492f4
-@2194(0): MoveSelectionSmall 0, 0
-@2220(0): CheckSum 7c447b19
-@2234(0): OpenTargetInventory
-@2235(0): ClearSelection
-@2280(0): CheckSum 744d5614
-@2290(0): TransferItemStack FuelOrContainer, 0
-@2332(0): CloseWindow
-@2340(0): CheckSum 12f52da6
-@2400(0): CheckSum 6d8fda2e
-@2460(0): CheckSum 0905be6b
-@2520(0): CheckSum fc48df0e
-@2580(0): CheckSum 5996e1fb
-@2597(0): Run W
-@2615(0): Run NW
-@2640(0): CheckSum e9b1a99b
-@2653(0): Run W
-@2679(0): Run NW
-@2700(0): CheckSum d565fe1f
-@2710(0): Run N
-@2719(0): MoveSelection -14.67578125, -7.5390625
-@2721(0): ClearSelection
-@2727(0): MoveSelectionSmall 1, -1
-@2734(0): MoveSelectionSmall 0, -1
-@2734(0): StopRunning
-@2745(0): MoveSelectionSmall 0, 1
-@2758(0): StartMining
-@2760(0): CheckSum 0290e106
-@2820(0): CheckSum b93245a5
-@2880(0): CheckSum 95c8adfb
-@2940(0): CheckSum e05b23f5
-@3000(0): CheckSum 5bd63075
-@3031(0): StopMining
-@3034(0): Run E
-@3038(0): ClearSelection
-@3041(0): Run SE
-@3060(0): CheckSum 53e71f1d
-@3120(0): CheckSum 31bc12f2
-@3132(0): Run E
-@3146(0): MoveSelection 13.83203125, 9.62109375
-@3149(0): StopRunning
-@3169(0): SplitEntityStack Out
-@3180(0): CheckSum 5aeeb1ff
-@3192(0): TransferEntityStack Out
-@3240(0): CheckSum f35ecae3
-@3288(0): CopyEntitySettings
-@3300(0): CheckSum 399ff612
-@3360(0): CheckSum 013b4601
-@3420(0): CheckSum 164a2b8e
-@3420(0): OpenTargetInventory
-@3421(0): ClearSelection
-@3477(0): TransferItemStack FuelOrContainer, 0
-@3480(0): CheckSum b7cb57ff
-@3501(0): CloseWindow
-@3510(0): MoveSelectionSmall 0, -1
-@3512(0): MoveSelectionSmall 2, 0
-@3525(0): MoveSelectionSmall 2, 1
-@3536(0): MoveSelectionSmall -2, -1
-@3540(0): CheckSum 90bb3264
-@3549(0): OpenTargetInventory
-@3550(0): ClearSelection
-@3600(0): CheckSum 0a499598
-@3604(0): TransferItemStack Player, 1
-@3649(0): CloseWindow
-@3660(0): CheckSum 048bcf71
-@3671(0): MoveSelectionSmall 0, 3
-@3677(0): ClearSelection
-@3694(0): MoveSelectionSmall -2, -3
-@3702(0): OpenTargetInventory
-@3703(0): ClearSelection
-@3720(0): CheckSum 625d705f
-@3756(0): TransferItemStack Player, 1
-@3780(0): CheckSum 2f10c3f4
-@3819(0): CloseWindow
-@3840(0): CheckSum 220b4e33
-@3900(0): CheckSum ecd88e09
-@3960(0): CheckSum d0909ee4
-@4020(0): CheckSum 81bf9ca1
-@4080(0): CheckSum db1f507b
-@4140(0): CheckSum 2442ee01
-@4200(0): CheckSum 49e33fd4
-@4260(0): CheckSum 24111d1d
-@4320(0): CheckSum 8a79d8a1
-@4338(0): MoveSelectionSmall 0, 0
-@4371(0): Shoot Enemy, 18.0546875, -40.4375
-@4380(0): CheckSum 3940d441
-@4383(0): Shoot None, 18.0546875, -40.4375
-@4430(0): Shoot Selected, 18.0546875, -40.4375
-@4438(0): Shoot None, 18.0546875, -40.4375
-@4440(0): CheckSum d9233a51
-@4452(0): Shoot Selected, 18.0546875, -40.4375
-@4460(0): Shoot None, 18.0546875, -40.4375
-@4474(0): Shoot Selected, 18.0546875, -40.625
-@4477(0): Shoot Selected, 18.078125, -40.6484375
-@4478(0): Shoot Selected, 18.1015625, -40.671875
-@4483(0): Shoot None, 18.1015625, -40.671875
-@4495(0): Shoot Selected, 18.1015625, -40.671875
-@4500(0): CheckSum 93d9c915
-@4546(0): Shoot Selected, 18.1015625, -40.7421875
-@4560(0): CheckSum a7ff5997
-@4583(0): Shoot None, 18.1015625, -40.7421875
-@4592(0): ClearSelection
-@4620(0): CheckSum f3433b68
-@4675(0): MoveSelectionSmall 0, 0
-@4680(0): CheckSum 256c55f1
-@4688(0): OpenTargetInventory
-@4689(0): ClearSelection
-@4740(0): CheckSum 2f4918e2
-@4794(0): TransferItemStack Output, 0
-@4800(0): CheckSum 6bb5b949
-@4844(0): CloseWindow
-@4860(0): CheckSum b0fe12e6
-@4878(0): Run W
-@4893(0): Run NW
-@4901(0): Run N
-@4903(0): StopRunning
-@4909(0): OpenPlayerInventory
-@4920(0): CheckSum c2f43110
-@4980(0): CheckSum 716d79ab
-@5040(0): CheckSum aa0f42f6
-@5071(0): CloseWindow
-@5100(0): CheckSum 553b7fda
-@5154(0): OpenPlayerInventory
-@5160(0): CheckSum a0e7015b
-@5220(0): CheckSum 180d89da
-@5280(0): CheckSum 1f5ca75a
-@5313(0): CloseWindow
-@5338(0): Run E
-@5340(0): CheckSum 5dc73695
-@5359(0): MoveSelectionSmall 0, 0
-@5363(0): StopRunning
-@5379(0): OpenTargetInventory
-@5380(0): ClearSelection
-@5400(0): CheckSum 1090ef87
-@5413(0): CloseWindow
-@5414(0): MoveSelectionSmall 0, 0
-@5420(0): Run W
-@5425(0): ClearSelection
-@5460(0): CheckSum 556c51c8
-@5501(0): StopRunning
-@5519(0): Run S
-@5520(0): CheckSum 1e021316
-@5529(0): Run SE
-@5580(0): CheckSum 521b9a0f
-@5631(0): Run E
-@5640(0): CheckSum 0391164c
-@5700(0): CheckSum 56d7a3cc
-@5760(0): CheckSum fe2c3d45
-@5787(0): Run SE
-@5798(0): Run S
-@5820(0): CheckSum 1a472034
-@5865(0): Run SE
-@5879(0): Run E
-@5880(0): CheckSum f1006959
-@5896(0): Run SE
-@5901(0): Run S
-@5923(0): StopRunning
-@5936(0): MoveSelection 27.68359375, 30.19921875
-@5940(0): CheckSum b253f275
-@5951(0): StartMining
-@6000(0): CheckSum 4944ce39
-@6018(0): StopMining
-@6033(0): Run E
-@6046(0): Run NE
-@6048(0): Run N
-@6060(0): CheckSum 7525f668
-@6083(0): StopRunning
+@0(255): AddPlayer Murray65536, 0, player
+@1(Murray65536): ConnectionInfo? 5ad3c174
+@1(Murray65536): UnknownA7 1
+@1(Murray65536): UpdateResolution 1920, 1080
+@41(Murray65536): Run N
+@60(Murray65536): CheckSum 58cc2f82
+@61(Murray65536): Run NW
+@83(Murray65536): Run N
+@104(Murray65536): Run NW
+@112(Murray65536): Run W
+@120(Murray65536): CheckSum 67ce7be8
+@180(Murray65536): CheckSum 8b4c2ed6
+@240(Murray65536): CheckSum 481eee0d
+@300(Murray65536): CheckSum 66bda226
+@360(Murray65536): CheckSum bf5215e9
+@420(Murray65536): CheckSum 75054c0c
+@427(Murray65536): Run NW
+@438(Murray65536): Run W
+@480(Murray65536): CheckSum cfee562b
+@539(Murray65536): Run NW
+@540(Murray65536): CheckSum 6f64b75e
+@545(Murray65536): Run W
+@546(Murray65536): StopRunning
+@560(Murray65536): MoveSelection -68.859375, -11.32421875
+@578(Murray65536): StartMining
+@600(Murray65536): CheckSum addf0705
+@658(Murray65536): StopMining
+@660(Murray65536): CheckSum 17a2023b
+@665(Murray65536): OpenPlayerInventory
+@666(Murray65536): ClearSelection
+@712(Murray65536): ChooseCraftingItemGroup production
+@720(Murray65536): CheckSum 27e9dd9e
+@748(Murray65536): Craft iron-axe, 1
+@771(Murray65536): CloseWindow
+@780(Murray65536): CheckSum 85395ec3
+@813(Murray65536): MoveSelectionSmall -1, -2
+@832(Murray65536): StartMining
+@840(Murray65536): CheckSum 7692c50b
+@900(Murray65536): CheckSum 4359b0c7
+@920(Murray65536): StopMining
+@924(Murray65536): Run E
+@960(Murray65536): CheckSum dff5e030
+@974(Murray65536): Run NE
+@1004(Murray65536): Run E
+@1020(Murray65536): CheckSum 4baa22fb
+@1080(Murray65536): CheckSum a306b116
+@1140(Murray65536): CheckSum 46143dbe
+@1200(Murray65536): CheckSum 260df216
+@1202(Murray65536): Run NE
+@1211(Murray65536): MoveSelection 89.08203125, -24.63671875
+@1212(Murray65536): MoveSelectionSmall 1, -2
+@1213(Murray65536): MoveSelectionSmall 2, -4
+@1214(Murray65536): MoveSelectionSmall 0, -1
+@1215(Murray65536): MoveSelectionSmall 0, -1
+@1218(Murray65536): MoveSelectionSmall 1, 0
+@1224(Murray65536): MoveSelectionSmall 0, -1
+@1225(Murray65536): MoveSelectionSmall 0, 1
+@1226(Murray65536): MoveSelectionSmall 0, 1
+@1228(Murray65536): MoveSelectionSmall -1, 0
+@1229(Murray65536): MoveSelectionSmall 0, 1
+@1230(Murray65536): MoveSelectionSmall 0, 1
+@1231(Murray65536): MoveSelectionSmall -1, 0
+@1235(Murray65536): MoveSelectionSmall 0, 1
+@1236(Murray65536): MoveSelectionSmall 0, -1
+@1237(Murray65536): MoveSelectionSmall -1, 1
+@1238(Murray65536): MoveSelectionSmall -1, 0
+@1239(Murray65536): MoveSelectionSmall 0, 1
+@1240(Murray65536): MoveSelectionSmall -1, 0
+@1241(Murray65536): ClearSelection
+@1260(Murray65536): CheckSum dac5d681
+@1320(Murray65536): CheckSum 71fc175e
+@1380(Murray65536): CheckSum 4c7d9654
+@1388(Murray65536): Run E
+@1440(Murray65536): CheckSum 5abaf6b7
+@1474(Murray65536): Run NE
+@1484(Murray65536): Run E
+@1500(Murray65536): CheckSum 45af349e
+@1525(Murray65536): Toolbelt 0
+@1541(Murray65536): Run NE
+@1553(Murray65536): Run N
+@1560(Murray65536): CheckSum 2127d16c
+@1561(Murray65536): MoveSelectionSmall 1, 3
+@1562(Murray65536): StopRunning
+@1576(Murray65536): Run E
+@1577(Murray65536): Run NE
+@1578(Murray65536): MoveSelectionSmall 0, -1
+@1581(Murray65536): MoveSelectionSmall 1, 0
+@1584(Murray65536): Run N
+@1587(Murray65536): StopRunning
+@1590(Murray65536): MoveSelectionSmall -1, 0
+@1598(Murray65536): MoveSelectionSmall 0, -1
+@1599(Murray65536): MoveSelectionSmall 1, 0
+@1620(Murray65536): CheckSum c6ef371f
+@1680(Murray65536): CheckSum 64e3fc4b
+@1704(Murray65536): Build 20, -41, W
+@1705(Murray65536): MoveSelectionSmall -1, -1
+@1714(Murray65536): MoveSelectionSmall 1, 2
+@1715(Murray65536): MoveSelectionSmall 0, 1
+@1716(Murray65536): MoveSelectionSmall 0, 1
+@1717(Murray65536): ClearSelection
+@1740(Murray65536): CheckSum 5b7b517c
+@1770(Murray65536): MoveSelectionSmall -1, -1
+@1772(Murray65536): ClearSelection
+@1782(Murray65536): MoveSelectionSmall -1, -2
+@1783(Murray65536): MoveSelectionSmall 0, -1
+@1785(Murray65536): MoveSelectionSmall -1, -1
+@1788(Murray65536): MoveSelectionSmall 0, -1
+@1789(Murray65536): Toolbelt 1
+@1796(Murray65536): MoveSelectionSmall 0, 1
+@1800(Murray65536): CheckSum 09da65dc
+@1808(Murray65536): ClearSelection
+@1828(Murray65536): Build 18, -41, W
+@1829(Murray65536): MoveSelectionSmall 0, 1
+@1850(Murray65536): MoveSelectionTiny 0.05078125, 0.11328125
+@1852(Murray65536): MoveSelectionSmall 1, 0
+@1860(Murray65536): CheckSum 71b2f87c
+@1867(Murray65536): OpenTargetInventory
+@1868(Murray65536): ClearSelection
+@1920(Murray65536): CheckSum 84c7980e
+@1968(Murray65536): SplitItemStack Player, 0
+@1980(Murray65536): CheckSum fa8eb08c
+@2015(Murray65536): SplitItemStack FuelOrContainer, 0
+@2039(Murray65536): CloseWindow
+@2040(Murray65536): CheckSum 9724c2a9
+@2047(Murray65536): MoveSelectionSmall -2, 0
+@2085(Murray65536): TransferEntityStack In
+@2100(Murray65536): CheckSum e4de502f
+@2101(Murray65536): ClearSelection
+@2142(Murray65536): ClearCursor
+@2160(Murray65536): CheckSum 16b492f4
+@2194(Murray65536): MoveSelectionSmall 0, 0
+@2220(Murray65536): CheckSum 7c447b19
+@2234(Murray65536): OpenTargetInventory
+@2235(Murray65536): ClearSelection
+@2280(Murray65536): CheckSum 744d5614
+@2290(Murray65536): TransferItemStack FuelOrContainer, 0
+@2332(Murray65536): CloseWindow
+@2340(Murray65536): CheckSum 12f52da6
+@2400(Murray65536): CheckSum 6d8fda2e
+@2460(Murray65536): CheckSum 0905be6b
+@2520(Murray65536): CheckSum fc48df0e
+@2580(Murray65536): CheckSum 5996e1fb
+@2597(Murray65536): Run W
+@2615(Murray65536): Run NW
+@2640(Murray65536): CheckSum e9b1a99b
+@2653(Murray65536): Run W
+@2679(Murray65536): Run NW
+@2700(Murray65536): CheckSum d565fe1f
+@2710(Murray65536): Run N
+@2719(Murray65536): MoveSelection -14.67578125, -7.5390625
+@2721(Murray65536): ClearSelection
+@2727(Murray65536): MoveSelectionSmall 1, -1
+@2734(Murray65536): MoveSelectionSmall 0, -1
+@2734(Murray65536): StopRunning
+@2745(Murray65536): MoveSelectionSmall 0, 1
+@2758(Murray65536): StartMining
+@2760(Murray65536): CheckSum 0290e106
+@2820(Murray65536): CheckSum b93245a5
+@2880(Murray65536): CheckSum 95c8adfb
+@2940(Murray65536): CheckSum e05b23f5
+@3000(Murray65536): CheckSum 5bd63075
+@3031(Murray65536): StopMining
+@3034(Murray65536): Run E
+@3038(Murray65536): ClearSelection
+@3041(Murray65536): Run SE
+@3060(Murray65536): CheckSum 53e71f1d
+@3120(Murray65536): CheckSum 31bc12f2
+@3132(Murray65536): Run E
+@3146(Murray65536): MoveSelection 13.83203125, 9.62109375
+@3149(Murray65536): StopRunning
+@3169(Murray65536): SplitEntityStack Out
+@3180(Murray65536): CheckSum 5aeeb1ff
+@3192(Murray65536): TransferEntityStack Out
+@3240(Murray65536): CheckSum f35ecae3
+@3288(Murray65536): CopyEntitySettings
+@3300(Murray65536): CheckSum 399ff612
+@3360(Murray65536): CheckSum 013b4601
+@3420(Murray65536): CheckSum 164a2b8e
+@3420(Murray65536): OpenTargetInventory
+@3421(Murray65536): ClearSelection
+@3477(Murray65536): TransferItemStack FuelOrContainer, 0
+@3480(Murray65536): CheckSum b7cb57ff
+@3501(Murray65536): CloseWindow
+@3510(Murray65536): MoveSelectionSmall 0, -1
+@3512(Murray65536): MoveSelectionSmall 2, 0
+@3525(Murray65536): MoveSelectionSmall 2, 1
+@3536(Murray65536): MoveSelectionSmall -2, -1
+@3540(Murray65536): CheckSum 90bb3264
+@3549(Murray65536): OpenTargetInventory
+@3550(Murray65536): ClearSelection
+@3600(Murray65536): CheckSum 0a499598
+@3604(Murray65536): TransferItemStack Player, 1
+@3649(Murray65536): CloseWindow
+@3660(Murray65536): CheckSum 048bcf71
+@3671(Murray65536): MoveSelectionSmall 0, 3
+@3677(Murray65536): ClearSelection
+@3694(Murray65536): MoveSelectionSmall -2, -3
+@3702(Murray65536): OpenTargetInventory
+@3703(Murray65536): ClearSelection
+@3720(Murray65536): CheckSum 625d705f
+@3756(Murray65536): TransferItemStack Player, 1
+@3780(Murray65536): CheckSum 2f10c3f4
+@3819(Murray65536): CloseWindow
+@3840(Murray65536): CheckSum 220b4e33
+@3900(Murray65536): CheckSum ecd88e09
+@3960(Murray65536): CheckSum d0909ee4
+@4020(Murray65536): CheckSum 81bf9ca1
+@4080(Murray65536): CheckSum db1f507b
+@4140(Murray65536): CheckSum 2442ee01
+@4200(Murray65536): CheckSum 49e33fd4
+@4260(Murray65536): CheckSum 24111d1d
+@4320(Murray65536): CheckSum 8a79d8a1
+@4338(Murray65536): MoveSelectionSmall 0, 0
+@4371(Murray65536): Shoot Enemy, 18.0546875, -40.4375
+@4380(Murray65536): CheckSum 3940d441
+@4383(Murray65536): Shoot None, 18.0546875, -40.4375
+@4430(Murray65536): Shoot Selected, 18.0546875, -40.4375
+@4438(Murray65536): Shoot None, 18.0546875, -40.4375
+@4440(Murray65536): CheckSum d9233a51
+@4452(Murray65536): Shoot Selected, 18.0546875, -40.4375
+@4460(Murray65536): Shoot None, 18.0546875, -40.4375
+@4474(Murray65536): Shoot Selected, 18.0546875, -40.625
+@4477(Murray65536): Shoot Selected, 18.078125, -40.6484375
+@4478(Murray65536): Shoot Selected, 18.1015625, -40.671875
+@4483(Murray65536): Shoot None, 18.1015625, -40.671875
+@4495(Murray65536): Shoot Selected, 18.1015625, -40.671875
+@4500(Murray65536): CheckSum 93d9c915
+@4546(Murray65536): Shoot Selected, 18.1015625, -40.7421875
+@4560(Murray65536): CheckSum a7ff5997
+@4583(Murray65536): Shoot None, 18.1015625, -40.7421875
+@4592(Murray65536): ClearSelection
+@4620(Murray65536): CheckSum f3433b68
+@4675(Murray65536): MoveSelectionSmall 0, 0
+@4680(Murray65536): CheckSum 256c55f1
+@4688(Murray65536): OpenTargetInventory
+@4689(Murray65536): ClearSelection
+@4740(Murray65536): CheckSum 2f4918e2
+@4794(Murray65536): TransferItemStack Output, 0
+@4800(Murray65536): CheckSum 6bb5b949
+@4844(Murray65536): CloseWindow
+@4860(Murray65536): CheckSum b0fe12e6
+@4878(Murray65536): Run W
+@4893(Murray65536): Run NW
+@4901(Murray65536): Run N
+@4903(Murray65536): StopRunning
+@4909(Murray65536): OpenPlayerInventory
+@4920(Murray65536): CheckSum c2f43110
+@4980(Murray65536): CheckSum 716d79ab
+@5040(Murray65536): CheckSum aa0f42f6
+@5071(Murray65536): CloseWindow
+@5100(Murray65536): CheckSum 553b7fda
+@5154(Murray65536): OpenPlayerInventory
+@5160(Murray65536): CheckSum a0e7015b
+@5220(Murray65536): CheckSum 180d89da
+@5280(Murray65536): CheckSum 1f5ca75a
+@5313(Murray65536): CloseWindow
+@5338(Murray65536): Run E
+@5340(Murray65536): CheckSum 5dc73695
+@5359(Murray65536): MoveSelectionSmall 0, 0
+@5363(Murray65536): StopRunning
+@5379(Murray65536): OpenTargetInventory
+@5380(Murray65536): ClearSelection
+@5400(Murray65536): CheckSum 1090ef87
+@5413(Murray65536): CloseWindow
+@5414(Murray65536): MoveSelectionSmall 0, 0
+@5420(Murray65536): Run W
+@5425(Murray65536): ClearSelection
+@5460(Murray65536): CheckSum 556c51c8
+@5501(Murray65536): StopRunning
+@5519(Murray65536): Run S
+@5520(Murray65536): CheckSum 1e021316
+@5529(Murray65536): Run SE
+@5580(Murray65536): CheckSum 521b9a0f
+@5631(Murray65536): Run E
+@5640(Murray65536): CheckSum 0391164c
+@5700(Murray65536): CheckSum 56d7a3cc
+@5760(Murray65536): CheckSum fe2c3d45
+@5787(Murray65536): Run SE
+@5798(Murray65536): Run S
+@5820(Murray65536): CheckSum 1a472034
+@5865(Murray65536): Run SE
+@5879(Murray65536): Run E
+@5880(Murray65536): CheckSum f1006959
+@5896(Murray65536): Run SE
+@5901(Murray65536): Run S
+@5923(Murray65536): StopRunning
+@5936(Murray65536): MoveSelection 27.68359375, 30.19921875
+@5940(Murray65536): CheckSum b253f275
+@5951(Murray65536): StartMining
+@6000(Murray65536): CheckSum 4944ce39
+@6018(Murray65536): StopMining
+@6033(Murray65536): Run E
+@6046(Murray65536): Run NE
+@6048(Murray65536): Run N
+@6060(Murray65536): CheckSum 7525f668
+@6083(Murray65536): StopRunning
 @6104(255): JoinSinglePlayer
-@6104(0): ConnectionInfo? 5ad3c174
-@6120(0): CheckSum 5b11db3c
-@6162(0): Run N
-@6172(0): Run NW
-@6180(0): CheckSum b5a9b806
-@6181(0): Run N
-@6185(0): OpenPlayerInventory
-@6218(0): Run NW
-@6240(0): CheckSum 9f9ed5c9
-@6245(0): Run N
-@6284(0): ChooseCraftingItemGroup 3
-@6285(0): Run NW
-@6300(0): CheckSum dece9ebe
-@6330(0): Run W
-@6348(0): Craft 191, 1
-@6360(0): CheckSum 07884748
-@6363(0): CloseWindow
-@6370(0): MoveSelection -12.296875, -30.53125
-@6376(0): MoveSelectionSmall -1, 1
-@6383(0): MoveSelectionSmall -1, 0
-@6390(0): MoveSelectionSmall -1, 0
-@6392(0): Run SW
-@6398(0): MoveSelectionSmall -1, 0
-@6400(0): MoveSelectionSmall 0, 1
-@6407(0): MoveSelectionSmall -1, 0
-@6410(0): MoveSelectionSmall 0, 1
-@6417(0): MoveSelectionSmall -1, 0
-@6419(0): MoveSelectionSmall 0, 1
-@6420(0): CheckSum a4fba35a
-@6426(0): MoveSelectionSmall -1, 0
-@6429(0): ClearSelection
-@6433(0): Run W
-@6441(0): StopRunning
-@6467(0): Toolbelt 1
-@6469(0): MoveSelectionSmall -2, 0
-@6473(0): MoveSelectionSmall 1, 0
-@6480(0): CheckSum e9de411c
-@6480(0): MoveSelectionSmall 0, -1
-@6482(0): MoveSelectionSmall 1, 0
-@6484(0): MoveSelectionSmall 0, -1
-@6493(0): Build 25.5, -39.5, N
-@6494(0): MoveSelectionSmall 0, 0
-@6505(0): MoveSelectionSmall 0, 1
-@6521(0): MoveSelectionSmall 0, -1
-@6537(0): OpenTargetInventory
-@6538(0): ClearSelection
-@6540(0): CheckSum dacf2302
-@6582(0): TransferInventory Player, 28
-@6600(0): CheckSum 3250c51c
-@6637(0): TransferInventory FuelOrContainer, 13
-@6660(0): CheckSum 81e595cc
-@6719(0): TransferItemStack Player, 26
-@6720(0): CheckSum 1d59dd08
-@6780(0): CheckSum 891df7b0
-@6809(0): SplitInventory Player, 26
-@6840(0): CheckSum 9494bc49
-@6900(0): CheckSum 5e52d62f
-@6960(0): CheckSum 968162d5
-@6991(0): TransferInventory FuelOrContainer, 1
-@7020(0): CheckSum db6a8ba7
-@7057(0): SplitInventory FuelOrContainer, 0
-@7080(0): CheckSum 6dd51a4c
-@7112(0): TransferInventory Player, 0
-@7140(0): CheckSum 1e0d236e
-@7148(0): SplitInventory Player, 0
-@7200(0): CheckSum 4dd0693f
-@7236(0): SplitInventory Player, 11
-@7260(0): CheckSum 7edcf073
-@7276(0): TransferInventory Player, 31
-@7320(0): CheckSum 3a6ea911
-@7380(0): CheckSum a93a119c
-@7406(0): LimitSlots FuelOrContainer, 4
-@7440(0): CheckSum c168f7b8
-@7454(0): LimitSlots FuelOrContainer, 16
-@7471(0): ClickItemStack FuelOrContainer, 15
-@7500(0): CheckSum 2aec4fea
-@7548(0): LimitSlots FuelOrContainer, 13
-@7560(0): CheckSum 4c180547
-@7578(0): CloseWindow
+@6104(Murray65536): ConnectionInfo? 5ad3c174
+@6120(Murray65536): CheckSum 5b11db3c
+@6162(Murray65536): Run N
+@6172(Murray65536): Run NW
+@6180(Murray65536): CheckSum b5a9b806
+@6181(Murray65536): Run N
+@6185(Murray65536): OpenPlayerInventory
+@6218(Murray65536): Run NW
+@6240(Murray65536): CheckSum 9f9ed5c9
+@6245(Murray65536): Run N
+@6284(Murray65536): ChooseCraftingItemGroup logistics
+@6285(Murray65536): Run NW
+@6300(Murray65536): CheckSum dece9ebe
+@6330(Murray65536): Run W
+@6348(Murray65536): Craft wooden-chest, 1
+@6360(Murray65536): CheckSum 07884748
+@6363(Murray65536): CloseWindow
+@6370(Murray65536): MoveSelection -12.296875, -30.53125
+@6376(Murray65536): MoveSelectionSmall -1, 1
+@6383(Murray65536): MoveSelectionSmall -1, 0
+@6390(Murray65536): MoveSelectionSmall -1, 0
+@6392(Murray65536): Run SW
+@6398(Murray65536): MoveSelectionSmall -1, 0
+@6400(Murray65536): MoveSelectionSmall 0, 1
+@6407(Murray65536): MoveSelectionSmall -1, 0
+@6410(Murray65536): MoveSelectionSmall 0, 1
+@6417(Murray65536): MoveSelectionSmall -1, 0
+@6419(Murray65536): MoveSelectionSmall 0, 1
+@6420(Murray65536): CheckSum a4fba35a
+@6426(Murray65536): MoveSelectionSmall -1, 0
+@6429(Murray65536): ClearSelection
+@6433(Murray65536): Run W
+@6441(Murray65536): StopRunning
+@6467(Murray65536): Toolbelt 1
+@6469(Murray65536): MoveSelectionSmall -2, 0
+@6473(Murray65536): MoveSelectionSmall 1, 0
+@6480(Murray65536): CheckSum e9de411c
+@6480(Murray65536): MoveSelectionSmall 0, -1
+@6482(Murray65536): MoveSelectionSmall 1, 0
+@6484(Murray65536): MoveSelectionSmall 0, -1
+@6493(Murray65536): Build 25.5, -39.5, N
+@6494(Murray65536): MoveSelectionSmall 0, 0
+@6505(Murray65536): MoveSelectionSmall 0, 1
+@6521(Murray65536): MoveSelectionSmall 0, -1
+@6537(Murray65536): OpenTargetInventory
+@6538(Murray65536): ClearSelection
+@6540(Murray65536): CheckSum dacf2302
+@6582(Murray65536): TransferInventory Player, 28
+@6600(Murray65536): CheckSum 3250c51c
+@6637(Murray65536): TransferInventory FuelOrContainer, 13
+@6660(Murray65536): CheckSum 81e595cc
+@6719(Murray65536): TransferItemStack Player, 26
+@6720(Murray65536): CheckSum 1d59dd08
+@6780(Murray65536): CheckSum 891df7b0
+@6809(Murray65536): SplitInventory Player, 26
+@6840(Murray65536): CheckSum 9494bc49
+@6900(Murray65536): CheckSum 5e52d62f
+@6960(Murray65536): CheckSum 968162d5
+@6991(Murray65536): TransferInventory FuelOrContainer, 1
+@7020(Murray65536): CheckSum db6a8ba7
+@7057(Murray65536): SplitInventory FuelOrContainer, 0
+@7080(Murray65536): CheckSum 6dd51a4c
+@7112(Murray65536): TransferInventory Player, 0
+@7140(Murray65536): CheckSum 1e0d236e
+@7148(Murray65536): SplitInventory Player, 0
+@7200(Murray65536): CheckSum 4dd0693f
+@7236(Murray65536): SplitInventory Player, 11
+@7260(Murray65536): CheckSum 7edcf073
+@7276(Murray65536): TransferInventory Player, 31
+@7320(Murray65536): CheckSum 3a6ea911
+@7380(Murray65536): CheckSum a93a119c
+@7406(Murray65536): LimitSlots FuelOrContainer, 4
+@7440(Murray65536): CheckSum c168f7b8
+@7454(Murray65536): LimitSlots FuelOrContainer, 16
+@7471(Murray65536): ClickItemStack FuelOrContainer, 15
+@7500(Murray65536): CheckSum 2aec4fea
+@7548(Murray65536): LimitSlots FuelOrContainer, 13
+@7560(Murray65536): CheckSum 4c180547
+@7578(Murray65536): CloseWindow

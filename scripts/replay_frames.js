@@ -1,4 +1,8 @@
 import { read, write, fetch } from './parse.js';
+import { idMaps } from './id_maps.js';
+
+// Keep track of player names the same way we track everything else
+idMaps.player = {};
 
 export const frameHandlers = [
   // IgnoreRemaining seems to stop replay parsing and makes the replay continue playing forever
@@ -46,58 +50,55 @@ export const frameHandlers = [
   [0x33, 'TransferItemStack', 'slotInInventory'],
   [0x34, 'TransferInventory', 'slotInInventory'],
   [0x35, 'CheckSum', ['checkSum', 'previousTick']],
-  [0x36, 'Craft', ['uint16', 'uint32OrAll']],
+  [0x36, 'Craft', ['recipe', 'uint32OrAll']],
   [0x38, 'Shoot', ['shotTarget', 'fixed32', 'fixed32']],
-  [0x39, 'ChooseRecipe', ['uint8', 'uint8']],
+  [0x39, 'ChooseRecipe', ['recipe']],
   [0x3A, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
   [0x3B, 'Pipette', 'uint16'],
   [0x3D, 'SplitInventory', 'slotInInventory'],
-  [0x3F, 'ToggleFilter', ['slotInInventory', 'uint16']],
-  [0x43, 'ChooseTechnology', 'uint16'],
+  [0x3F, 'ToggleFilter', ['slotInInventory', 'item']],
+  [0x43, 'ChooseTechnology', 'technology'],
   [0x48, 'Chat', 'string'],
-  [0x4C, 'ChooseCraftingItemGroup', 'uint8'],
+  [0x4C, 'ChooseCraftingItemGroup', 'itemGroup'],
   [0x51, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
   [0x52, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
   [0x56, 'LimitSlots', 'slotInInventory'],
-  [0x57, 'ChooseFilterCategory', 'uint8'],
+  [0x57, 'ChooseFilterCategory', 'itemGroup'],
   [0x68, 'ConnectionInfo?', () => {
-    const playerNumber = read.uint8();
-    const unknown1 = read.uint24(); // No ideas, always 0?
+    const playerNumber = read.curPlayer();
     const checkSum = read.checkSum();
     const unknown2 = read.uint24(); // No ideas, always 0?
     let unknown3 = '';
     if (256 == unknown2) {
       unknown3 = read.bytes(30); // This random blob happens on connections in lan games
     }
-    const extras = (playerNumber == curPlayer && unknown1 == 0 && unknown2 == 0)
+    const extras = (playerNumber.toString().length == 0 && unknown2 == 0)
       ? ''
-      : `, ${playerNumber}, ${unknown1}, ${unknown2}, ${unknown3}`;
+      : `, ${playerNumber}, ${unknown2}, ${unknown3}`;
     return `${checkSum}${extras}`;
   }, () => {
     const checkSum = fetch.checkSum();
-    let playerNumber = curPlayer, unknown1 = 0, unknown2 = 0;
-    if (!eof()) {
-      playerNumber = fetch.num();
-      unknown1 = fetch.num();
-      unknown2 = fetch.num();
-    }
-    write.uint8(playerNumber);
-    write.uint24(unknown1);
+    write.curPlayer();
     write.checkSum(checkSum);
-    write.uint24(unknown2);
+    const unknown2 = write.uint24ProbablyZero();
     if (256 == unknown2) {
       write.bytes(30);
     }
   }],
   [0x6F, 'AddPlayer', () => {
     const playerNumber = read.optUint16();
-    const force = read.uint8(); // Always 1? Maybe force?
+    const force = read.force();
     const name = read.string();
+    idMaps.player[name] = playerNumber;
+    idMaps.player[playerNumber] = name;
     return `${name}, ${playerNumber}, ${force}`;
   }, () => {
     const name = fetch.string(',');
-    write.optUint16();
-    write.uint8();
+    const playerNumber = fetch.num();
+    idMaps.player[name] = playerNumber;
+    idMaps.player[playerNumber] = name;
+    write.optUint16(playerNumber);
+    write.force();
     write.string(true, name);
   }],
   [0x76, 'PlaceArea', () => {
