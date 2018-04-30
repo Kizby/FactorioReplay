@@ -3,4 +3,6 @@ Inspect, modify, and generate replay files for Factorio. This is a relatively si
 
 This code can probably be broken in myriad ways at this early point - if you can break it, please file an issue, ideally with a test case to reproduce it.
 
+Any Factorio icons or data used in this tool belong to Wube Software.
+
 ¹In Windows at least, dragging and dropping from inside compressed folders doesn't seem to work
