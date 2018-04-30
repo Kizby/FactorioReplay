@@ -66,20 +66,23 @@ export const frameHandlers = [
   [0x57, 'ChooseFilterCategory', 'itemGroup'],
   [0x68, 'ConnectionInfo?', () => {
     const playerNumber = read.curPlayer();
+    const unknown1 = read.uint16();
     const checkSum = read.checkSum();
     const unknown2 = read.uint24(); // No ideas, always 0?
     let unknown3 = '';
     if (256 == unknown2) {
       unknown3 = read.bytes(30); // This random blob happens on connections in lan games
     }
-    const extras = (playerNumber.toString().length == 0 && unknown2 == 0)
+    const extras = (playerNumber.toString().length == 0 && unknown1 == 0 && unknown2 == 0)
       ? ''
       : `, ${playerNumber}, ${unknown2}, ${unknown3}`;
     return `${checkSum}${extras}`;
   }, () => {
     const checkSum = fetch.checkSum();
     write.curPlayer();
+    write.uint16ProbablyZero();
     write.checkSum(checkSum);
+
     const unknown2 = write.uint24ProbablyZero();
     if (256 == unknown2) {
       write.bytes(30);

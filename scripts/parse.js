@@ -261,7 +261,7 @@ const read = {
     return fromIEEE754Double(bytes.reverse());
   },
   curPlayer: () => {
-    const playerNum = read.uint32();
+    const playerNum = read.uint16();
     if (mapValIfPossible(playerNum, 'player') == curPlayer) {
       return '';
     }
@@ -441,6 +441,11 @@ const write = {
     const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
     write.uint8(num);
   },
+  uint16ProbablyZero: () => {
+    const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
+    write.uint16(num);
+    return num;
+  },
   uint24ProbablyZero: () => {
     const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
     write.uint24(num);
@@ -483,7 +488,7 @@ const write = {
   },
   curPlayer: () => {
     const num = (buffer[curIndex] == '\n') ? mapValIfPossible(curPlayer, 'player') : fetch.num();
-    write.uint32(num);
+    write.uint16(num);
   },
 };
 
@@ -495,32 +500,23 @@ for (let i = 0; i < idMapTypes.length; i++) {
 
 const tryFindHeartbeat = () => {
   // Factorio emits CheckSum frames every second, on the second, so try to find the next one
-  while (curTick % 60 != 0) {
-    curTick++;
-  }
-
-  // datString should always be unused when this is called, but just in case
-  const savedDatString = datString;
-  datString = '';
-  write.uint8(0x35); // CheckSum
-  write.uint32(curTick);
-  write.optUint16(0);
-
-  const byteArray = new Uint8Array(datString.length / 2);
-  for (let i = 0; i < datString.length / 2; i++) {
-    byteArray[i] = parseInt(datString.substring(2 * i, 2 * i + 2), 16);
-  }
-  datString = savedDatString;
-
   // Find the next CheckSum frame
   outerLoop:
-  for (let searchIndex = curIndex; searchIndex + byteArray.length <= buffer.length; searchIndex++) {
-    for (let i = 0; i < byteArray.length; i++) {
-      if (byteArray[i] != buffer[searchIndex + i]) {
-        // Almost as bad as a goto - js could really use first-class multi-level continue/break
-        continue outerLoop;
-      }
+  for (let searchIndex = curIndex; searchIndex + 6 <= buffer.length; searchIndex++) {
+    if (buffer[searchIndex] != 0x35) {
+      // Not a checksum
+      continue;
     }
+    const tick = buffer[searchIndex + 1] + (buffer[searchIndex + 2] << 8) + (buffer[searchIndex + 3] << 16) + (buffer[searchIndex + 4] << 24);
+    if (tick % 60 != 0) {
+      // Not an even second
+      continue;
+    }
+    if (buffer[searchIndex + 5] != 0) {
+      // Not the host player
+      continue;
+    }
+
     // Found a matching frame!
     return searchIndex;
   }
