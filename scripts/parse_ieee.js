@@ -101,4 +101,4 @@ function toIEEE754DoubleString(v) {
         .replace(/(.)(.{11})(.{52})/, "$1 $2 $3")
 }
 
-export { fromIEEE754Double, fromIEEE754Single };
+export { fromIEEE754Double, fromIEEE754Single, toIEEE754Double, toIEEE754Single };

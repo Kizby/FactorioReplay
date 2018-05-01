@@ -1,4 +1,4 @@
-import { fromIEEE754Double, fromIEEE754Single } from './parse_ieee.js';
+import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.js';
 import { idMapTypes, idMaps } from './id_maps.js';
 
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
@@ -76,10 +76,11 @@ const fetch = {
     return [curTick, curPlayer];
   },
   unhandledBytes: () => {
-    const startIndex = curIndex - 1;
+    curIndex -= 5;
+    const startIndex = curIndex;
     let tickGuess = read.tick();
     tickGuess = tickGuess.replace('@', '?');
-    curIndex = startIndex; // Take back the bytes we've tried to interpret
+    curIndex = startIndex - 1; // Take back the bytes we've tried to interpret
     const endIndex = tryFindHeartbeat();
     return `${tickGuess}${read.bytes(endIndex - curIndex)}`;
   },
@@ -148,11 +149,11 @@ const read = {
     return num;
   },
   optUint16: (category) => {
-    let num = read.uint8(category);
+    let num = read.uint8();
     if (255 == num) {
       num = read.uint16(category);
     }
-    return num;
+    return mapValIfPossible(num);
   },
   optUint32: () => {
     let num = read.uint8();
@@ -188,6 +189,34 @@ const read = {
       result += byte;
     }
     return result;
+  },
+  bytesUntil: (targetBytes) => {
+    const startIndex = curIndex;
+    const actualBytes = [];
+    for (let i = 0; i < targetBytes.length && !eof(); i++) {
+      actualBytes[i] = read.uint8();
+    }
+    let endIndex = buffer.length;
+    while (true) {
+      let found = true;
+      for (let i = 0; i < targetBytes.length; i++) {
+        if (targetBytes[i] != actualBytes[i]) {
+          found = false;
+          break;
+        }
+      }
+      if (found || eof()) {
+        endIndex = curIndex;
+        curIndex = startIndex;
+        break;
+      }
+      // Rotate a new byte in
+      for (let i = 0; i < actualBytes.length - 1; i++) {
+        actualBytes[i] = actualBytes[i + 1];
+      }
+      actualBytes[actualBytes.length - 1] = read.uint8();
+    }
+    return read.bytes(endIndex - startIndex);
   },
   bool: () => {
     return read.uint8() == 1;
@@ -226,6 +255,14 @@ const read = {
   },
   uint8ProbablyZero: () => {
     const num = read.uint8();
+    return num == 0 ? '' : num;
+  },
+  uint16ProbablyZero: () => {
+    const num = read.uint16();
+    return num == 0 ? '' : num;
+  },
+  uint24ProbablyZero: () => {
+    const num = read.uint24();
     return num == 0 ? '' : num;
   },
   uint8ProbablyFour: () => {
@@ -490,6 +527,13 @@ const write = {
     const num = (buffer[curIndex] == '\n') ? mapValIfPossible(curPlayer, 'player') : fetch.num();
     write.uint16(num);
   },
+  double: () => {
+    const num = fetch.num();
+    const array = toIEEE754Double(num);
+    for (let i = array.length - 1; i >= 0; i--) {
+      write.uint8(array[i]);
+    }
+  }
 };
 
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
