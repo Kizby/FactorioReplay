@@ -65,29 +65,28 @@ export const frameHandlers = [
   [0x56, 'LimitSlots', 'slotInInventory'],
   [0x57, 'ChooseFilterCategory', 'itemGroup'],
   [0x68, 'ConnectionInfo?', () => {
-    const playerNumber = read.curPlayer();
+    const playerNumber = read.uint16();
     const unknown1 = read.uint16();
     const checkSum = read.checkSum();
-    const unknown2 = read.uint24(); // No ideas, always 0?
+    const unknown2 = read.uint24();
     let unknown3 = '';
-    if (256 == unknown2) {
-      unknown3 = read.bytes(30); // This random blob happens on connections in lan games
+    if (unknown2 != 0) {
+      unknown3 = read.bytesUntil([0, 1, 0, 0, 0xff, 0xff, 0, 0]); // This random blob happens on connections in lan games
     }
-    const extras = (playerNumber.toString().length == 0 && unknown1 == 0 && unknown2 == 0)
-      ? ''
-      : `, ${playerNumber}, ${unknown2}, ${unknown3}`;
-    return `${checkSum}${extras}`;
+    const extras = (unknown2 == 0) ? '' : `, ${unknown2}, ${unknown3}`;
+    return `${playerNumber}, ${unknown1}, ${checkSum}${extras}`;
   }, () => {
-    const checkSum = fetch.checkSum();
-    write.curPlayer();
-    write.uint16ProbablyZero();
-    write.checkSum(checkSum);
-
+    write.uint16();
+    write.uint16();
+    write.checkSum();
     const unknown2 = write.uint24ProbablyZero();
-    if (256 == unknown2) {
-      write.bytes(30);
+    if (unknown2 != 0) {
+      write.bytes();
     }
   }],
+  [0x6A, 'Unknown6A', () => {
+    return read.bytes(102); // Or something -.-
+  }, write.bytes],
   [0x6F, 'AddPlayer', () => {
     const playerNumber = read.optUint16();
     const force = read.force();
@@ -134,6 +133,7 @@ export const frameHandlers = [
     write.uint8ProbablyZero();
   }],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
+  [0x92, 'Unknown92', 'double'],
   [0x9c, 'EnableAutoLaunch', 'bool'],
   [0x94, 'PickUpNearbyItems', 'bool'],
   [0x95, 'MoveSelectionSmall', () => {
