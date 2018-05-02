@@ -48,6 +48,7 @@ const loadReplayTxt = (text) => {
   let result = document.createElement('div');
   result.id = 'replayDiv';
   result.contentEditable = true;
+  result.spellcheck = false;
 
   const lines = text.split(/\r?\n/);
   for (let i = 0; i < lines.length; i++) {
@@ -68,6 +69,7 @@ const loadReplayDat = (arrayBuffer) => {
   let result = document.createElement('div');
   result.id = 'replayDiv';
   result.contentEditable = true;
+  result.spellcheck = false;
 
   while (!eof()) {
     let inputAction = read.uint8();
