@@ -1,7 +1,7 @@
 import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.js';
 import { idMapTypes, idMaps } from './id_maps.js';
 
-let curIndex, buffer, curTick, curPlayer, datString, error = '', playerCount;
+let curIndex, buffer, curTick, curPlayer, datString, error = '';
 
 const fetch = {
   char: () => {
@@ -301,21 +301,13 @@ const read = {
     const bytes = buffer.slice(curIndex, curIndex += 8);
     return fromIEEE754Double(bytes.reverse());
   },
-  nextPlayer: () => {
-    const playerNum = read.optUint16();
-    if (mapValIfPossible(playerNum, 'player') == playerCount) {
-      playerCount++;
+  curPlayer: () => {
+    const playerNum = read.uint16();
+    if (mapValIfPossible(playerNum, 'player') == curPlayer) {
       return '';
     }
     return playerNum;
   },
-  forceProbablyPlayer: () => {
-    const force = read.force();
-    if (force == 'player') {
-      return '';
-    }
-    return force;
-  }
 };
 
 const write = {
@@ -535,22 +527,15 @@ const write = {
   inOut: () => {
     write.bool(fetch.string() == 'In');
   },
-  nextPlayer: () => {
-    const num = (buffer[curIndex] == '\n') ? mapValIfPossible(playerCount++, 'player') : fetch.num();
-    write.optUint16(num);
+  curPlayer: () => {
+    const num = (buffer[curIndex] == '\n') ? mapValIfPossible(curPlayer, 'player') : fetch.num();
+    write.uint16(num);
   },
   double: () => {
     const num = fetch.num();
     const array = toIEEE754Double(num);
     for (let i = array.length - 1; i >= 0; i--) {
       write.uint8(array[i]);
-    }
-  },
-  forceProbablyPlayer: () => {
-    if (buffer[curIndex] != '\n') {
-      write.force();
-    } else {
-      write.string(true, 'player');
     }
   }
 };
@@ -591,7 +576,6 @@ const setBuffer = (newBuffer) => {
   buffer = newBuffer;
   curIndex = 0;
   datString = '';
-  playerCount = 0;
 };
 
 const eof = () => {
