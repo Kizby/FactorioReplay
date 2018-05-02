@@ -153,23 +153,24 @@ const getTextRecursively = (node, respectPlatform) => {
   if (node.nodeType != Node.ELEMENT_NODE) {
     return '';
   }
+  const curLineBreak = respectPlatform ? lineBreak : '\n';
   if (node.nodeName == 'BR') {
-    return respectPlatform ? lineBreak : '\n';
+    return curLineBreak;
   }
   let result = '';
   const nodes = node.childNodes;
   for (let i = 0; i < nodes.length; i++) {
-    const next = getTextRecursively(nodes[i], respectPlatform);
-    if (result != '' && nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV' && !result.endsWith('\n')) {
-      result = `${result}\n${next}`;
-    } else {
-      result = `${result}${next}`;
+    let next = getTextRecursively(nodes[i], respectPlatform);
+    if (nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV') {
+      // Add a line break before and after every DIV
+      if (result != '' && !result.endsWith(curLineBreak) && !next.startsWith(curLineBreak)) {
+        next = `${curLineBreak}${next}`;
+      }
+      if (!next.endsWith(curLineBreak)) {
+        next = `${next}${curLineBreak}`;
+      }
     }
-    if (!result.endsWith('\n')) {
-      result = `${result}\n`;
-    } else while (result.endsWith('\n\n')) {
-      result = result.substring(0, result.length - 1);
-    }
+    result = `${result}${next}`;
   }
   return result;
 }
