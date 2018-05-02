@@ -1,0 +1,26 @@
+{
+  "name": "factorioreplay",
+  "version": "0.0.2",
+  "description": "Create and edit replays for Factorio",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kizby/FactorioReplay.git"
+  },
+  "keywords": [
+    "factorio",
+    "tas"
+  ],
+  "author": "Kizby",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kizby/FactorioReplay/issues"
+  },
+  "homepage": "https://github.com/Kizby/FactorioReplay#readme"
+}
