@@ -160,11 +160,13 @@ const getTextRecursively = (node, respectPlatform) => {
     const next = getTextRecursively(nodes[i], respectPlatform);
     if (result != '' && nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV' && !result.endsWith('\n')) {
       result = `${result}\n${next}`;
-      if (!result.endsWith('\n')) {
-        result = `${result}\n`;
-      }
     } else {
       result = `${result}${next}`;
+    }
+    if (!result.endsWith('\n')) {
+      result = `${result}\n`;
+    } else while (result.endsWith('\n\n')) {
+      result = result.substring(0, result.length - 1);
     }
   }
   return result;
@@ -175,14 +177,15 @@ exportDatButton.addEventListener('click', () => {
   let failed = false;
   let datStringLen = 0;
   for (let lineType = fetch.char(); !failed && !eof(); lineType = fetch.char()) {
-    // Used in a couple of the cases
     if (lineType == '?') {
       // Arbitrary bytes
       fetch.string(':');
       write.bytes();
-    } else if (lineType == '@') {
-      // Typical case - command at a given tick
-      const [tick, player] = fetch.tick();
+    } else if (lineType == '@' || lineType == '+') {
+      // Typical case
+      // @ - command at a given tick
+      // + - command at an offset from the last command
+      const [tick, player] = fetch.tick(lineType == '+');
       fetch.whitespace();
 
       let name = fetch.string(' ');
@@ -249,6 +252,10 @@ const stableSort = (array, compare) => {
 
 const sortReplayLines = (compare) => {
   const initialText = getTextRecursively(replayDiv);
+  if (initialText.indexOf('+') != -1) {
+    console.error('Can\'t sort by tick with relative ticks');
+    return;
+  }
   let lines = initialText.split('\n');
   stableSort(lines, compare);
   const finalText = lines.join('\n');

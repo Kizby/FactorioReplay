@@ -57,7 +57,7 @@ const fetch = {
     }
     return buffer.substring(startIndex, curIndex);
   },
-  tick: () => {
+  tick: (isRelative) => {
     const colonIndex = buffer.indexOf(':', curIndex);
     if (colonIndex == -1) {
       error = `Failed to obtain tick on line after tick ${curTick}`;
@@ -65,7 +65,11 @@ const fetch = {
     }
     const tickStr = buffer.substring(curIndex, colonIndex);
     let openIndex = tickStr.indexOf('(');
-    curTick = parseInt(tickStr.substring(0, openIndex));
+    if (isRelative) {
+      curTick += parseInt(tickStr.substring(0, openIndex));
+    } else {
+      curTick = parseInt(tickStr.substring(0, openIndex));
+    }
     let closeIndex = tickStr.indexOf(')', openIndex + 1);
     curPlayer = tickStr.substring(openIndex + 1, closeIndex);
     if (/[0123456789]/.test(curPlayer[0])) {
