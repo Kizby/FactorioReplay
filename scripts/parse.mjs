@@ -1,5 +1,5 @@
-import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.js';
-import { idMapTypes, idMaps } from './id_maps.js';
+import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.mjs';
+import { idMapTypes, idMaps } from './id_maps.mjs';
 
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
 

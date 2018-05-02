@@ -1,6 +1,6 @@
-import { read, write, fetch, setBuffer, eof, datString, error } from './parse.js';
-import { frameHandlers } from './replay_frames.js';
-import { loadLevelDat } from './level_loader.js';
+import { read, write, fetch, setBuffer, eof, datString, error } from './parse.mjs';
+import { frameHandlers } from './replay_frames.mjs';
+import { loadLevelDat } from './level_loader.mjs';
 import './jszip/jszip.js';
 
 let inputActionByteToFrameHandler = [], inputActionNameToFrameHandler = [];
@@ -62,14 +62,12 @@ const loadReplayTxt = (text) => {
   showButtons();
 };
 
-const loadReplayDat = (arrayBuffer) => {
+const parseReplayDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
 
-  let result = document.createElement('div');
-  result.id = 'replayDiv';
-  result.contentEditable = true;
-
+  let result = '';
   while (!eof()) {
+    let line = '';
     let inputAction = read.uint8();
     let tickStr = read.tick();
     let frameHandler = inputActionByteToFrameHandler[inputAction];
@@ -99,14 +97,18 @@ const loadReplayDat = (arrayBuffer) => {
       if (frameArgs.length > 0) {
         frameArgs = ` ${frameArgs}`;
       }
-      appendElement(result, 'span', `${tickStr}${frameHandler[1]}${frameArgs}`);
+      line = `${tickStr}${frameHandler[1]}${frameArgs}`;
     } else if (!eof()) {
-      appendElement(result, 'span', fetch.unhandledBytes());
+      line = fetch.unhandledBytes();
     }
-    appendElement(result, 'br');
+    result = `${result}${line}\n`;
   }
-  replayDiv.parentNode.replaceChild(result, replayDiv);
-  showButtons();
+  return result;
+}
+
+const loadReplayDat = (arrayBuffer) => {
+  const result = parseReplayDat(arrayBuffer);
+  loadReplayTxt(result);
 };
 
 document.body.addEventListener('dragover', (event) => {
@@ -172,8 +174,8 @@ const getTextRecursively = (node, respectPlatform) => {
   return result;
 }
 
-exportDatButton.addEventListener('click', () => {
-  setBuffer(getTextRecursively(replayDiv, false));
+const getReplayDatBytes = (text) => {
+  setBuffer(text);
   let failed = false;
   let datStringLen = 0;
   for (let lineType = fetch.char(); !failed && !eof(); lineType = fetch.char()) {
@@ -227,11 +229,16 @@ exportDatButton.addEventListener('click', () => {
   for (let i = 0; i < datStringLen / 2; i++) {
     byteArray[i] = parseInt(datString.substring(2 * i, 2 * i + 2), 16);
   }
-  download(byteArray, 'replay.dat', 'application/octet-stream');
+  return byteArray;
+};
+
+exportDatButton.addEventListener('click', () => {
+  const result = getReplayDatBytes(getTextRecursively(replayDiv, false));
+  download(result, 'replay.dat', 'application/octet-stream');
 });
 
 exportTxtButton.addEventListener('click', () => {
-  let result = getTextRecursively(replayDiv, true);
+  const result = getTextRecursively(replayDiv, true);
   download(result, 'replay.txt', 'text/plain');
 });
 
@@ -306,3 +313,5 @@ sortByPlayerButton.addEventListener('click', () => {
 
 // Expose this for convenience
 window.loadText = loadReplayTxt;
+
+export { loadReplayDat, loadReplayTxt, getReplayDatBytes, getTextRecursively };

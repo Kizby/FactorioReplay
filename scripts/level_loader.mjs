@@ -1,5 +1,5 @@
-import { read, write, fetch, setBuffer, expect, eof } from './parse.js';
-import { idMapTypes, idMaps } from './id_maps.js';
+import { read, write, fetch, setBuffer, expect, eof } from './parse.mjs';
+import { idMapTypes, idMaps } from './id_maps.mjs';
 
 const loadLevelDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));

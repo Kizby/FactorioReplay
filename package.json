@@ -2,12 +2,12 @@
   "name": "factorioreplay",
   "version": "0.0.2",
   "description": "Create and edit replays for Factorio",
-  "main": "index.js",
+  "main": "index.mjs",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node scripts/test.mjs"
   },
   "repository": {
     "type": "git",
