@@ -70,12 +70,15 @@ export const frameHandlers = [
     const checkSum = read.checkSum();
     const unknown2 = read.uint24();
     let unknown3 = '';
-    if (unknown2 != 0) {
+    if (unknown1 != 0) {
       // This random blob happens on connections in lan games
       // and some single player games?
       unknown3 = read.bytesUntil([0, 1, 0, 0, 0xff, 0xff, 0, 0]);
     }
-    const extras = (unknown2 == 0) ? '' : `, ${unknown2}, ${unknown3}`;
+    let extras = (unknown1 == 0 && unknown2 == 0) ? '' : `, ${unknown2}`;
+    if (unknown3 != '') {
+      extras = `${extras}, ${unknown3}`;
+    }
     return `${playerNumber}, ${unknown1}, ${checkSum}${extras}`;
   }, () => {
     write.uint16();
@@ -89,22 +92,7 @@ export const frameHandlers = [
   [0x6A, 'Unknown6A', () => {
     return read.bytes(102); // Or something -.-
   }, write.bytes],
-  [0x6F, 'AddPlayer', () => {
-    const playerNumber = read.optUint16();
-    const force = read.force();
-    const name = read.string();
-    idMaps.player[name] = playerNumber;
-    idMaps.player[playerNumber] = name;
-    return `${name}, ${playerNumber}, ${force}`;
-  }, () => {
-    const name = fetch.string(',');
-    const playerNumber = fetch.num();
-    idMaps.player[name] = playerNumber;
-    idMaps.player[playerNumber] = name;
-    write.optUint16(playerNumber);
-    write.force();
-    write.string(true, name);
-  }],
+  [0x6F, 'AddPlayer', ['nextPlayer', 'forceProbablyPlayer', 'string']],
   [0x76, 'PlaceArea', () => {
     const x = read.fixed32();
     const y = read.fixed32();
