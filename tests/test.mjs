@@ -1,3 +1,4 @@
-import { loadReplayDat, loadReplayTxt, getReplayDatBytes, getTextRecursively } from '../scripts/index.mjs';
+import { parseReplayDat, getReplayDatBytes } from '../scripts/index.mjs';
 
-assert(false)
+console.log('Passed NaN/NaN tests!');
+console.error('Failed NaN/NaN tests :(');
