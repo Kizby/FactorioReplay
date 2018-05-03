@@ -1,5 +1,5 @@
 @0(65535): JoinMultiPlayer
-@0(Murray65536): AddPlayer SteelAxeBot, 0, player
+@0(0): AddPlayer SteelAxeBot, 0, player
 @0(SteelAxeBot): ShowInfo
 @0(SteelAxeBot): Craft iron-axe, 1
 @0(SteelAxeBot): Run SW

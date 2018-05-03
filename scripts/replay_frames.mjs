@@ -1,5 +1,5 @@
-import { read, write, fetch } from './parse.js';
-import { idMaps } from './id_maps.js';
+import { read, write, fetch } from './parse.mjs';
+import { idMaps } from './id_maps.mjs';
 
 // Keep track of player names the same way we track everything else
 idMaps.player = {};
