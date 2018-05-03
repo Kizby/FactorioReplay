@@ -543,7 +543,7 @@ const write = {
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
 for (let i = 0; i < idMapTypes.length; i++) {
   read[idMapTypes[i][0]] = () => read[idMapTypes[i][1]](idMapTypes[i][0]);
-  write[idMapTypes[i][0]] = () => write[idMapTypes[i][1]](fetch.string(','), idMapTypes[i][0]);
+  write[idMapTypes[i][0]] = (val = fetch.string(',')) => write[idMapTypes[i][1]](val, idMapTypes[i][0]);
 }
 
 const tryFindHeartbeat = () => {
@@ -576,7 +576,6 @@ const setBuffer = (newBuffer) => {
   buffer = newBuffer;
   curIndex = 0;
   datString = '';
-  idMaps.player = {};
 };
 
 const eof = () => {

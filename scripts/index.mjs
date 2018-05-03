@@ -1,5 +1,5 @@
 import { read, write, fetch, setBuffer, eof, datString, error } from './parse.mjs';
-import { frameHandlers } from './replay_frames.mjs';
+import { frameHandlers, resetPlayers } from './replay_frames.mjs';
 import { loadLevelDat } from './level_loader.mjs';
 import './jszip/jszip.js';
 
@@ -11,6 +11,7 @@ for (let i = 0; i < frameHandlers.length; i++) {
 
 const parseReplayDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
+  resetPlayers();
 
   let result = '';
   while (!eof()) {
@@ -55,6 +56,7 @@ const parseReplayDat = (arrayBuffer) => {
 
 const getReplayDatBytes = (text) => {
   setBuffer(text);
+  resetPlayers();
   let failed = false;
   let datStringLen = 0;
   for (let lineType = fetch.char(); !failed && !eof(); lineType = fetch.char()) {

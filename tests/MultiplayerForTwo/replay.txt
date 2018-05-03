@@ -1,5 +1,5 @@
 @0(65535): JoinMultiPlayer
-@0(65535): AddPlayer Murray65536, 0, player
+@0(65535): AddPlayer Murray65536
 @1(Murray65536): UpdateResolution 1920, 1080
 @1(Murray65536): ConnectionInfo? 0, 0, 5ad3c174
 @3(Murray65536): MoveSelection 1.4375, 9.0625
@@ -281,7 +281,7 @@
 @6000(Murray65536): CheckSum f2f83fd3
 @6060(Murray65536): CheckSum 842ec032
 @6120(Murray65536): CheckSum 8ce0f8cf
-@6142(Murray65536): AddPlayer zerovolts, 1, player
+@6142(Murray65536): AddPlayer zerovolts
 @6175(zerovolts): UpdateResolution 1920, 1080
 @6175(zerovolts): ConnectionInfo? 1, 0, 5adaa91c
 @6180(Murray65536): CheckSum 0b398321

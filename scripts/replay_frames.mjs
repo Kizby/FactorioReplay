@@ -3,6 +3,11 @@ import { idMaps } from './id_maps.mjs';
 
 // Keep track of player names the same way we track everything else
 idMaps.player = {};
+let playerCount = 0;
+export const resetPlayers = () => {
+  idMaps.player = {};
+  playerCount = 0;
+};
 
 export const frameHandlers = [
   // IgnoreRemaining seems to stop replay parsing and makes the replay continue playing forever
@@ -93,16 +98,41 @@ export const frameHandlers = [
     const playerNumber = read.optUint16();
     const force = read.force();
     const name = read.string();
-    idMaps.player[name] = playerNumber;
-    idMaps.player[playerNumber] = name;
-    return `${name}, ${playerNumber}, ${force}`;
+    let extras = '';
+    if (playerNumber == playerCount) {
+      idMaps.player[name] = playerNumber;
+      idMaps.player[playerNumber] = name;
+      ++playerCount;
+    } else if (idMaps.player[playerNumber] != name) {
+      // Factorio won't be happy, but let's make it representable
+      extras = `${extras}, ${playerNumber}`;
+
+      // Go ahead and add it to the map anyway
+      idMaps.player[name] = playerNumber;
+      idMaps.player[playerNumber] = name;
+    }
+    if (force != 'player') {
+      extras = `${extras}, ${force}`;
+    }
+    return `${name}${extras}`;
   }, () => {
     const name = fetch.string(',');
-    const playerNumber = fetch.num();
+    let extra = fetch.string(',');
+    let playerNumber = idMaps.player[name] || playerCount;
+    if (extra != '' && /[1234567890]/.test(extra[0])) {
+      playerNumber = parseInt(extra);
+      extra = fetch.string(',');
+    } else if (playerNumber == playerCount) {
+      playerCount++;
+    }
+    let force = 'player';
+    if (extra != '') {
+      force = extra;
+    }
     idMaps.player[name] = playerNumber;
     idMaps.player[playerNumber] = name;
     write.optUint16(playerNumber);
-    write.force();
+    write.force(force);
     write.string(true, name);
   }],
   [0x76, 'PlaceArea', () => {
