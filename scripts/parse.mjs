@@ -157,7 +157,7 @@ const read = {
     if (255 == num) {
       num = read.uint16(category);
     }
-    return mapValIfPossible(num);
+    return mapValIfPossible(num, category);
   },
   optUint32: () => {
     let num = read.uint8();
@@ -576,6 +576,7 @@ const setBuffer = (newBuffer) => {
   buffer = newBuffer;
   curIndex = 0;
   datString = '';
+  idMaps.player = {};
 };
 
 const eof = () => {
