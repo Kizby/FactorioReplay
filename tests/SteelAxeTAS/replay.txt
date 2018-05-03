@@ -1,176 +1,176 @@
 @0(65535): JoinMultiPlayer
-@0(0): AddPlayer SteelAxeBot, 0, player
+@0(0): AddPlayer SteelAxeBot
 @0(SteelAxeBot): ShowInfo
 @0(SteelAxeBot): Craft iron-axe, 1
 @0(SteelAxeBot): Run SW
 @0(SteelAxeBot): MoveSelection -9, 7
-@2(SteelAxeBot): AddPlayer CopperMiner1, 1, player
+@2(SteelAxeBot): AddPlayer CopperMiner1
 @2(CopperMiner1): Craft iron-axe, 2
 @2(CopperMiner1): MoveSelection 1.5, 1.5
 @2(CopperMiner1): StartMining
 @2(CopperMiner1): Toolbelt 1
 @2(CopperMiner1): Build -4, -3, N
-@2(SteelAxeBot): AddPlayer CopperMiner2, 2, player
+@2(SteelAxeBot): AddPlayer CopperMiner2
 @2(CopperMiner2): Craft iron-axe, 2
 @2(CopperMiner2): MoveSelection 1.5, 0.5
 @2(CopperMiner2): StartMining
 @2(CopperMiner2): Toolbelt 1
 @2(CopperMiner2): Build -2, -3, N
-@2(SteelAxeBot): AddPlayer CopperMiner3, 3, player
+@2(SteelAxeBot): AddPlayer CopperMiner3
 @2(CopperMiner3): Craft iron-axe, 2
 @2(CopperMiner3): MoveSelection 1.5, -1.5
 @2(CopperMiner3): StartMining
 @2(CopperMiner3): Toolbelt 1
 @2(CopperMiner3): Build 0, -3, N
-@2(SteelAxeBot): AddPlayer CopperMiner4, 4, player
+@2(SteelAxeBot): AddPlayer CopperMiner4
 @2(CopperMiner4): Craft iron-axe, 2
 @2(CopperMiner4): MoveSelection 0.5, 1.5
 @2(CopperMiner4): StartMining
 @2(CopperMiner4): Toolbelt 1
 @2(CopperMiner4): Build 2, -3, N
-@2(SteelAxeBot): AddPlayer CopperMiner5, 5, player
+@2(SteelAxeBot): AddPlayer CopperMiner5
 @2(CopperMiner5): Craft iron-axe, 2
 @2(CopperMiner5): MoveSelection 1.5, 1.5
 @2(CopperMiner5): StartMining
 @2(CopperMiner5): Toolbelt 1
 @2(CopperMiner5): Build 4, -3, N
-@2(SteelAxeBot): AddPlayer CopperMiner6, 6, player
+@2(SteelAxeBot): AddPlayer CopperMiner6
 @2(CopperMiner6): Craft iron-axe, 2
 @2(CopperMiner6): MoveSelection 1.5, 0.5
 @2(CopperMiner6): StartMining
 @2(CopperMiner6): Toolbelt 1
 @2(CopperMiner6): Build -2, -5, N
-@2(SteelAxeBot): AddPlayer CopperMiner7, 7, player
+@2(SteelAxeBot): AddPlayer CopperMiner7
 @2(CopperMiner7): Craft iron-axe, 2
 @2(CopperMiner7): MoveSelection 1.5, -1.5
 @2(CopperMiner7): StartMining
 @2(CopperMiner7): Toolbelt 1
 @2(CopperMiner7): Build 0, -5, N
-@2(SteelAxeBot): AddPlayer CopperMiner8, 8, player
+@2(SteelAxeBot): AddPlayer CopperMiner8
 @2(CopperMiner8): Craft iron-axe, 2
 @2(CopperMiner8): MoveSelection 0.5, 1.5
 @2(CopperMiner8): StartMining
 @2(CopperMiner8): Toolbelt 1
 @2(CopperMiner8): Build 2, -5, N
-@2(SteelAxeBot): AddPlayer CoalMiner1, 9, player
+@2(SteelAxeBot): AddPlayer CoalMiner1
 @2(CoalMiner1): Craft iron-axe, 2
 @2(CoalMiner1): MoveSelection 1.5, -0.5
 @2(CoalMiner1): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner2, 10, player
+@2(SteelAxeBot): AddPlayer CoalMiner2
 @2(CoalMiner2): Craft iron-axe, 2
 @2(CoalMiner2): MoveSelection 1.5, -0.5
 @2(CoalMiner2): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner3, 11, player
+@2(SteelAxeBot): AddPlayer CoalMiner3
 @2(CoalMiner3): Craft iron-axe, 2
 @2(CoalMiner3): MoveSelection 1.5, -0.5
 @2(CoalMiner3): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner4, 12, player
+@2(SteelAxeBot): AddPlayer CoalMiner4
 @2(CoalMiner4): Craft iron-axe, 2
 @2(CoalMiner4): MoveSelection 1.5, -0.5
 @2(CoalMiner4): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner5, 13, player
+@2(SteelAxeBot): AddPlayer CoalMiner5
 @2(CoalMiner5): Craft iron-axe, 2
 @2(CoalMiner5): MoveSelection 1.5, -0.5
 @2(CoalMiner5): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner6, 14, player
+@2(SteelAxeBot): AddPlayer CoalMiner6
 @2(CoalMiner6): Craft iron-axe, 2
 @2(CoalMiner6): MoveSelection 1.5, -0.5
 @2(CoalMiner6): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner7, 15, player
+@2(SteelAxeBot): AddPlayer CoalMiner7
 @2(CoalMiner7): Craft iron-axe, 2
 @2(CoalMiner7): MoveSelection -1.5, 1.5
 @2(CoalMiner7): StartMining
-@2(SteelAxeBot): AddPlayer CoalMiner8, 16, player
+@2(SteelAxeBot): AddPlayer CoalMiner8
 @2(CoalMiner8): Craft iron-axe, 2
 @2(CoalMiner8): MoveSelection 1.5, -0.5
 @2(CoalMiner8): StartMining
-@22(SteelAxeBot): AddPlayer ChestCrafter, 17, player
+@22(SteelAxeBot): AddPlayer ChestCrafter
 @22(ChestCrafter): Craft iron-chest, 1
-@22(SteelAxeBot): AddPlayer PipeCrafter1, 18, player
+@22(SteelAxeBot): AddPlayer PipeCrafter1
 @22(PipeCrafter1): Craft pipe, 2
-@22(SteelAxeBot): AddPlayer PipeCrafter2, 19, player
+@22(SteelAxeBot): AddPlayer PipeCrafter2
 @22(PipeCrafter2): Craft pipe, 2
-@22(SteelAxeBot): AddPlayer PipeCrafter3, 20, player
+@22(SteelAxeBot): AddPlayer PipeCrafter3
 @22(PipeCrafter3): Craft pipe, 2
-@22(SteelAxeBot): AddPlayer PipeCrafter4, 21, player
+@22(SteelAxeBot): AddPlayer PipeCrafter4
 @22(PipeCrafter4): Craft pipe, 2
-@22(SteelAxeBot): AddPlayer PipeCrafter5, 22, player
+@22(SteelAxeBot): AddPlayer PipeCrafter5
 @22(PipeCrafter5): Craft pipe, 2
-@22(SteelAxeBot): AddPlayer GearCrafter1, 23, player
+@22(SteelAxeBot): AddPlayer GearCrafter1
 @22(GearCrafter1): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter2, 24, player
+@22(SteelAxeBot): AddPlayer GearCrafter2
 @22(GearCrafter2): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter3, 25, player
+@22(SteelAxeBot): AddPlayer GearCrafter3
 @22(GearCrafter3): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter4, 26, player
+@22(SteelAxeBot): AddPlayer GearCrafter4
 @22(GearCrafter4): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter5, 27, player
+@22(SteelAxeBot): AddPlayer GearCrafter5
 @22(GearCrafter5): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter6, 28, player
+@22(SteelAxeBot): AddPlayer GearCrafter6
 @22(GearCrafter6): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter7, 29, player
+@22(SteelAxeBot): AddPlayer GearCrafter7
 @22(GearCrafter7): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter8, 30, player
+@22(SteelAxeBot): AddPlayer GearCrafter8
 @22(GearCrafter8): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter9, 31, player
+@22(SteelAxeBot): AddPlayer GearCrafter9
 @22(GearCrafter9): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter10, 32, player
+@22(SteelAxeBot): AddPlayer GearCrafter10
 @22(GearCrafter10): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter11, 33, player
+@22(SteelAxeBot): AddPlayer GearCrafter11
 @22(GearCrafter11): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter12, 34, player
+@22(SteelAxeBot): AddPlayer GearCrafter12
 @22(GearCrafter12): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter13, 35, player
+@22(SteelAxeBot): AddPlayer GearCrafter13
 @22(GearCrafter13): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter14, 36, player
+@22(SteelAxeBot): AddPlayer GearCrafter14
 @22(GearCrafter14): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter15, 37, player
+@22(SteelAxeBot): AddPlayer GearCrafter15
 @22(GearCrafter15): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter16, 38, player
+@22(SteelAxeBot): AddPlayer GearCrafter16
 @22(GearCrafter16): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter17, 39, player
+@22(SteelAxeBot): AddPlayer GearCrafter17
 @22(GearCrafter17): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter18, 40, player
+@22(SteelAxeBot): AddPlayer GearCrafter18
 @22(GearCrafter18): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter19, 41, player
+@22(SteelAxeBot): AddPlayer GearCrafter19
 @22(GearCrafter19): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter20, 42, player
+@22(SteelAxeBot): AddPlayer GearCrafter20
 @22(GearCrafter20): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter21, 43, player
+@22(SteelAxeBot): AddPlayer GearCrafter21
 @22(GearCrafter21): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter22, 44, player
+@22(SteelAxeBot): AddPlayer GearCrafter22
 @22(GearCrafter22): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter23, 45, player
+@22(SteelAxeBot): AddPlayer GearCrafter23
 @22(GearCrafter23): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter24, 46, player
+@22(SteelAxeBot): AddPlayer GearCrafter24
 @22(GearCrafter24): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter25, 47, player
+@22(SteelAxeBot): AddPlayer GearCrafter25
 @22(GearCrafter25): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter26, 48, player
+@22(SteelAxeBot): AddPlayer GearCrafter26
 @22(GearCrafter26): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter27, 49, player
+@22(SteelAxeBot): AddPlayer GearCrafter27
 @22(GearCrafter27): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer GearCrafter28, 50, player
+@22(SteelAxeBot): AddPlayer GearCrafter28
 @22(GearCrafter28): Craft iron-gear-wheel, 4
-@22(SteelAxeBot): AddPlayer BeltCrafter1, 51, player
+@22(SteelAxeBot): AddPlayer BeltCrafter1
 @22(BeltCrafter1): Craft transport-belt, 2
-@22(SteelAxeBot): AddPlayer BeltCrafter2, 52, player
+@22(SteelAxeBot): AddPlayer BeltCrafter2
 @22(BeltCrafter2): Craft transport-belt, 2
-@22(SteelAxeBot): AddPlayer BeltCrafter3, 53, player
+@22(SteelAxeBot): AddPlayer BeltCrafter3
 @22(BeltCrafter3): Craft transport-belt, 2
-@22(SteelAxeBot): AddPlayer BeltCrafter4, 54, player
+@22(SteelAxeBot): AddPlayer BeltCrafter4
 @22(BeltCrafter4): Craft transport-belt, 2
-@22(SteelAxeBot): AddPlayer BeltCrafter5, 55, player
+@22(SteelAxeBot): AddPlayer BeltCrafter5
 @22(BeltCrafter5): Craft transport-belt, 2
 @53(ChestCrafter): Toolbelt 2
 @53(ChestCrafter): Build -4, -2, N
 @53(ChestCrafter): LeaveGame
-@53(SteelAxeBot): AddPlayer IronMule1, 56, player
+@53(SteelAxeBot): AddPlayer IronMule1
 @53(IronMule1): ClickItemStack Player, 0
 @53(IronMule1): MoveSelection -4, -2
 @53(IronMule1): TransferEntityStack In
 @53(IronMule1): LeaveGame
-@53(SteelAxeBot): AddPlayer IronMule2, 57, player
+@53(SteelAxeBot): AddPlayer IronMule2
 @53(IronMule2): ClickItemStack Player, 0
 @53(IronMule2): MoveSelection -4, -2
 @53(IronMule2): TransferEntityStack In
@@ -531,7 +531,7 @@
 @340(CoalMiner8): TransferEntityStack In
 @340(CoalMiner8): MoveSelection -0.5, 4.5
 @340(CoalMiner8): StartMining
-@429(SteelAxeBot): AddPlayer CopperFetcher, 58, player
+@429(SteelAxeBot): AddPlayer CopperFetcher
 @429(CopperFetcher): MoveSelection -4, -3
 @429(CopperFetcher): OpenTargetInventory
 @429(CopperFetcher): TransferItemStack Output, 0
@@ -576,45 +576,45 @@
 @429(CopperFetcher): OpenTargetInventory
 @429(CopperFetcher): TransferInventory Player, 31
 @429(CopperFetcher): CloseWindow
-@429(SteelAxeBot): AddPlayer CableCrafter1, 59, player
+@429(SteelAxeBot): AddPlayer CableCrafter1
 @429(CableCrafter1): MoveSelection -4, -2
 @429(CableCrafter1): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer CableCrafter2, 60, player
+@429(SteelAxeBot): AddPlayer CableCrafter2
 @429(CableCrafter2): MoveSelection -4, -2
 @429(CableCrafter2): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer CableCrafter3, 61, player
+@429(SteelAxeBot): AddPlayer CableCrafter3
 @429(CableCrafter3): MoveSelection -4, -2
 @429(CableCrafter3): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@429(SteelAxeBot): AddPlayer CableCrafter4, 63, player
+@429(SteelAxeBot): AddPlayer Placeholder1
+@429(SteelAxeBot): AddPlayer CableCrafter4
 @429(Placeholder1): LeaveGame
 @429(CableCrafter4): MoveSelection -4, -2
 @429(CableCrafter4): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@429(SteelAxeBot): AddPlayer CableCrafter5, 64, player
+@429(SteelAxeBot): AddPlayer Placeholder1
+@429(SteelAxeBot): AddPlayer CableCrafter5
 @429(Placeholder1): LeaveGame
 @429(CableCrafter5): MoveSelection -4, -2
 @429(CableCrafter5): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@429(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@429(SteelAxeBot): AddPlayer CableCrafter6, 66, player
+@429(SteelAxeBot): AddPlayer Placeholder1
+@429(SteelAxeBot): AddPlayer Placeholder2
+@429(SteelAxeBot): AddPlayer CableCrafter6
 @429(Placeholder2): LeaveGame
 @429(Placeholder1): LeaveGame
 @429(CableCrafter6): MoveSelection -4, -2
 @429(CableCrafter6): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@429(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@429(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@429(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@429(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@429(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@429(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@429(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@429(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@429(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@429(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@429(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@429(SteelAxeBot): AddPlayer CableCrafter7, 77, player
+@429(SteelAxeBot): AddPlayer Placeholder1
+@429(SteelAxeBot): AddPlayer Placeholder2
+@429(SteelAxeBot): AddPlayer Placeholder3
+@429(SteelAxeBot): AddPlayer Placeholder4
+@429(SteelAxeBot): AddPlayer Placeholder5
+@429(SteelAxeBot): AddPlayer Placeholder6
+@429(SteelAxeBot): AddPlayer Placeholder7
+@429(SteelAxeBot): AddPlayer Placeholder8
+@429(SteelAxeBot): AddPlayer Placeholder9
+@429(SteelAxeBot): AddPlayer Placeholder10
+@429(SteelAxeBot): AddPlayer Placeholder11
+@429(SteelAxeBot): AddPlayer Placeholder12
+@429(SteelAxeBot): AddPlayer CableCrafter7
 @429(Placeholder12): LeaveGame
 @429(Placeholder11): LeaveGame
 @429(Placeholder10): LeaveGame
@@ -629,20 +629,20 @@
 @429(Placeholder1): LeaveGame
 @429(CableCrafter7): MoveSelection -4, -2
 @429(CableCrafter7): OpenTargetInventory
-@429(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@429(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@429(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@429(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@429(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@429(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@429(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@429(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@429(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@429(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@429(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@429(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@429(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@429(SteelAxeBot): AddPlayer CableCrafter8, 79, player
+@429(SteelAxeBot): AddPlayer Placeholder1
+@429(SteelAxeBot): AddPlayer Placeholder2
+@429(SteelAxeBot): AddPlayer Placeholder3
+@429(SteelAxeBot): AddPlayer Placeholder4
+@429(SteelAxeBot): AddPlayer Placeholder5
+@429(SteelAxeBot): AddPlayer Placeholder6
+@429(SteelAxeBot): AddPlayer Placeholder7
+@429(SteelAxeBot): AddPlayer Placeholder8
+@429(SteelAxeBot): AddPlayer Placeholder9
+@429(SteelAxeBot): AddPlayer Placeholder10
+@429(SteelAxeBot): AddPlayer Placeholder11
+@429(SteelAxeBot): AddPlayer Placeholder12
+@429(SteelAxeBot): AddPlayer Placeholder13
+@429(SteelAxeBot): AddPlayer CableCrafter8
 @429(Placeholder13): LeaveGame
 @429(Placeholder12): LeaveGame
 @429(Placeholder11): LeaveGame
@@ -698,20 +698,20 @@
 @460(SteelAxeBot): TransferInventory Player, 31
 @460(SteelAxeBot): CloseWindow
 @460(SteelAxeBot): Run NW
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter1, 80, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer CircuitCrafter1
 @460(Placeholder13): LeaveGame
 @460(Placeholder12): LeaveGame
 @460(Placeholder11): LeaveGame
@@ -727,20 +727,20 @@
 @460(Placeholder1): LeaveGame
 @460(CircuitCrafter1): MoveSelection -4, -2
 @460(CircuitCrafter1): OpenTargetInventory
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter2, 81, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer CircuitCrafter2
 @460(Placeholder13): LeaveGame
 @460(Placeholder12): LeaveGame
 @460(Placeholder11): LeaveGame
@@ -756,20 +756,20 @@
 @460(Placeholder1): LeaveGame
 @460(CircuitCrafter2): MoveSelection -4, -2
 @460(CircuitCrafter2): OpenTargetInventory
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter3, 82, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer CircuitCrafter3
 @460(Placeholder13): LeaveGame
 @460(Placeholder12): LeaveGame
 @460(Placeholder11): LeaveGame
@@ -785,21 +785,21 @@
 @460(Placeholder1): LeaveGame
 @460(CircuitCrafter3): MoveSelection -4, -2
 @460(CircuitCrafter3): OpenTargetInventory
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter4, 84, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer Placeholder14
+@460(SteelAxeBot): AddPlayer CircuitCrafter4
 @460(Placeholder14): LeaveGame
 @460(Placeholder13): LeaveGame
 @460(Placeholder12): LeaveGame
@@ -816,23 +816,23 @@
 @460(Placeholder1): LeaveGame
 @460(CircuitCrafter4): MoveSelection -4, -2
 @460(CircuitCrafter4): OpenTargetInventory
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@460(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@460(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter5, 87, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer Placeholder14
+@460(SteelAxeBot): AddPlayer Placeholder15
+@460(SteelAxeBot): AddPlayer Placeholder16
+@460(SteelAxeBot): AddPlayer CircuitCrafter5
 @460(Placeholder16): LeaveGame
 @460(Placeholder15): LeaveGame
 @460(Placeholder14): LeaveGame
@@ -851,24 +851,24 @@
 @460(Placeholder1): LeaveGame
 @460(CircuitCrafter5): MoveSelection -4, -2
 @460(CircuitCrafter5): OpenTargetInventory
-@460(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@460(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@460(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@460(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@460(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@460(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@460(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@460(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@460(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@460(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@460(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@460(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@460(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@460(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@460(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@460(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@460(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@460(SteelAxeBot): AddPlayer CircuitCrafter6, 89, player
+@460(SteelAxeBot): AddPlayer Placeholder1
+@460(SteelAxeBot): AddPlayer Placeholder2
+@460(SteelAxeBot): AddPlayer Placeholder3
+@460(SteelAxeBot): AddPlayer Placeholder4
+@460(SteelAxeBot): AddPlayer Placeholder5
+@460(SteelAxeBot): AddPlayer Placeholder6
+@460(SteelAxeBot): AddPlayer Placeholder7
+@460(SteelAxeBot): AddPlayer Placeholder8
+@460(SteelAxeBot): AddPlayer Placeholder9
+@460(SteelAxeBot): AddPlayer Placeholder10
+@460(SteelAxeBot): AddPlayer Placeholder11
+@460(SteelAxeBot): AddPlayer Placeholder12
+@460(SteelAxeBot): AddPlayer Placeholder13
+@460(SteelAxeBot): AddPlayer Placeholder14
+@460(SteelAxeBot): AddPlayer Placeholder15
+@460(SteelAxeBot): AddPlayer Placeholder16
+@460(SteelAxeBot): AddPlayer Placeholder17
+@460(SteelAxeBot): AddPlayer CircuitCrafter6
 @460(Placeholder17): LeaveGame
 @460(Placeholder16): LeaveGame
 @460(Placeholder15): LeaveGame
@@ -1182,24 +1182,24 @@
 @715(CopperMiner8): TransferEntityStack In
 @715(CopperMiner8): MoveSelection -1.5, 6.5
 @715(CopperMiner8): StartMining
-@731(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@731(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@731(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@731(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@731(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@731(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@731(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@731(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@731(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@731(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@731(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@731(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@731(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@731(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@731(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@731(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@731(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@731(SteelAxeBot): AddPlayer ScienceCrafter1, 89, player
+@731(SteelAxeBot): AddPlayer Placeholder1
+@731(SteelAxeBot): AddPlayer Placeholder2
+@731(SteelAxeBot): AddPlayer Placeholder3
+@731(SteelAxeBot): AddPlayer Placeholder4
+@731(SteelAxeBot): AddPlayer Placeholder5
+@731(SteelAxeBot): AddPlayer Placeholder6
+@731(SteelAxeBot): AddPlayer Placeholder7
+@731(SteelAxeBot): AddPlayer Placeholder8
+@731(SteelAxeBot): AddPlayer Placeholder9
+@731(SteelAxeBot): AddPlayer Placeholder10
+@731(SteelAxeBot): AddPlayer Placeholder11
+@731(SteelAxeBot): AddPlayer Placeholder12
+@731(SteelAxeBot): AddPlayer Placeholder13
+@731(SteelAxeBot): AddPlayer Placeholder14
+@731(SteelAxeBot): AddPlayer Placeholder15
+@731(SteelAxeBot): AddPlayer Placeholder16
+@731(SteelAxeBot): AddPlayer Placeholder17
+@731(SteelAxeBot): AddPlayer ScienceCrafter1, 89
 @731(Placeholder17): LeaveGame
 @731(Placeholder16): LeaveGame
 @731(Placeholder15): LeaveGame
@@ -1742,24 +1742,24 @@
 @1340(CopperMiner8): TransferEntityStack In
 @1340(CopperMiner8): MoveSelection -1.5, 6.5
 @1340(CopperMiner8): StartMining
-@1361(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@1361(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@1361(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@1361(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@1361(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@1361(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@1361(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@1361(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@1361(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@1361(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@1361(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@1361(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@1361(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@1361(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@1361(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@1361(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@1361(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@1361(SteelAxeBot): AddPlayer ScienceCrafter2, 90, player
+@1361(SteelAxeBot): AddPlayer Placeholder1
+@1361(SteelAxeBot): AddPlayer Placeholder2
+@1361(SteelAxeBot): AddPlayer Placeholder3
+@1361(SteelAxeBot): AddPlayer Placeholder4
+@1361(SteelAxeBot): AddPlayer Placeholder5
+@1361(SteelAxeBot): AddPlayer Placeholder6
+@1361(SteelAxeBot): AddPlayer Placeholder7
+@1361(SteelAxeBot): AddPlayer Placeholder8
+@1361(SteelAxeBot): AddPlayer Placeholder9
+@1361(SteelAxeBot): AddPlayer Placeholder10
+@1361(SteelAxeBot): AddPlayer Placeholder11
+@1361(SteelAxeBot): AddPlayer Placeholder12
+@1361(SteelAxeBot): AddPlayer Placeholder13
+@1361(SteelAxeBot): AddPlayer Placeholder14
+@1361(SteelAxeBot): AddPlayer Placeholder15
+@1361(SteelAxeBot): AddPlayer Placeholder16
+@1361(SteelAxeBot): AddPlayer Placeholder17
+@1361(SteelAxeBot): AddPlayer ScienceCrafter2
 @1361(Placeholder17): LeaveGame
 @1361(Placeholder16): LeaveGame
 @1361(Placeholder15): LeaveGame
@@ -2117,24 +2117,24 @@
 @1751(CircuitCrafter3): TransferInventory Player, 31
 @1751(CircuitCrafter4): TransferInventory Player, 31
 @1751(CircuitCrafter5): TransferInventory Player, 31
-@1781(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@1781(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@1781(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@1781(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@1781(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@1781(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@1781(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@1781(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@1781(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@1781(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@1781(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@1781(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@1781(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@1781(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@1781(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@1781(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@1781(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@1781(SteelAxeBot): AddPlayer ScienceCrafter3, 91, player
+@1781(SteelAxeBot): AddPlayer Placeholder1
+@1781(SteelAxeBot): AddPlayer Placeholder2
+@1781(SteelAxeBot): AddPlayer Placeholder3
+@1781(SteelAxeBot): AddPlayer Placeholder4
+@1781(SteelAxeBot): AddPlayer Placeholder5
+@1781(SteelAxeBot): AddPlayer Placeholder6
+@1781(SteelAxeBot): AddPlayer Placeholder7
+@1781(SteelAxeBot): AddPlayer Placeholder8
+@1781(SteelAxeBot): AddPlayer Placeholder9
+@1781(SteelAxeBot): AddPlayer Placeholder10
+@1781(SteelAxeBot): AddPlayer Placeholder11
+@1781(SteelAxeBot): AddPlayer Placeholder12
+@1781(SteelAxeBot): AddPlayer Placeholder13
+@1781(SteelAxeBot): AddPlayer Placeholder14
+@1781(SteelAxeBot): AddPlayer Placeholder15
+@1781(SteelAxeBot): AddPlayer Placeholder16
+@1781(SteelAxeBot): AddPlayer Placeholder17
+@1781(SteelAxeBot): AddPlayer ScienceCrafter3
 @1781(Placeholder17): LeaveGame
 @1781(Placeholder16): LeaveGame
 @1781(Placeholder15): LeaveGame
@@ -2696,24 +2696,24 @@
 @2383(SteelAxeBot): Toolbelt 9
 @2383(SteelAxeBot): TransferEntityStack In
 @2383(SteelAxeBot): MoveSelection 2.5, 3.5
-@2411(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@2411(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@2411(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@2411(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@2411(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@2411(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@2411(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@2411(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@2411(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@2411(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@2411(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@2411(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@2411(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@2411(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@2411(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@2411(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@2411(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@2411(SteelAxeBot): AddPlayer ScienceCrafter4, 92, player
+@2411(SteelAxeBot): AddPlayer Placeholder1
+@2411(SteelAxeBot): AddPlayer Placeholder2
+@2411(SteelAxeBot): AddPlayer Placeholder3
+@2411(SteelAxeBot): AddPlayer Placeholder4
+@2411(SteelAxeBot): AddPlayer Placeholder5
+@2411(SteelAxeBot): AddPlayer Placeholder6
+@2411(SteelAxeBot): AddPlayer Placeholder7
+@2411(SteelAxeBot): AddPlayer Placeholder8
+@2411(SteelAxeBot): AddPlayer Placeholder9
+@2411(SteelAxeBot): AddPlayer Placeholder10
+@2411(SteelAxeBot): AddPlayer Placeholder11
+@2411(SteelAxeBot): AddPlayer Placeholder12
+@2411(SteelAxeBot): AddPlayer Placeholder13
+@2411(SteelAxeBot): AddPlayer Placeholder14
+@2411(SteelAxeBot): AddPlayer Placeholder15
+@2411(SteelAxeBot): AddPlayer Placeholder16
+@2411(SteelAxeBot): AddPlayer Placeholder17
+@2411(SteelAxeBot): AddPlayer ScienceCrafter4
 @2411(Placeholder17): LeaveGame
 @2411(Placeholder16): LeaveGame
 @2411(Placeholder15): LeaveGame
@@ -3097,24 +3097,24 @@
 @3013(SteelAxeBot): Toolbelt 9
 @3013(SteelAxeBot): TransferEntityStack In
 @3013(SteelAxeBot): MoveSelection 2.5, 0.5
-@3041(SteelAxeBot): AddPlayer Placeholder1, 62, player
-@3041(SteelAxeBot): AddPlayer Placeholder2, 65, player
-@3041(SteelAxeBot): AddPlayer Placeholder3, 67, player
-@3041(SteelAxeBot): AddPlayer Placeholder4, 68, player
-@3041(SteelAxeBot): AddPlayer Placeholder5, 69, player
-@3041(SteelAxeBot): AddPlayer Placeholder6, 70, player
-@3041(SteelAxeBot): AddPlayer Placeholder7, 71, player
-@3041(SteelAxeBot): AddPlayer Placeholder8, 72, player
-@3041(SteelAxeBot): AddPlayer Placeholder9, 73, player
-@3041(SteelAxeBot): AddPlayer Placeholder10, 74, player
-@3041(SteelAxeBot): AddPlayer Placeholder11, 75, player
-@3041(SteelAxeBot): AddPlayer Placeholder12, 76, player
-@3041(SteelAxeBot): AddPlayer Placeholder13, 78, player
-@3041(SteelAxeBot): AddPlayer Placeholder14, 83, player
-@3041(SteelAxeBot): AddPlayer Placeholder15, 85, player
-@3041(SteelAxeBot): AddPlayer Placeholder16, 86, player
-@3041(SteelAxeBot): AddPlayer Placeholder17, 88, player
-@3041(SteelAxeBot): AddPlayer ScienceCrafter5, 93, player
+@3041(SteelAxeBot): AddPlayer Placeholder1
+@3041(SteelAxeBot): AddPlayer Placeholder2
+@3041(SteelAxeBot): AddPlayer Placeholder3
+@3041(SteelAxeBot): AddPlayer Placeholder4
+@3041(SteelAxeBot): AddPlayer Placeholder5
+@3041(SteelAxeBot): AddPlayer Placeholder6
+@3041(SteelAxeBot): AddPlayer Placeholder7
+@3041(SteelAxeBot): AddPlayer Placeholder8
+@3041(SteelAxeBot): AddPlayer Placeholder9
+@3041(SteelAxeBot): AddPlayer Placeholder10
+@3041(SteelAxeBot): AddPlayer Placeholder11
+@3041(SteelAxeBot): AddPlayer Placeholder12
+@3041(SteelAxeBot): AddPlayer Placeholder13
+@3041(SteelAxeBot): AddPlayer Placeholder14
+@3041(SteelAxeBot): AddPlayer Placeholder15
+@3041(SteelAxeBot): AddPlayer Placeholder16
+@3041(SteelAxeBot): AddPlayer Placeholder17
+@3041(SteelAxeBot): AddPlayer ScienceCrafter5
 @3041(Placeholder17): LeaveGame
 @3041(Placeholder16): LeaveGame
 @3041(Placeholder15): LeaveGame
@@ -3809,7 +3809,7 @@
 @5148(SteelAxeBot): MoveSelection 2.5, -2.5
 @5180(SteelAxeBot): MoveSelection 0, -1
 @5180(SteelAxeBot): OpenTargetInventory
-@5180(SteelAxeBot): AddPlayer SteelCrafter, 95, player
+@5180(SteelAxeBot): AddPlayer SteelCrafter, 95
 @5180(SteelCrafter): ToggleFilter Toolbelt, 2, iron-plate
 @5180(SteelCrafter): MoveSelection -4, -2
 @5180(SteelCrafter): OpenTargetInventory
