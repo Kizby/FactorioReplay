@@ -29,30 +29,8 @@ const appendElement = (node, tag, contents) => {
   node.appendChild(element);
 };
 
-const showButtons = () => {
-  exportDatButton.hidden = false;
-  exportTxtButton.hidden = false;
-  sortByTickButton.hidden = false;
-  sortByPlayerButton.hidden = false;
-};
-
 const loadReplayTxt = (text) => {
-  let result = document.createElement('div');
-  result.id = 'replayDiv';
-  result.contentEditable = true;
-  result.spellcheck = false;
-
-  const lines = text.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].length == 0 && i == lines.length - 1) {
-      // Don't add spurious line for last linebreak
-      break;
-    }
-    appendElement(result, 'span', lines[i]);
-    appendElement(result, 'br');
-  }
-  replayDiv.parentNode.replaceChild(result, replayDiv);
-  showButtons();
+  replayTextArea.value = text;
 };
 
 const loadReplayDat = (arrayBuffer) => {
@@ -64,30 +42,13 @@ const loadReplayDat = (arrayBuffer) => {
 const lineBreak = /Win/.test(navigator.platform) ? '\r\n' : '\n';
 
 const getTextRecursively = (node, respectPlatform) => {
-  if (node.nodeType == Node.TEXT_NODE) {
-    return node.nodeValue;
-  }
-  if (node.nodeType != Node.ELEMENT_NODE) {
-    return '';
-  }
-  const curLineBreak = respectPlatform ? lineBreak : '\n';
-  if (node.nodeName == 'BR') {
-    return curLineBreak;
-  }
-  let result = '';
-  const nodes = node.childNodes;
-  for (let i = 0; i < nodes.length; i++) {
-    let next = getTextRecursively(nodes[i], respectPlatform);
-    if (nodes[i].nodeType == Node.ELEMENT_NODE && nodes[i].nodeName == 'DIV') {
-      // Add a line break before and after every DIV
-      if (result != '' && !result.endsWith(curLineBreak) && !next.startsWith(curLineBreak)) {
-        next = `${curLineBreak}${next}`;
-      }
-      if (!next.endsWith(curLineBreak)) {
-        next = `${next}${curLineBreak}`;
-      }
-    }
-    result = `${result}${next}`;
+  let result = node.value;
+  // Normalize line endings
+  result = result.replace(/\r\n/g, '\n');
+  if (respectPlatform) {
+    // This might just be restoring what was there, but if there were \r\n's in the textarea, we
+    // don't want to turn them into \r\r\n's
+    result = result.replace(/\n/g, lineBreak);
   }
   return result;
 }
@@ -125,12 +86,12 @@ document.body.addEventListener('drop', (event) => {
 });
 
 exportDatButton.addEventListener('click', () => {
-  const result = getReplayDatBytes(getTextRecursively(replayDiv, false));
+  const result = getReplayDatBytes(getTextRecursively(replayTextArea, false));
   download(result, 'replay.dat', 'application/octet-stream');
 });
 
 exportTxtButton.addEventListener('click', () => {
-  const result = getTextRecursively(replayDiv, true);
+  const result = getTextRecursively(replayTextArea, true);
   download(result, 'replay.txt', 'text/plain');
 });
 
@@ -150,7 +111,7 @@ const stableSort = (array, compare) => {
 };
 
 const sortReplayLines = (compare) => {
-  const initialText = getTextRecursively(replayDiv);
+  const initialText = getTextRecursively(replayTextArea);
   if (initialText.indexOf('+') != -1) {
     console.error('Can\'t sort by tick with relative ticks');
     return;
