@@ -9,12 +9,15 @@
 <body>
   <h1>Factorio Replay Editor</h1>
   <textarea id="replayTextArea" spellcheck="false" placeholder="Drag a replay.dat or replay.txt file anywhere on this page!"></textarea>
+  <textarea id="replayJsTextArea" spellcheck="false" placeholder="Drag a replay.js file anywhere on this page!"></textarea>
   <br/>
   <div class="export-buttons">
     <button id="exportDatButton">Export replay.dat</button>
     <button id="exportTxtButton">Export replay.txt</button>
     <button id="sortByTickButton">Sort by tick</button>
     <button id="sortByPlayerButton">Sort by player</button>
+    <button id="exportJsButton">Export replay.js</button>
+    <button id="runJsButton">Run replay.js</button>
   </div>
 </body>
 <script type="module" src="scripts/dom_bindings.mjs"></script>

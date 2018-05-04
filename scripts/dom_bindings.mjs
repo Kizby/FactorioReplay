@@ -1,4 +1,4 @@
-import { parseReplayDat, getReplayDatBytes } from './index.mjs';
+import { parseReplayDat, parseReplayJs, getReplayDatBytes } from './index.mjs';
 import { loadLevelDat } from './level_loader.mjs';
 
 // Function to download data to a file
@@ -37,6 +37,11 @@ const loadReplayDat = (arrayBuffer) => {
   const result = parseReplayDat(arrayBuffer);
   loadReplayTxt(result);
 };
+
+const loadReplayJs = (text) => {
+  replayJsTextArea.value = text;
+  replayTextArea.value = parseReplayJs(text);
+}
 
 // Probably accurate enough?
 const lineBreak = /Win/.test(navigator.platform) ? '\r\n' : '\n';
@@ -93,6 +98,15 @@ exportDatButton.addEventListener('click', () => {
 exportTxtButton.addEventListener('click', () => {
   const result = getTextRecursively(replayTextArea, true);
   download(result, 'replay.txt', 'text/plain');
+});
+
+exportJsButton.addEventListener('click', () => {
+  const result = getTextRecursively(replayJsTextArea, true);
+  download(result, 'replay.js', 'text/plain');
+});
+
+runJsButton.addEventListener('click', () => {
+  parseReplayJs(getTextRecursively(replayJsTextArea));
 });
 
 // Logic stolen from https://medium.com/@fsufitch/is-javascript-array-sort-stable-46b90822543f

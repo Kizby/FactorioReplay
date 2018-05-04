@@ -25,13 +25,14 @@ button {
   border-radius: 0.3rem;
 }
 
-#replayTextArea {
+textarea {
   background: white;
   margin: auto;
   border-radius: 0.3rem;
   padding: 1rem;
-  width: calc(90% - 12rem);
-  height: calc(90% - 12rem);
+  width: calc(50% - 6rem);
+  height: calc(90% - 6rem);
+  resize: none;
 }
 
 .export-buttons {
