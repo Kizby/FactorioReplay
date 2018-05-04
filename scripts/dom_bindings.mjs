@@ -1,5 +1,6 @@
 import { parseReplayDat, getReplayDatBytes } from './index.mjs';
 import { loadLevelDat } from './level_loader.mjs';
+import { parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
 
 // Function to download data to a file
 // From https://stackoverflow.com/a/30832210
@@ -59,6 +60,14 @@ const loadReplayDat = (arrayBuffer) => {
   const result = parseReplayDat(arrayBuffer);
   loadReplayTxt(result);
 };
+
+const loadZip = (arrayBuffer) => {
+  parseReplayFromZip(arrayBuffer).then((replayDat) => {
+    loadReplayDat(replayDat);
+    exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
+    exportZipButton.hidden = false;
+  }, console.error);
+}
 
 // Probably accurate enough?
 const lineBreak = /Win/.test(navigator.platform) ? '\r\n' : '\n';
@@ -121,6 +130,11 @@ document.body.addEventListener('drop', (event) => {
       });
     }
     reader.readAsArrayBuffer(file);
+  } else if (filename.endsWith('.zip')) {
+    reader.addEventListener('loadend', () => {
+      loadZip(reader.result);
+    });
+    reader.readAsArrayBuffer(file);
   }
 });
 
@@ -132,6 +146,15 @@ exportDatButton.addEventListener('click', () => {
 exportTxtButton.addEventListener('click', () => {
   const result = getTextRecursively(replayDiv, true);
   download(result, 'replay.txt', 'text/plain');
+});
+
+exportZipButton.addEventListener('click', () => {
+  const text = getTextRecursively(replayDiv, true);
+  const dat = getReplayDatBytes(text);
+  const zip = getZipWithReplay(dat);
+  zip.zip.generateAsync({ type: "arraybuffer" }).then((array) =>
+    download(array, zip.name, 'application/zip')
+  );
 });
 
 // Logic stolen from https://medium.com/@fsufitch/is-javascript-array-sort-stable-46b90822543f

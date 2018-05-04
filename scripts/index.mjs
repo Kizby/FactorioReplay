@@ -1,7 +1,6 @@
 import { read, write, fetch, setBuffer, eof, datString, error } from './parse.mjs';
 import { frameHandlers, resetPlayers } from './replay_frames.mjs';
 import { loadLevelDat } from './level_loader.mjs';
-import './jszip/jszip.js';
 
 let inputActionByteToFrameHandler = [], inputActionNameToFrameHandler = [];
 for (let i = 0; i < frameHandlers.length; i++) {
