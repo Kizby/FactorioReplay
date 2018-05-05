@@ -1,4 +1,4 @@
-import './jszip/jszip.js';
+import './jszip/jszip.mjs';
 
 const loadedZip = {
   name: '?',
@@ -7,26 +7,32 @@ const loadedZip = {
 
 const parseReplayFromJSZip = (zip) => {
   loadedZip.zip = zip;
-  zip.forEach((path, file) => {
-    if (path.endsWith('/')) {
-      loadedZip.name = path.substring(0, path.search(/\//));
+  for (let filename in zip.files) {
+    if (!zip.files.hasOwnProperty(filename)) {
+      continue;
     }
-  });
-  return zip.file(`${loadedZip.name}/replay.dat`)
-    .async('arraybuffer');
+    loadedZip.name = filename.substring(0, filename.search(/\//));
+    break;
+  }
+  const object = zip.file(`${loadedZip.name}/replay.dat`);
+  return object ? object.async('arraybuffer') : new Promise((resolve, reject) => { resolve(new ArrayBuffer()) });
 };
 
 const parseReplayFromZip = (zipBytes) => {
-  loadedZip.bytes = zipBytes;
   const zip = new JSZip();
   return zip.loadAsync(zipBytes)
     .then(parseReplayFromJSZip, console.error);
 };
 
-const getZipWithReplay = (replayDat) => {
+const getZipWithReplay = (replayDat, preserveDate) => {
   if (undefined !== replayDat) {
     // Update the zip and before returning
-    loadedZip.zip.file(`${loadedZip.name}/replay.dat`, replayDat);
+    const name = `${loadedZip.name}/replay.dat`;
+    let options = {};
+    if (preserveDate) {
+      options = { date: loadedZip.zip.file(name).date };
+    }
+    loadedZip.zip.file(name, replayDat, options);
   }
   return loadedZip;
 };
