@@ -112,9 +112,4 @@ const getReplayDatBytes = (text) => {
   return byteArray;
 };
 
-const parseReplayJs = (text) => {
-  const func = new Function(text);
-  console.log(func());
-};
-
-export { parseReplayDat, parseReplayJs, getReplayDatBytes };
+export { parseReplayDat, getReplayDatBytes };

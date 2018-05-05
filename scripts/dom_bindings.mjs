@@ -1,6 +1,7 @@
-import { parseReplayDat, parseReplayJs, getReplayDatBytes } from './index.mjs';
+import { parseReplayDat, getReplayDatBytes } from './index.mjs';
 import { loadLevelDat } from './level_loader.mjs';
 import { parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
+import { parseReplayJs } from './replay_framework.mjs';
 
 // Function to download data to a file
 // From https://stackoverflow.com/a/30832210
@@ -41,7 +42,8 @@ const loadReplayDat = (arrayBuffer) => {
 
 const loadReplayJs = (text) => {
   replayJsTextArea.value = text;
-  replayTextArea.value = parseReplayJs(text);
+  replayTextArea.value = '';
+  parseReplayJs(text);
 }
 
 const loadZip = (arrayBuffer) => {
@@ -101,6 +103,11 @@ document.body.addEventListener('drop', (event) => {
       loadZip(reader.result);
     });
     reader.readAsArrayBuffer(file);
+  } else if (filename.endsWith('.js')) {
+    reader.addEventListener('loadend', () => {
+      loadReplayJs(reader.result);
+    });
+    reader.readAsText(file);
   }
 });
 
@@ -120,7 +127,12 @@ exportJsButton.addEventListener('click', () => {
 });
 
 runJsButton.addEventListener('click', () => {
+  replayTextArea.value = '';
   parseReplayJs(getTextRecursively(replayJsTextArea));
+});
+
+window.addEventListener('frame', (event) => {
+  replayTextArea.value += event.detail + '\n';
 });
 
 exportZipButton.addEventListener('click', () => {
