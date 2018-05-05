@@ -9,7 +9,7 @@
 <body>
   <h1>Factorio Replay Editor</h1>
   <div id="replayDiv" contenteditable="true" spellcheck="false">
-    Drag a replay.dat or replay.txt file anywhere on this page!
+    Drag a replay.dat, replay.txt, or save file anywhere on this page!
   </div>
   <br/>
   <div class="export-buttons">
@@ -17,6 +17,9 @@
     <button id="exportTxtButton" hidden="true">Export replay.txt</button>
     <button id="sortByTickButton" hidden="true">Sort by tick</button>
     <button id="sortByPlayerButton" hidden="true">Sort by player</button>
+  </div>
+  <div class="export-buttons">
+    <button id="exportZipButton" hidden="true">Save ?.zip</button>
   </div>
 </body>
 <script type="module" src="scripts/dom_bindings.mjs"></script>
