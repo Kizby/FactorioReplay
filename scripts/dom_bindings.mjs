@@ -159,6 +159,39 @@ const stableSort = (array, compare) => {
   }
 };
 
+const compareTick = (a, b) => {
+  let aTick = 0x100000000, bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
+  if (a.startsWith('@') || a.startsWith('?')) {
+    const parsedTick = parseInt(a.substring(1));
+    if (!isNaN(parsedTick)) {
+      aTick = parsedTick;
+    }
+  }
+  if (b.startsWith('@') || b.startsWith('?')) {
+    const parsedTick = parseInt(b.substring(1));
+    if (!isNaN(parsedTick)) {
+      bTick = parsedTick;
+    }
+  }
+  return aTick - bTick;
+};
+
+const comparePlayer = (a, b) => {
+  let aPlayer = '\u00ff', bPlayer = '\u00ff'; // If we don't get a valid player, put these elements at the end
+  const openPosA = a.indexOf('(');
+  const closePosA = a.indexOf(')', openPosA);
+  if (openPosA != -1 && closePosA != -1) {
+    aPlayer = a.substring(openPosA + 1, closePosA);
+  }
+  const openPosB = b.indexOf('(');
+  const closePosB = b.indexOf(')', openPosB);
+  if (openPosB != -1 && closePosB != -1) {
+    bPlayer = b.substring(openPosB + 1, closePosB);
+  }
+  // Basically strcmp
+  return aPlayer < bPlayer ? -1 : +(aPlayer > bPlayer);
+};
+
 const sortReplayLines = (compare) => {
   const initialText = getTextRecursively(replayTextArea);
   if (initialText.indexOf('+') != -1) {
@@ -173,45 +206,8 @@ const sortReplayLines = (compare) => {
   }
 };
 
-sortByTickButton.addEventListener('click', () => {
-  sortReplayLines((a, b) => {
-    let aTick = 0x100000000, bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
-    if (a.startsWith('@') || a.startsWith('?')) {
-      const parsedTick = parseInt(a.substring(1));
-      if (!isNaN(parsedTick)) {
-        aTick = parsedTick;
-      }
-    }
-    if (b.startsWith('@') || b.startsWith('?')) {
-      const parsedTick = parseInt(b.substring(1));
-      if (!isNaN(parsedTick)) {
-        bTick = parsedTick;
-      }
-    }
-    return aTick - bTick;
-  });
-});
-
-sortByPlayerButton.addEventListener('click', () => {
-  sortReplayLines((a, b) => {
-    let aPlayer = 0x10000, bPlayer = 0x10000; // If we don't get a valid player, put these elements at the end
-    const openPosA = a.indexOf('(');
-    if (openPosA != -1) {
-      const parsedPlayer = parseInt(a.substring(openPosA + 1));
-      if (!isNaN(parsedPlayer)) {
-        aPlayer = parsedPlayer;
-      }
-    }
-    const openPosB = b.indexOf('(');
-    if (openPosB != -1) {
-      const parsedPlayer = parseInt(b.substring(openPosB + 1));
-      if (!isNaN(parsedPlayer)) {
-        bPlayer = parsedPlayer;
-      }
-    }
-    return aPlayer - bPlayer;
-  });
-});
+sortByTickButton.addEventListener('click', () => sortReplayLines(compareTick));
+sortByPlayerButton.addEventListener('click', () => sortReplayLines(comparePlayer));
 
 // Adapted from http://jsfiddle.net/2wAzx/13/
 const makeIndentsBetter = (el) => {
