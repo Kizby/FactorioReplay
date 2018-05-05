@@ -36,7 +36,7 @@ globalObject.act = (player, action) => {
 };
 
 const parseReplayJs = (text) => {
-  globalObject.act(serverPlayer, `Start${isMultiplayer ? 'Multi' : 'Single'}Player`);
+  serverPlayer[`join${isMultiplayer ? 'Multi' : 'Single'}Player`]();
   new Function(text)();
 };
 
