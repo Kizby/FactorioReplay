@@ -35,6 +35,10 @@ textarea {
   padding: 1rem;
   flex: 1 0 auto;
   resize: none;
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: scroll;
 }
 
 .textarea-container {

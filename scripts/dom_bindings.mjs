@@ -213,5 +213,55 @@ sortByPlayerButton.addEventListener('click', () => {
   });
 });
 
+// Adapted from http://jsfiddle.net/2wAzx/13/
+const makeIndentsBetter = (el) => {
+  el.addEventListener('keydown', (e) => {
+    const key = e.keyCode || e.which;
+    if (key != 9 && key != 13) {
+      // Short circuit out
+      return true;
+    }
+
+    // get caret position/selection
+    const val = el.value,
+      start = el.selectionStart,
+      end = el.selectionEnd;
+
+    let textToInsert = '';
+    let caretMove = 0;
+
+    if (key === 9) { // tab was pressed
+      textToInsert = '\t';
+      caretMove = 1;
+    } else if (key === 13) { // enter was pressed
+      // Use the indentation of the current line on the next line
+      // Implicitly handles the not found (-1) case
+      const lastLineEnd = val.lastIndexOf('\n', start - 1);
+      const currentIndent = val.substring(lastLineEnd + 1).match(/([ \t]*).*/)[1];
+
+      textToInsert = lineBreak + currentIndent;
+      // Only advance the caret past the line break if it's not already there
+      caretMove = currentIndent.length + (val[start] == lineBreak[0] ? 0 : 1);
+    }
+
+    // set textarea value to: text before caret + new whitespace + text after caret
+    el.value = val.substring(0, start) + textToInsert + val.substring(end);
+    // put caret at right position again
+    el.selectionStart = el.selectionEnd = start + caretMove;
+
+    // prevent the browser from adding its own newline
+    e.preventDefault();
+
+    // Make sure textarea scrolls so caret is visible
+    el.blur();
+    el.focus();
+    return false;
+  });
+}
+
+for (let textArea of document.getElementsByTagName('textarea')) {
+  makeIndentsBetter(textArea);
+}
+
 // Expose this for convenience
 window.loadText = loadReplayTxt;
