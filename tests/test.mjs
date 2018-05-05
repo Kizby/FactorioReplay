@@ -1,5 +1,6 @@
 import { parseReplayDat, getReplayDatBytes } from '../scripts/index.mjs';
 import { parseReplayFromZip, getZipWithReplay } from '../scripts/zip_loader.mjs';
+import { parseReplayJs } from '../scripts/replay_framework.mjs';
 import fs from 'fs';
 
 let allPass = true;
@@ -30,7 +31,7 @@ const testOneDirectory = async (dir) => {
         numDifferent++;
       }
     }
-    console.error(` ${numDifferent} line${numDifferent != 1 ? 's' : ''} changed overall.`);
+    console.error(` ${numDifferent} line${numDifferent != 1 ? 's' : ''} (out of ${replayLines.length}) changed overall.`);
   }
 
   const replayDat = new Uint8Array(replayDatRaw);
@@ -72,6 +73,30 @@ const testOneDirectory = async (dir) => {
     }
   });
 
+  if (fs.existsSync(`tests/${dir}/replay.js`)) {
+    globalReplayText = [];
+    const replayJs = fs.readFileSync(`tests/${dir}/replay.js`, 'ascii').replace(/\r\n/g, '\n');
+    parseReplayJs(replayJs);
+    const replayLines = replayTxt.split('\n');
+    let numDifferent = 0;
+    for (let i = 0; i < replayLines.length && i < globalReplayText.length; i++) {
+      if (replayLines[i] != globalReplayText[i]) {
+        if (numDifferent == 0) {
+          pass = false;
+          console.error(`${redCode}${dir} parse of replay.js does not match replay.txt.${clearCode}`);
+          console.error(` Line ${i + 1} has changed from < to >`);
+          console.error(` <${replayLines[i]}`)
+          console.error(` >${globalReplayText[i]}`)
+        }
+        numDifferent++;
+      }
+    }
+    if (numDifferent > 0) {
+      console.error(` ${numDifferent} line${numDifferent != 1 ? 's' : ''} (out of ${replayLines.length}) changed overall.`);
+    }
+  }
+
+
   if (pass) {
     console.log(`${greenCode}${dir} replays match!${clearCode}`);
   } else {
@@ -79,6 +104,21 @@ const testOneDirectory = async (dir) => {
   }
 }
 
+// Add infrastructure to catch the events replay_framework.mjs uses to emit replay.txt
+let globalReplayText = [];
+
+// Gross hack, but it works
+global.dispatchEvent = function (event) {
+  globalReplayText[globalReplayText.length] = `${event.detail}`;
+};
+global.CustomEvent = class {
+  constructor(name, extras) {
+    this.name = name;
+    this.detail = extras.detail;
+  }
+}
+
+// Actually run the tests
 const runTests = async () => {
   const testDirs = fs.readdirSync('tests');
   for (let dir of testDirs) {

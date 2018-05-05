@@ -1,0 +1,24 @@
+@0(65535): JoinMultiPlayer
+@0(65535): AddPlayer TASBot
+@0(TASBot): Craft iron-axe, 1
+@0(TASBot): Run N
+@60(TASBot): Run E
+@120(TASBot): Run S
+@180(TASBot): Run W
+@240(TASBot): Run N
+@300(TASBot): Run E
+@360(TASBot): Run S
+@420(TASBot): Run W
+@480(TASBot): Run N
+@540(TASBot): Run E
+@600(TASBot): Run S
+@660(TASBot): Run W
+@720(TASBot): Run N
+@780(TASBot): Run E
+@840(TASBot): Run S
+@900(TASBot): Run W
+@960(TASBot): Run N
+@1020(TASBot): Run E
+@1080(TASBot): Run S
+@1140(TASBot): Run W
+@1200(TASBot): StopRunning
