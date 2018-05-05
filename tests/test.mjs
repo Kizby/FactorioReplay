@@ -1,4 +1,4 @@
-import { parseReplayDat, getReplayDatBytes } from '../scripts/index.mjs';
+import { parseReplayDat, getReplayDatBytes, stableSort, compareTick } from '../scripts/index.mjs';
 import { parseReplayFromZip, getZipWithReplay } from '../scripts/zip_loader.mjs';
 import { parseReplayJs } from '../scripts/replay_framework.mjs';
 import fs from 'fs';
@@ -77,6 +77,7 @@ const testOneDirectory = async (dir) => {
     globalReplayText = [];
     const replayJs = fs.readFileSync(`tests/${dir}/replay.js`, 'ascii').replace(/\r\n/g, '\n');
     parseReplayJs(replayJs);
+    stableSort(globalReplayText, compareTick);
     const replayLines = replayTxt.split('\n');
     let numDifferent = 0;
     for (let i = 0; i < replayLines.length && i < globalReplayText.length; i++) {

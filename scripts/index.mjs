@@ -112,4 +112,53 @@ const getReplayDatBytes = (text) => {
   return byteArray;
 };
 
-export { parseReplayDat, getReplayDatBytes };
+// Logic stolen from https://medium.com/@fsufitch/is-javascript-array-sort-stable-46b90822543f
+const stableSort = (array, compare) => {
+  let keyedArray = array.map((el, index) => [el, index]);
+  keyedArray.sort((a, b) => {
+    const rawCompare = compare(a[0], b[0]);
+    if (rawCompare != 0) {
+      return rawCompare;
+    }
+    return a[1] - b[1];
+  });
+  for (let i = 0; i < array.length; i++) {
+    array[i] = keyedArray[i][0];
+  }
+};
+
+const compareTick = (a, b) => {
+  let aTick = 0x100000000, bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
+  if (a.startsWith('@') || a.startsWith('?')) {
+    const parsedTick = parseInt(a.substring(1));
+    if (!isNaN(parsedTick)) {
+      aTick = parsedTick;
+    }
+  }
+  if (b.startsWith('@') || b.startsWith('?')) {
+    const parsedTick = parseInt(b.substring(1));
+    if (!isNaN(parsedTick)) {
+      bTick = parsedTick;
+    }
+  }
+  return aTick - bTick;
+};
+
+const comparePlayer = (a, b) => {
+  let aPlayer = '\u00ff', bPlayer = '\u00ff'; // If we don't get a valid player, put these elements at the end
+  const openPosA = a.indexOf('(');
+  const closePosA = a.indexOf(')', openPosA);
+  if (openPosA != -1 && closePosA != -1) {
+    aPlayer = a.substring(openPosA + 1, closePosA);
+  }
+  const openPosB = b.indexOf('(');
+  const closePosB = b.indexOf(')', openPosB);
+  if (openPosB != -1 && closePosB != -1) {
+    bPlayer = b.substring(openPosB + 1, closePosB);
+  }
+  // Basically strcmp
+  return aPlayer < bPlayer ? -1 : +(aPlayer > bPlayer);
+};
+
+
+export { parseReplayDat, getReplayDatBytes, stableSort, compareTick, comparePlayer };
