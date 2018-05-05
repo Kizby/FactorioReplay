@@ -7,11 +7,14 @@ body {
   background: #f0f0ea;
   margin: 0;
   padding: 1rem;
-  min-height: calc(100vh - 2rem);
+  height: calc(100vh - 2rem);
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 h1 {
   text-align: center;
+  flex: 0 1 auto;
 }
 
 button {
@@ -25,14 +28,21 @@ button {
   border-radius: 0.3rem;
 }
 
-#replayDiv {
+textarea {
   background: white;
-  margin: 0 6rem;
+  margin: 0.3rem;
   border-radius: 0.3rem;
   padding: 1rem;
+  flex: 1 0 auto;
+  resize: none;
 }
 
-.export-buttons {
+.textarea-container {
+  flex: 1 0 auto;
+}
+
+.textarea-container, .export-buttons {
   display: flex;
+  flex-flow: row;
   justify-content: center;
 }

@@ -8,15 +8,18 @@
 
 <body>
   <h1>Factorio Replay Editor</h1>
-  <div id="replayDiv" contenteditable="true" spellcheck="false">
-    Drag a replay.dat, replay.txt, or save file anywhere on this page!
+  <div class="textarea-container">
+    <textarea id="replayTextArea" spellcheck="false" placeholder="Drag a replay.dat, replay.txt, or save file anywhere on this page!"></textarea>
+    <textarea id="replayJsTextArea" spellcheck="false" placeholder="Drag a replay.js file anywhere on this page!"></textarea>
   </div>
   <br/>
   <div class="export-buttons">
-    <button id="exportDatButton" hidden="true">Export replay.dat</button>
-    <button id="exportTxtButton" hidden="true">Export replay.txt</button>
-    <button id="sortByTickButton" hidden="true">Sort by tick</button>
-    <button id="sortByPlayerButton" hidden="true">Sort by player</button>
+    <button id="exportDatButton">Export replay.dat</button>
+    <button id="exportTxtButton">Export replay.txt</button>
+    <button id="sortByTickButton">Sort by tick</button>
+    <button id="sortByPlayerButton">Sort by player</button>
+    <button id="exportJsButton">Export replay.js</button>
+    <button id="runJsButton">Run replay.js</button>
   </div>
   <div class="export-buttons">
     <button id="exportZipButton" hidden="true">Save ?.zip</button>
