@@ -38,6 +38,8 @@ globalObject.Player.prototype.act = function (action) {
 };
 
 const parseReplayJs = (text) => {
+  globalObject.currentTick = 0;
+  serverPlayer.tick = 0;
   serverPlayer[`join${isMultiplayer ? 'Multi' : 'Single'}Player`]();
   new Function(text)();
 };
