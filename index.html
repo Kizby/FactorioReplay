@@ -8,8 +8,10 @@
 
 <body>
   <h1>Factorio Replay Editor</h1>
-  <textarea id="replayTextArea" spellcheck="false" placeholder="Drag a replay.dat, replay.txt, or save file anywhere on this page!"></textarea>
-  <textarea id="replayJsTextArea" spellcheck="false" placeholder="Drag a replay.js file anywhere on this page!"></textarea>
+  <div class="textarea-container">
+    <textarea id="replayTextArea" spellcheck="false" placeholder="Drag a replay.dat, replay.txt, or save file anywhere on this page!"></textarea>
+    <textarea id="replayJsTextArea" spellcheck="false" placeholder="Drag a replay.js file anywhere on this page!"></textarea>
+  </div>
   <br/>
   <div class="export-buttons">
     <button id="exportDatButton">Export replay.dat</button>

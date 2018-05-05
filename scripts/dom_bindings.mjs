@@ -124,7 +124,7 @@ runJsButton.addEventListener('click', () => {
 });
 
 exportZipButton.addEventListener('click', () => {
-  const text = getTextRecursively(replayDiv, true);
+  const text = getTextRecursively(replayTextArea, true);
   const dat = getReplayDatBytes(text);
   const zip = getZipWithReplay(dat);
   zip.zip.generateAsync({ type: "arraybuffer" }).then((array) =>
