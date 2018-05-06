@@ -21,6 +21,7 @@ globalObject.Player = class {
     this.position = [0, 0];
     this.velocity = [0, 0];
     this.runSpeed = 0.15;
+    this.selection = [0, 0];
     if (initializedServer) {
       serverPlayer.tick = tick;
       serverPlayer.act(`AddPlayer ${name}`);
@@ -31,7 +32,7 @@ globalObject.Player = class {
     return this._tick;
   }
   set tick(newTick) {
-    if (!warnedAboutNegativeTicks && newTick < this._tick) {
+    if (!warnedAboutNegativeTicks && (this != serverPlayer) && newTick < this._tick) {
       console.warn(`Reducing player tick from ${this._tick} to ${newTick} - position information can no longer be guanteed valid`);
     }
     this.position[0] += (newTick - this._tick) * this.velocity[0];
@@ -82,11 +83,11 @@ globalObject.roundToFixed = (num) => {
 const directionToVector = {
   'N': [0, -1],
   'NW': [-Math.sqrt(2) / 2, -Math.sqrt(2) / 2],
-  'W': [1, 0],
+  'W': [-1, 0],
   'SW': [-Math.sqrt(2) / 2, Math.sqrt(2) / 2],
   'S': [0, 1],
   'SE': [Math.sqrt(2) / 2, Math.sqrt(2) / 2],
-  'E': [-1, 0],
+  'E': [1, 0],
   'NE': [Math.sqrt(2) / 2, -Math.sqrt(2) / 2],
 };
 globalObject.Player.prototype._run = globalObject.Player.prototype.run;
@@ -205,4 +206,59 @@ globalObject.spawnPlayers = (nameList) => {
     players[i].position = [startingPositions[i][0], startingPositions[i][1]];
   }
   return players;
+};
+
+globalObject.Player.prototype.runTo = function (targetPos) {
+  const delta = [targetPos[0] - this.position[0], targetPos[1] - this.position[1]];
+  const absDelta = [Math.abs(delta[0]), Math.abs(delta[1])];
+  const targetIsEast = delta[0] > 0;
+  const targetIsSouth = delta[1] > 0;
+  if (absDelta[0] > this.runSpeed && absDelta[1] > this.runSpeed) {
+    // It's worth running diagonally to get closer
+    const orthDistance = Math.min(absDelta[0], absDelta[1]);
+    const orthStep = roundToFixed(this.runSpeed * Math.sqrt(2) / 2);
+    const diagTicks = Math.floor(orthDistance / orthStep);
+    this.run(`${targetIsSouth ? 'S' : 'N'}${targetIsEast ? 'E' : 'W'}`);
+    this.tick += diagTicks;
+
+    // Update deltas for any remaining movement
+    delta[0] = targetPos[0] - this.position[0];
+    delta[1] = targetPos[1] - this.position[1];
+    absDelta[0] = Math.abs(delta[0]);
+    absDelta[1] = Math.abs(delta[1]);
+  }
+  if (absDelta[0] > this.runSpeed) {
+    // It's worth running E/W to get closer
+    const step = roundToFixed(this.runSpeed);
+    const ticks = Math.floor(absDelta[0] / step);
+    this.run(`${targetIsEast ? 'E' : 'W'}`);
+    this.tick += ticks;
+  }
+  if (absDelta[1] > this.runSpeed) {
+    // It's worth running N/S to get closer
+    const step = roundToFixed(this.runSpeed);
+    const ticks = Math.floor(absDelta[1] / step);
+    this.run(`${targetIsSouth ? 'S' : 'N'}`);
+    this.tick += ticks;
+  }
+  this.stopRunning();
+};
+
+globalObject.Player.prototype._moveSelection = globalObject.Player.prototype.moveSelection;
+globalObject.Player.prototype.moveSelection = function (x, y) {
+  this.selection[0] += x;
+  this.selection[1] += y;
+  this._moveSelection(x, y);
+};
+
+globalObject.Player.prototype.moveSelectionTo = function (pos) {
+  const x = pos[0] - this.selection[0];
+  const y = pos[1] - this.selection[1];
+  this.moveSelection(x, y);
+};
+
+globalObject.Player.prototype.isSelectedBy = function (pos) {
+  const delta = [pos[0] - this.position[0], pos[1] - this.position[1]];
+  return -0.4 < delta[0] && delta[0] < 0.4 &&
+    -1.4 < delta[1] && delta[1] < 0.2;
 }
