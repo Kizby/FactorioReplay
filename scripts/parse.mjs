@@ -106,6 +106,8 @@ const inventories = [[],
 [undefined, 'FuelOrContainer', 'Input', 'Output']];
 const shotTargets = ['None', 'Enemy', 'Selected'];
 const transferCounts = [undefined, 'One', 'All'];
+const trainAccelerations = ['Coast', 'Accelerate', 'Decelerate', 'Reverse'];
+const trainJunctionChoices = ['Right', 'Straight', 'Left'];
 
 const mapValIfPossible = (val, category) => {
   let idMap, mapped;
@@ -137,6 +139,13 @@ const read = {
       + (buffer[curIndex++] * 0x100)
       + (buffer[curIndex++] * 0x10000)
       + (buffer[curIndex++] * 0x1000000);
+  },
+  int8: () => {
+    let num = read.uint8();
+    if (num >= 0x80) {
+      num -= 0x100;
+    }
+    return num;
   },
   int16: () => {
     let num = read.uint16();
@@ -308,6 +317,12 @@ const read = {
     }
     return playerNum;
   },
+  trainJunctionChoice: () => {
+    return trainJunctionChoices[read.uint8()];
+  },
+  trainAcceleration: () => {
+    return trainAccelerations[read.uint8()];
+  },
 };
 
 const write = {
@@ -337,6 +352,12 @@ const write = {
   uint32: (num = fetch.num()) => {
     write.uint16(num & 0xffff);
     write.uint16((num / 0x10000) & 0xffff);
+  },
+  int8: (num = fetch.num()) => {
+    if (num < 0) {
+      num += 0x100;
+    }
+    write.uint8(num);
   },
   int16: (num = fetch.num()) => {
     if (num < 0) {
@@ -537,7 +558,27 @@ const write = {
     for (let i = array.length - 1; i >= 0; i--) {
       write.uint8(array[i]);
     }
-  }
+  },
+  trainJunctionChoice: () => {
+    const trainJunctionChoice = fetch.string(',');
+    for (let i = 0; i < trainJunctionChoices.length; i++) {
+      if (trainJunctionChoices[i] == trainJunctionChoice) {
+        write.uint8(i);
+        return;
+      }
+    }
+    error = `Can't parse train junction choice "${trainJunctionChoice}"`;
+  },
+  trainAcceleration: () => {
+    const trainAcceleration = fetch.string(',');
+    for (let i = 0; i < trainAccelerations.length; i++) {
+      if (trainAccelerations[i] == trainAcceleration) {
+        write.uint8(i);
+        return;
+      }
+    }
+    error = `Can't parse train acceleration "${trainAcceleration}"`;
+  },
 };
 
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
@@ -576,6 +617,7 @@ const setBuffer = (newBuffer) => {
   buffer = newBuffer;
   curIndex = 0;
   datString = '';
+  error = '';
 };
 
 const eof = () => {

@@ -61,7 +61,7 @@ const getReplayDatBytes = (text) => {
   for (let lineType = fetch.char(); !failed && !eof(); lineType = fetch.char()) {
     if (lineType == '?') {
       // Arbitrary bytes
-      fetch.string(':');
+      fetch.tick();
       write.bytes();
     } else if (lineType == '@' || lineType == '+') {
       // Typical case
