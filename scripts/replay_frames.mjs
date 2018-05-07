@@ -49,6 +49,7 @@ export const frameHandlers = [
   [0x29, 'DropItem', ['fixed32', 'fixed32']],
   [0x2a, 'Build', ['fixed32', 'fixed32', 'direction', 'isDragging', 'isGhost', 'uint8ProbablyZero']],
   [0x2b, 'Run', 'direction'],
+  [0x2d, 'MoveTrain', ['trainJunctionChoice', 'trainAcceleration']],
   [0x2e, 'OpenEquipmentGrid', 'slotInInventory'],
   [0x31, 'ClickItemStack', 'slotInInventory'],
   [0x32, 'SplitItemStack', 'slotInInventory'],
@@ -164,6 +165,7 @@ export const frameHandlers = [
     write.bool(isGhost);
     write.uint8ProbablyZero();
   }],
+  [0x7b, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
   [0x92, 'Unknown92', 'double'],
   [0x9c, 'EnableAutoLaunch', 'bool'],
@@ -192,6 +194,7 @@ export const frameHandlers = [
     write.fixed16(); // Write y first
     write.fixed16(x);
   }],
+  [0x98, 'SelectTrain', 'uint32'],
   [0x99, 'Toolbelt', 'uint16'],
   [0x9A, 'ChooseWeapon', 'uint16'],
   [0xA1, 'TransferEntityStack', 'inOut'],
