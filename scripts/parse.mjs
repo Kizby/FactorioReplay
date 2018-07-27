@@ -105,7 +105,7 @@ const inventories = [[],
 [],
 [undefined, 'FuelOrContainer', 'Input', 'Output']];
 const shotTargets = ['None', 'Enemy', 'Selected'];
-const transferCounts = [undefined, 'One', 'All'];
+const transferCounts = ['None?', 'One', 'All'];
 const trainAccelerations = ['Coast', 'Accelerate', 'Decelerate', 'Reverse'];
 const trainJunctionChoices = ['Right', 'Straight', 'Left'];
 
