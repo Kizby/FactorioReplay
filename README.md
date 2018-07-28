@@ -17,3 +17,6 @@ for (let i = 0; i < 20; i++) {
 player.stopRunning();
 ```
 will make a player named TASBot craft an iron axe and run in a few circles. For now, the only documentation of available methods is in the code itself (specifically in scripts/replay_frames.mjs, with the first letter lowercase), but anyone who would like to add real documentation would be much appreciated :)
+
+# Checksum Stripper
+At https://kizby.github.io/FactorioReplay/ChecksumStripper.html, you can strip any Checksum frames from your replay or save file containing a replay, so Factorio should be willing to play it back, ignoring desyncs. I can't guarantee your run will be particularly inspiring without checksums to ensure its fidelity, but it will at least play.
