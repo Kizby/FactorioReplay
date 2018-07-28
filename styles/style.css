@@ -45,7 +45,7 @@ textarea {
   flex: 1 0 auto;
 }
 
-.textarea-container, .export-buttons {
+.textarea-container, .export-buttons, p {
   display: flex;
   flex-flow: row;
   justify-content: center;

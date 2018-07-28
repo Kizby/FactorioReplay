@@ -30,7 +30,7 @@ const getZipWithReplay = (replayDat, preserveDate) => {
     const name = `${loadedZip.name}/replay.dat`;
     let options = {};
     if (preserveDate) {
-      options = { date: loadedZip.zip.file(name).date };
+      options.date = loadedZip.zip.file(name).date;
     }
     loadedZip.zip.file(name, replayDat, options);
   }

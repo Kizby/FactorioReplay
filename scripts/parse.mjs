@@ -85,7 +85,7 @@ const fetch = {
     let tickGuess = read.tick();
     tickGuess = tickGuess.replace('@', '?');
     curIndex = startIndex - 1; // Take back the bytes we've tried to interpret
-    const endIndex = tryFindHeartbeat();
+    const endIndex = tryFindHeartbeat(buffer, curIndex);
     return `${tickGuess}${read.bytes(endIndex - curIndex)}`;
   },
   whitespace: () => {
@@ -588,10 +588,9 @@ for (let i = 0; i < idMapTypes.length; i++) {
   write[idMapTypes[i][0]] = (val = fetch.string(',')) => write[idMapTypes[i][1]](val, idMapTypes[i][0]);
 }
 
-const tryFindHeartbeat = () => {
+const tryFindHeartbeat = (buffer, curIndex) => {
   // Factorio emits CheckSum frames every second, on the second, so try to find the next one
   // Find the next CheckSum frame
-  outerLoop:
   for (let searchIndex = curIndex; searchIndex + 6 <= buffer.length; searchIndex++) {
     if (buffer[searchIndex] != 0x35) {
       // Not a checksum
@@ -633,4 +632,4 @@ const expect = (func, data) => {
   }
 };
 
-export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps };
+export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps, tryFindHeartbeat };

@@ -141,7 +141,13 @@ exportZipButton.addEventListener('click', () => {
   const text = getTextRecursively(replayTextArea, true);
   const dat = getReplayDatBytes(text);
   const zip = getZipWithReplay(dat);
-  zip.zip.generateAsync({ type: "arraybuffer" }).then((array) =>
+  zip.zip.generateAsync({
+    type: "arraybuffer",
+    compression: "DEFLATE",
+    compressionOptions: {
+      level: 5
+    }
+  }).then((array) =>
     download(array, zip.name, 'application/zip')
   );
 });
