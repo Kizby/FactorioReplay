@@ -8,7 +8,7 @@ for (let i = 0; i < frameHandlers.length; i++) {
   inputActionNameToFrameHandler[frameHandlers[i][1]] = frameHandlers[i];
 }
 
-const parseReplayDat = (arrayBuffer) => {
+function* parseReplayDat(arrayBuffer) {
   setBuffer(new Uint8Array(arrayBuffer));
   resetPlayers();
 
@@ -48,7 +48,7 @@ const parseReplayDat = (arrayBuffer) => {
     } else if (!eof()) {
       line = fetch.unhandledBytes();
     }
-    result = `${result}${line}\n`;
+    yield `${result}${line}`;
   }
   return result;
 }

@@ -1,5 +1,5 @@
 import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.mjs';
-import { idMapTypes, idMaps } from './id_maps.mjs';
+import { idMapTypes, signalIdTypes, idMaps } from './id_maps.mjs';
 
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
 
@@ -104,9 +104,12 @@ const inventories = [[],
 [],
 [],
 [undefined, 'FuelOrContainer', 'Input', 'Output'],
+[],
+[],
+[],
 []];
 const shotTargets = ['None', 'Enemy', 'Selected'];
-const transferCounts = [undefined, 'One', 'All'];
+const transferCounts = ['None?', 'One', 'All'];
 const trainAccelerations = ['Coast', 'Accelerate', 'Decelerate', 'Reverse'];
 const trainJunctionChoices = ['Right', 'Straight', 'Left'];
 
@@ -324,6 +327,62 @@ const read = {
   trainAcceleration: () => {
     return trainAccelerations[read.uint8()];
   },
+  blueprintIcons: () => {
+    const iconCount = read.uint8();
+    let result = '';
+    for (let i = 0; i < iconCount; i++) {
+      if (i > 0) {
+        result = `${result}, `;
+      }
+      const category = read.uint8();
+      result = `${result}${read[signalIdTypes[category]]()}`;
+    }
+    return result;
+  },
+  blueprintOrBook: (recursive = false) => {
+    let result = '';
+    const blueprintId = read.uint16();
+    let blueprintContainer;
+    if (recursive) {
+      blueprintContainer = read.item();
+    }
+    const blueprintBytes = read.bytes(20);
+    let unknown3 = '';
+    if (!recursive) {
+      blueprintContainer = read.item();
+      unknown3 = read.uint8ProbablyZero();
+    }
+    const icons = read.blueprintIcons();
+    const name = read.string();
+    if (!recursive) {
+      const terminus = read.uint16();
+      if (terminus != 0xffff) {
+        throw `No terminus on saved blueprint ${i}?`;
+      }
+    }
+    if (name === '') {
+      result = `${blueprintId} =`;
+    } else {
+      result = `${name} (${blueprintId}) =`;
+    }
+    result = `${result} ${blueprintBytes} in a ${blueprintContainer}`
+    if (unknown3 != '') {
+      result = `${result} (${unknown3})`;
+    }
+    result = `${result} with icons [${icons}]`;
+    if (blueprintContainer == 'blueprint-book') {
+      result = `${result}:`;
+      const containerBlueprintCount = read.uint8();
+      for (let i = 0; i < containerBlueprintCount; i++) {
+        if (i > 0) {
+          result = `${result},`;
+        }
+        result = `${result} ${read.blueprintOrBook(true)}`;
+      }
+      result = `${result};`;
+    }
+    return result;
+  }
 };
 
 const write = {
@@ -580,6 +639,31 @@ const write = {
     }
     error = `Can't parse train acceleration "${trainAcceleration}"`;
   },
+  blueprintIcons: () => {
+    const category = [];
+    const id = [];
+    while (buffer[curIndex] != '\n') {
+      const oneIcon = fetch.string(',');
+      let found = false;
+      for (let i = 0; i < signalIdTypes.length; i++) {
+        if (idMaps[signalIdTypes[i]].hasOwnProperty(oneIcon)) {
+          category.push(i);
+          id.push(idMaps[signalIdTypes[i]][oneIcon]);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        error = `Failed to determine category and id for: ${oneIcon}`;
+        break;
+      }
+    }
+    write.uint8(category.length);
+    for (let i = 0; i < category.length; i++) {
+      write.uint8(category[i]);
+      write.item(id[i]);
+    }
+  },
 };
 
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
@@ -632,4 +716,8 @@ const expect = (func, data) => {
   }
 };
 
-export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps, tryFindHeartbeat };
+const progress = () => {
+  return curIndex / buffer.length;
+};
+
+export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps, tryFindHeartbeat, progress };

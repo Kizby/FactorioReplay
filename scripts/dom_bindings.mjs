@@ -2,6 +2,9 @@ import { parseReplayDat, getReplayDatBytes, stableSort, compareTick, comparePlay
 import { loadLevelDat } from './level_loader.mjs';
 import { parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
 import { parseReplayJs } from './replay_framework.mjs';
+import { progress } from './parse.mjs';
+
+let replayText = '';
 
 // Function to download data to a file
 // From https://stackoverflow.com/a/30832210
@@ -23,21 +26,41 @@ const download = (data, filename, type) => {
   }
 };
 
-const appendElement = (node, tag, contents) => {
-  const element = document.createElement(tag);
-  if (undefined !== contents) {
-    element.textContent = contents;
+const showReplayTxt = () => {
+  if (replayText.length > 5000000) {
+    replayTextArea.value = `// Only showing first 5MB of replay.txt so your tab stays responsive; you can still download the whole thing if you'd like\n${replayText.substring(0, 5000000)}`;
+    replayTextArea.readOnly = true;
+  } else {
+    replayTextArea.value = replayText;
+    replayTextArea.readOnly = false;
   }
-  node.appendChild(element);
 };
 
-const loadReplayTxt = (text) => {
-  replayTextArea.value = text;
-};
+const generateLines = (generator) => {
+  let nextLine;
+  // Yield every thousand lines
+  for (let i = 0; i < 1000; i++) {
+    nextLine = generator.next();
+    if (nextLine.done) {
+      break;
+    }
+    replayText += `${nextLine.value}\n`;
+  }
+  if (!nextLine.done) {
+    replayTextArea.value = `Loading ${(progress() * 100).toFixed(1)}%`;
+    setTimeout(generateLines, 0, generator);
+  } else {
+    const expectedRenderTime = Math.ceil(Math.min(replayText.length / 500000, 10));
+    replayTextArea.value = `Rendering replay.txt! It could take up to ${expectedRenderTime} seconds.`;
+    setTimeout(showReplayTxt, expectedRenderTime > 5 ? 500 : 0); // Make sure the render warning can render if it will take more than 5 seconds
+  }
+}
 
 const loadReplayDat = (arrayBuffer) => {
-  const result = parseReplayDat(arrayBuffer);
-  loadReplayTxt(result);
+  const lineGenerator = parseReplayDat(arrayBuffer);
+  replayText = '';
+  replayTextArea.readOnly = true;
+  generateLines(lineGenerator);
 };
 
 const loadReplayJs = (text) => {
@@ -85,7 +108,8 @@ document.body.addEventListener('drop', (event) => {
   const filename = file.name.toLowerCase();
   if (filename.endsWith('.txt')) {
     reader.addEventListener('loadend', () => {
-      loadReplayTxt(reader.result);
+      replayText = reader.result;
+      showReplayTxt();
     });
     reader.readAsText(file);
   } else if (filename.endsWith('.dat')) {
@@ -118,8 +142,17 @@ exportDatButton.addEventListener('click', () => {
 });
 
 exportTxtButton.addEventListener('click', () => {
-  const result = getTextRecursively(replayTextArea, true);
-  download(result, 'replay.txt', 'text/plain');
+  if (replayTextArea.readOnly) {
+    // Need to use the contents of replayText
+    let downloadText = replayText;
+    if (lineBreak != '\n') {
+      downloadText = replayText.replace(/\n/g, lineBreak);
+    }
+    download(downloadText, 'replay.txt', 'text/plain');
+  } else {
+    // User may have edited this, so get what's actually there
+    download(getTextRecursively(replayTextArea, true), 'replay.txt', 'text/plain');
+  }
 });
 
 exportJsButton.addEventListener('click', () => {
@@ -162,7 +195,8 @@ const sortReplayLines = (compare) => {
   stableSort(lines, compare);
   const finalText = lines.join('\n');
   if (initialText != finalText) {
-    loadReplayTxt(finalText);
+    replayText = finalText;
+    showReplayTxt();
   }
 };
 
@@ -220,4 +254,4 @@ for (let textArea of document.getElementsByTagName('textarea')) {
 }
 
 // Expose this for convenience
-window.loadText = loadReplayTxt;
+window.loadText = (text) => { replayText = text; showReplayTxt(); };
