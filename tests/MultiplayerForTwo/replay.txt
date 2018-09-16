@@ -1,7 +1,7 @@
 @0(65535): JoinMultiPlayer
 @0(65535): AddPlayer Murray65536
 @1(Murray65536): UpdateResolution 1920, 1080
-@1(Murray65536): ConnectionInfo? 0, 0, 5ad3c174
+@1(Murray65536): LoadSavedBlueprints Murray65536 (nextId=0, checksum=5ad3c174); 0 blueprints:
 @3(Murray65536): MoveSelection 1.4375, 9.0625
 @60(Murray65536): CheckSum 60a25586
 @61(Murray65536): MoveSelectionSmall -1, 0
@@ -283,7 +283,7 @@
 @6120(Murray65536): CheckSum 8ce0f8cf
 @6142(Murray65536): AddPlayer zerovolts
 @6175(zerovolts): UpdateResolution 1920, 1080
-@6175(zerovolts): ConnectionInfo? 1, 0, 5adaa91c
+@6175(zerovolts): LoadSavedBlueprints zerovolts (nextId=0, checksum=5adaa91c); 0 blueprints:
 @6180(Murray65536): CheckSum 0b398321
 @6240(Murray65536): CheckSum af5d053e
 @6264(zerovolts): MoveSelectionSmall 7, 7

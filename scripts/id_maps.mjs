@@ -37,6 +37,7 @@ export const signalIdTypes = {
   1: "fluid",
   "signal": 2,
   2: "signal",
+  "length": 3,
 };
 
 export const idMaps = {

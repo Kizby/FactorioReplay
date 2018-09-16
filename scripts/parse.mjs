@@ -4,11 +4,44 @@ import { idMapTypes, signalIdTypes, idMaps } from './id_maps.mjs';
 let curIndex, buffer, curTick, curPlayer, datString, error = '';
 
 const fetch = {
+  bytes: (count) => {
+    let result = '';
+    for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
+      const char = buffer[curIndex];
+      if (char == '\n') {
+        if (count === undefined) {
+          // No more bytes
+          break;
+        }
+        // Permit newlines in byte sequence if we're looking for a certain number of bytes
+        continue;
+      }
+      if (/\s/.test(char)) {
+        continue; // Consume the space
+      }
+      const byte = buffer.substring(curIndex, curIndex + 2);
+      if (!/[a-fA-F0-9][a-fA-F0-9]/.test(byte)) {
+        error = "Bad character in byte sequence";
+        return;
+      }
+      result += byte;
+      ++curIndex; // Increment a second time to consume both characters
+      if (count !== undefined) {
+        --count;
+      }
+    }
+    if (undefined !== count && count > 0) {
+      error = "Not enough bytes at end of input";
+    } else if (0 === count) {
+      fetch.commaAndWhitespace();
+    }
+    return result;
+  },
   char: () => {
     return buffer[curIndex++];
   },
-  checkSum: () => {
-    let checkSum = fetch.string(',');
+  checkSum: (next = ',') => {
+    let checkSum = fetch.string(next);
     let result = '';
     // Need to make this little endian
     while (checkSum.length > 0) {
@@ -25,9 +58,19 @@ const fetch = {
     }
     return result + fetch.whitespace();
   },
-  num: () => {
+  literalString: (expected) => {
+    const actual = buffer.substring(curIndex, curIndex + expected.length);
+    if (actual != expected) {
+      error = `Failed to match expected string: wanted "${expected}", got "${actual}"`;
+      return false;
+    }
+    curIndex += expected.length;
+    fetch.whitespace();
+    return true;
+  },
+  num: (next = ',') => {
     let endIndex = curIndex;
-    while (buffer[endIndex] != ',' && buffer[endIndex] != '\n') {
+    while (buffer[endIndex] != next && buffer[endIndex] != '\n') {
       endIndex++;
     }
     const result = parseFloat(buffer.substring(curIndex, endIndex));
@@ -35,8 +78,8 @@ const fetch = {
     fetch.commaAndWhitespace();
     return result;
   },
-  string: (delimiter) => {
-    let endIndex = buffer.indexOf('\n', curIndex);
+  string: (delimiter, finalDelimiter = '\n') => {
+    let endIndex = buffer.indexOf(finalDelimiter, curIndex);
     if (delimiter !== undefined) {
       const commaIndex = buffer.indexOf(delimiter, curIndex);
       if (-1 != commaIndex && commaIndex < endIndex) {
@@ -357,7 +400,7 @@ const read = {
     if (!recursive) {
       const terminus = read.uint16();
       if (terminus != 0xffff) {
-        throw `No terminus on saved blueprint ${i}?`;
+        throw `No terminus on saved blueprint?`;
       }
     }
     if (name === '') {
@@ -396,6 +439,7 @@ const write = {
       result = '0' + result;
     }
     datString += result;
+    return num;
   },
   uint16: (val = fetch.string(','), category) => {
     let num = parseInt(val);
@@ -464,35 +508,7 @@ const write = {
     }
   },
   bytes: (count) => {
-    for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
-      const char = buffer[curIndex];
-      if (char == '\n') {
-        if (count === undefined) {
-          // No more bytes
-          break;
-        }
-        // Permit newlines in byte sequence if we're looking for a certain number of bytes
-        continue;
-      }
-      if (/\s/.test(char)) {
-        continue; // Consume the space
-      }
-      const byte = buffer.substring(curIndex, curIndex + 2);
-      if (!/[a-fA-F0-9][a-fA-F0-9]/.test(byte)) {
-        error = "Bad character in byte sequence";
-        return;
-      }
-      datString += byte;
-      ++curIndex; // Increment a second time to consume both characters
-      if (count !== undefined) {
-        --count;
-      }
-    }
-    if (undefined !== count && count > 0) {
-      error = "Not enough bytes at end of input";
-    } else if (0 === count) {
-      fetch.commaAndWhitespace();
-    }
+    datString += fetch.bytes(count);
   },
   bool: (val) => {
     if (val === undefined) {
@@ -559,8 +575,8 @@ const write = {
   isGhost: () => {
     write.bool(fetch.string(',') == 'Ghost');
   },
-  uint8ProbablyZero: () => {
-    const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
+  uint8ProbablyZero: (next = '\n') => {
+    const num = (buffer[curIndex] == next) ? 0 : fetch.num(next);
     write.uint8(num);
   },
   uint16ProbablyZero: () => {
@@ -639,11 +655,12 @@ const write = {
     }
     error = `Can't parse train acceleration "${trainAcceleration}"`;
   },
-  blueprintIcons: () => {
+  blueprintIcons: (inSavedBlueprint = false) => {
     const category = [];
     const id = [];
-    while (buffer[curIndex] != '\n') {
-      const oneIcon = fetch.string(',');
+    const finalDelimiter = inSavedBlueprint ? ']' : '\n';
+    while (buffer[curIndex] != finalDelimiter) {
+      const oneIcon = fetch.string(',', finalDelimiter);
       let found = false;
       for (let i = 0; i < signalIdTypes.length; i++) {
         if (idMaps[signalIdTypes[i]].hasOwnProperty(oneIcon)) {
@@ -664,6 +681,94 @@ const write = {
       write.item(id[i]);
     }
   },
+  blueprintOrBook: (recursive = false) => {
+    const maybeNameAndId = fetch.string('=');
+    let id;
+    let name = '';
+    if (maybeNameAndId.endsWith(')')) {
+      // looks like: "<name> (<id>)"
+      id = maybeNameAndId.substring(maybeNameAndId.lastIndexOf('(') + 1, maybeNameAndId.lastIndexOf(')'));
+      name = maybeNameAndId.substring(0, maybeNameAndId.lastIndexOf('(') - 1);
+    } else {
+      // looks like: "<id>"
+      id = maybeNameAndId;
+    }
+
+    write.uint16(id);
+
+    fetch.literalString('=');
+
+    const blueprintBytes = fetch.bytes(20);
+
+    if (!fetch.literalString('in a')) {
+      return;
+    }
+
+    if (recursive) {
+      const blueprintContainer = fetch.string(' ');
+      write.item(blueprintContainer);
+    }
+
+    datString += blueprintBytes;
+
+    if (!recursive) {
+      const blueprintContainer = fetch.string(' ');
+      write.item(blueprintContainer);
+      if ('(' == buffer[curIndex]) {
+        ++curIndex;
+        const unknown = fetch.num(')');
+        write.uint8(unknown);
+        if (!fetch.literalString(')')) {
+          return;
+        }
+      } else {
+        write.uint8(0);
+      }
+    }
+
+    if (!fetch.literalString('with icons [')) {
+      return;
+    }
+
+    write.blueprintIcons(true);
+
+    if (!fetch.literalString(']')) {
+      return;
+    }
+
+    write.string(false, name);
+
+    if (!recursive) {
+      write.uint16(0xffff);
+    }
+
+    if (buffer[curIndex] == ':') {
+      // Need to call this recursively on the contents of this container
+      ++curIndex;
+      // Hack to let the recursive calls write directly to datString
+      // We'll overwrite this 0 later with the real count
+      const savedDatLen = datString.length;
+      write.uint8(0);
+      let count = 0;
+      while (buffer[curIndex] != ';') {
+        if (count > 0) {
+          fetch.commaAndWhitespace();
+        }
+        write.blueprintOrBook(true);
+        ++count;
+      }
+      ++curIndex;
+
+      if (count > 0) {
+        // Overwrite the previously claimed 0 count with the actual value
+        let countBytes = count.toString(16);
+        if (countBytes.length < 2) {
+          countBytes = '0' + countBytes;
+        }
+        datString = datString.substring(0, savedDatLen) + countBytes + datString.substring(savedDatLen + 2);
+      }
+    }
+  }
 };
 
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)

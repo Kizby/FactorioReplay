@@ -14,7 +14,7 @@ const testOneDirectory = async (dir) => {
   const replayDatRaw = fs.readFileSync(`tests/${dir}/replay.dat`);
 
   const replayTxt = fs.readFileSync(`tests/${dir}/replay.txt`, 'ascii').replace(/\r\n/g, '\n');
-  const parsedTxt = parseReplayDat(replayDatRaw);
+  const parsedTxt = Array.from(parseReplayDat(replayDatRaw)).join('\n') + '\n';
   if (replayTxt != parsedTxt) {
     pass = false;
     console.error(`${redCode}${dir} parse of replay.dat does not match replay.txt.${clearCode}`);

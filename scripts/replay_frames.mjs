@@ -74,15 +74,18 @@ export const frameHandlers = [
   [0x65, 'DeleteMyBlueprint', 'uint32'],
   [0x66, 'NewBlueprint', 'item'],
   [0x68, 'LoadSavedBlueprints', () => {
+    // Can't just use read.player since it's a uint16 here, not an optUint16
     const playerNumber = read.uint16();
     const nextBlueprintId = read.uint16();
     const checkSum = read.checkSum();
     const unknown2 = read.uint8ProbablyZero();
     const blueprintCount = read.uint8();
-    let result = `${idMaps.player[playerNumber]} (nextId=${nextBlueprintId}, checksum=${checkSum}):`;
+    let result = `${idMaps.player[playerNumber]} (nextId=${nextBlueprintId}, checksum=${checkSum})`;
     if (unknown2 !== '') {
-      result = ` ${result}${unknown2},`;
+      result = `${result} ${unknown2}`;
     }
+    result = `${result}; ${blueprintCount} blueprints:`;
+
     for (let i = 0; i < blueprintCount; i++) {
       if (i > 0) {
         result = `${result},`;
@@ -94,11 +97,26 @@ export const frameHandlers = [
     }
     return result;
   }, () => {
+    // Can't just use write.player since it's a uint16 here, not an optUint16
+    write.uint16(idMaps.player[fetch.string(' ')]);
+    if (!fetch.literalString('(nextId=')) return;
     write.uint16();
-    write.uint16();
-    write.checkSum();
-    write.uint8();
-    write.uint8();
+    if (!fetch.literalString('checksum=')) return;
+    const checkSum = fetch.checkSum(')');
+    write.checkSum(checkSum);
+    if (!fetch.literalString(')')) return;
+    write.uint8ProbablyZero(';');
+    if (!fetch.literalString(';')) return;
+    const blueprintCountString = fetch.string(' ');
+    const blueprintCount = write.uint8(blueprintCountString);
+    if (!fetch.literalString('blueprints:')) return;
+    for (let i = 0; i < blueprintCount; i++) {
+      if (i > 0) {
+        fetch.commaAndWhitespace();
+      }
+      write.blueprintOrBook();
+    }
+    write.uint8(0);
   }],
   //[0x6a, 'Unknown6A', () => {
   //  return read.bytes(102); // Or something -.-
