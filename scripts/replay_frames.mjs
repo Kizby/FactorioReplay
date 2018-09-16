@@ -10,9 +10,7 @@ export const resetPlayers = () => {
 };
 
 export const frameHandlers = [
-  // IgnoreRemaining seems to stop replay parsing and makes the replay continue playing forever
-  // instead of stopping at the tick at offset 0x37 in level.dat
-  [0x00, 'IgnoreRemaining'],
+  //[0x00, 'IgnoreRemaining'], This is an invalid frame, better to let tryFindHeartbeat take over
   [0x01, 'StopRunning'],
   [0x02, 'StartMining'],
   [0x03, 'StopMining'],
@@ -22,12 +20,12 @@ export const frameHandlers = [
   [0x07, 'OpenPlayerInventory'],
   [0x08, 'ConnectTrain'],
   [0x09, 'DisconnectTrain'],
-  [0x0A, 'ClearSelection'],
-  [0x0B, 'ClearCursor'],
-  [0x0C, 'Unknown0C'],
-  [0x0D, 'OpenTechnologies'],
-  [0x0E, 'Unknown0E'],
-  [0x0F, 'Unknown0F'],
+  [0x0a, 'ClearSelection'],
+  [0x0b, 'ClearCursor'],
+  [0x0c, 'Unknown0C'],
+  [0x0d, 'OpenTechnologies'],
+  [0x0e, 'Unknown0E'],
+  [0x0f, 'Unknown0F'],
   [0x10, 'OpenBlueprintLibrary'],
   [0x11, 'OpenProductionStatistics'],
   [0x12, 'OpenKillStatistics'],
@@ -38,12 +36,12 @@ export const frameHandlers = [
   [0x17, 'Unknown17'],
   [0x18, 'Unknown18'],
   [0x19, 'ShowInfo'],
-  [0x1A, 'JoinSinglePlayer'],
-  [0x1B, 'JoinMultiPlayer'],
-  [0x1C, 'Unknown1C'],
-  [0x1D, 'OpenBonuses'],
-  [0x1E, 'OpenTrains'],
-  [0x1F, 'OpenAchievements'],
+  [0x1a, 'JoinSinglePlayer'],
+  [0x1b, 'JoinMultiPlayer'],
+  [0x1c, 'Unknown1C'],
+  [0x1d, 'OpenBonuses'],
+  [0x1e, 'OpenTrains'],
+  [0x1f, 'OpenAchievements'],
   [0x23, 'Lag?'],
   [0x27, 'OpenLogisticNetworks'],
   [0x29, 'DropItem', ['fixed32', 'fixed32']],
@@ -59,43 +57,71 @@ export const frameHandlers = [
   [0x36, 'Craft', ['recipe', 'uint32OrAll']],
   [0x38, 'Shoot', ['shotTarget', 'fixed32', 'fixed32']],
   [0x39, 'ChooseRecipe', ['recipe']],
-  [0x3A, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
-  [0x3B, 'Pipette', 'uint16'],
-  [0x3D, 'SplitInventory', 'slotInInventory'],
-  [0x3F, 'ToggleFilter', ['slotInInventory', 'item']],
+  [0x3a, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
+  [0x3b, 'Pipette', 'uint16'],
+  [0x3d, 'SplitInventory', 'slotInInventory'],
+  [0x3f, 'ToggleFilter', ['slotInInventory', 'item']],
   [0x43, 'ChooseTechnology', 'technology'],
   [0x48, 'Chat', 'string'],
-  [0x4C, 'ChooseCraftingItemGroup', 'itemGroup'],
+  [0x4c, 'ChooseCraftingItemGroup', 'itemGroup'],
   [0x51, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
   [0x52, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
   [0x56, 'LimitSlots', 'slotInInventory'],
   [0x57, 'ChooseFilterCategory', 'itemGroup'],
-  [0x68, 'ConnectionInfo?', () => {
+  [0x5b, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
+  [0x5d, 'SaveBlueprint', ['uint8', 'uint8', 'uint8', 'uint8', 'uint32', 'blueprintIcons']],
+  [0x60, 'OpenMyBlueprint', 'uint32'],
+  [0x65, 'DeleteMyBlueprint', 'uint32'],
+  [0x66, 'NewBlueprint', 'item'],
+  [0x68, 'LoadSavedBlueprints', () => {
+    // Can't just use read.player since it's a uint16 here, not an optUint16
     const playerNumber = read.uint16();
-    const unknown1 = read.uint16();
+    const nextBlueprintId = read.uint16();
     const checkSum = read.checkSum();
-    const unknown2 = read.uint24();
-    let unknown3 = '';
-    if (unknown2 != 0) {
-      // This random blob happens on connections in lan games
-      // and some single player games?
-      unknown3 = read.bytesUntil([0, 1, 0, 0, 0xff, 0xff, 0, 0]);
+    const unknown2 = read.uint8ProbablyZero();
+    const blueprintCount = read.uint8();
+    let result = `${idMaps.player[playerNumber]} (nextId=${nextBlueprintId}, checksum=${checkSum})`;
+    if (unknown2 !== '') {
+      result = `${result} ${unknown2}`;
     }
-    const extras = (unknown2 == 0) ? '' : `, ${unknown2}, ${unknown3}`;
-    return `${playerNumber}, ${unknown1}, ${checkSum}${extras}`;
+    result = `${result}; ${blueprintCount} blueprints:`;
+
+    for (let i = 0; i < blueprintCount; i++) {
+      if (i > 0) {
+        result = `${result},`;
+      }
+      result = `${result} ${read.blueprintOrBook()}`;
+    }
+    if (read.uint8() != 0) {
+      throw "No null terminus on blueprint list?";
+    }
+    return result;
   }, () => {
+    // Can't just use write.player since it's a uint16 here, not an optUint16
+    write.uint16(idMaps.player[fetch.string(' ')]);
+    if (!fetch.literalString('(nextId=')) return;
     write.uint16();
-    write.uint16();
-    write.checkSum();
-    const unknown2 = write.uint24ProbablyZero();
-    if (unknown2 != 0) {
-      write.bytes();
+    if (!fetch.literalString('checksum=')) return;
+    const checkSum = fetch.checkSum(')');
+    write.checkSum(checkSum);
+    if (!fetch.literalString(')')) return;
+    write.uint8ProbablyZero(';');
+    if (!fetch.literalString(';')) return;
+    const blueprintCountString = fetch.string(' ');
+    const blueprintCount = write.uint8(blueprintCountString);
+    if (!fetch.literalString('blueprints:')) return;
+    for (let i = 0; i < blueprintCount; i++) {
+      if (i > 0) {
+        fetch.commaAndWhitespace();
+      }
+      write.blueprintOrBook();
     }
+    write.uint8(0);
   }],
-  [0x6A, 'Unknown6A', () => {
-    return read.bytes(102); // Or something -.-
-  }, write.bytes],
-  [0x6F, 'AddPlayer', () => {
+  //[0x6a, 'Unknown6A', () => {
+  //  return read.bytes(102); // Or something -.-
+  //}, write.bytes],
+  [0x6f, 'AddPlayer', () => {
     const playerNumber = read.optUint16();
     const force = read.force();
     const name = read.string();
@@ -165,7 +191,9 @@ export const frameHandlers = [
     write.bool(isGhost);
     write.uint8ProbablyZero();
   }],
+  [0x7a, 'SetItemName', 'string'],
   [0x7b, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
+  [0x8f, 'SetDestructionFilter', ['entity', 'uint16']],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
   [0x92, 'Unknown92', 'double'],
   [0x9c, 'EnableAutoLaunch', 'bool'],
@@ -196,15 +224,16 @@ export const frameHandlers = [
   }],
   [0x98, 'SelectTrain', 'uint32'],
   [0x99, 'Toolbelt', 'uint16'],
-  [0x9A, 'ChooseWeapon', 'uint16'],
-  [0xA1, 'TransferEntityStack', 'inOut'],
-  [0xA2, 'RotateEntity', () => {
+  [0x9a, 'ChooseWeapon', 'uint16'],
+  [0xa1, 'TransferEntityStack', 'inOut'],
+  [0xa2, 'RotateEntity', () => {
     const isCounterClockwise = read.bool();
     return isCounterClockwise ? 'CCW' : 'CW';
   }, () => {
     write.bool(fetch.string() == 'CCW');
   }],
-  [0xA3, 'SplitEntityStack', 'inOut'],
-  [0xA7, 'UnknownA7', 'uint8'],
-  [0xB4, 'LeaveGame', 'leaveReason'],
+  [0xa3, 'SplitEntityStack', 'inOut'],
+  [0xa7, 'UnknownA7', 'uint8'],
+  [0xab, 'SetTreesRocksOnly', 'bool'],
+  [0xb4, 'LeaveGame', 'leaveReason'],
 ];

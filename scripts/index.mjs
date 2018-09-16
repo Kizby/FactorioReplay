@@ -8,11 +8,10 @@ for (let i = 0; i < frameHandlers.length; i++) {
   inputActionNameToFrameHandler[frameHandlers[i][1]] = frameHandlers[i];
 }
 
-const parseReplayDat = (arrayBuffer) => {
+function* parseReplayDat(arrayBuffer) {
   setBuffer(new Uint8Array(arrayBuffer));
   resetPlayers();
 
-  let result = '';
   while (!eof()) {
     let line = '';
     let inputAction = read.uint8();
@@ -48,9 +47,8 @@ const parseReplayDat = (arrayBuffer) => {
     } else if (!eof()) {
       line = fetch.unhandledBytes();
     }
-    result = `${result}${line}\n`;
+    yield line;
   }
-  return result;
 }
 
 const getReplayDatBytes = (text) => {

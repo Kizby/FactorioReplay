@@ -30,6 +30,16 @@ export const idMapTypes = [
   ['force', 'uint8']
 ];
 
+export const signalIdTypes = {
+  "item": 0,
+  0: "item",
+  "fluid": 1,
+  1: "fluid",
+  "signal": 2,
+  2: "signal",
+  "length": 3,
+};
+
 export const idMaps = {
   mod: {
   },
@@ -43,6 +53,9 @@ export const idMaps = {
     3: "small-equipment-grid",
   },
   item: {
+    // convenience for parsing:
+    "nothing": 0,
+    0: "nothing",
     // ammo:
     "firearm-magazine": 2,
     2: "firearm-magazine",
