@@ -1,7 +1,7 @@
 import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.mjs';
 import { idMapTypes, signalIdTypes, idMaps } from './id_maps.mjs';
 
-let curIndex, buffer, curTick, curPlayer, datString, error = '';
+let curIndex, buffer, curTick, curPlayer, datString, error = '', lastTickStart;
 
 const fetch = {
   bytes: (count) => {
@@ -123,7 +123,7 @@ const fetch = {
     return [curTick, curPlayer];
   },
   unhandledBytes: () => {
-    curIndex -= 5;
+    curIndex = lastTickStart;
     const startIndex = curIndex;
     let tickGuess = read.tick();
     tickGuess = tickGuess.replace('@', '?');
@@ -303,15 +303,16 @@ const read = {
     return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
   },
   tick: () => {
+    lastTickStart = curIndex;
     curTick = read.uint32();
     curPlayer = read.optUint16('player');
     return `@${curTick}(${curPlayer}): `;
   },
-  isDragging: () => {
-    return read.bool() ? 'Dragging' : '';
+  isNotDragging: () => {
+    return read.bool() ? '' : 'Dragging';
   },
-  isGhost: () => {
-    return read.bool() ? 'Ghost' : '';
+  isNotGhost: () => {
+    return read.bool() ? '' : 'Ghost';
   },
   uint8ProbablyZero: () => {
     const num = read.uint8();
@@ -781,7 +782,7 @@ const tryFindHeartbeat = (buffer, curIndex) => {
   // Factorio emits CheckSum frames every second, on the second, so try to find the next one
   // Find the next CheckSum frame
   for (let searchIndex = curIndex; searchIndex + 6 <= buffer.length; searchIndex++) {
-    if (buffer[searchIndex] != 0x35) {
+    if (buffer[searchIndex] != 0x42) {
       // Not a checksum
       continue;
     }
