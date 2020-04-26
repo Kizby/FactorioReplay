@@ -9,20 +9,22 @@ const loadLevelDat = (arrayBuffer) => {
     console.error(`This tool has only been tested on Factorio 0.16.36-38! Use it with version ${major}.${minor}.${patch} at your own risk!`);
   }
 
-  expect(read.uint24, 2);
+  console.log(`Unknown: ${read.uint32()}`);
 
   const scenario = read.string();
   const scenarioContext = read.string();
   console.log(`Scenario: ${scenario}(${scenarioContext})`);
 
   expect(read.uint32, 1);
-  expect(read.uint32, 0x1000000);
+  expect(read.uint32, 0x1010000);
   expect(read.uint8, major);
   expect(read.uint8, minor);
   expect(read.uint8, patch);
 
-  const buildNumber = read.uint24();
-  console.log(`Build number?: ${buildNumber}`);
+  const buildNumber = read.uint16();
+  console.log(`Build number: ${buildNumber}`);
+
+  expect(read.uint8, 1);
 
   const modCount = read.optUint32();
   console.log('Mods:')
@@ -33,28 +35,27 @@ const loadLevelDat = (arrayBuffer) => {
     console.log(` ${modName} v${modMajor}.${modMinor}.${modPatch}, config checksum ${modCheckSum}`);
   }
 
-  expect(read.uint8, 0);
   expect(read.uint32, 0);
+  expect(read.uint32, 5);
+  expect(read.uint16, 0);
 
   const lastTick = read.uint32();
   console.log(`Current map tick: ${lastTick}`);
-
-  const frequencies = ['None', 'Very low', 'Low', 'Normal', 'High', 'Very high'];
-  const sizes = ['None', 'Very small', 'Small', 'Medium', 'Big', 'Very Big'];
-  const richnesses = ['None', 'Very poor', 'Poor', 'Regular', 'Good', 'Very good']
+  expect(read.uint32, lastTick);
+  expect(read.uint32, lastTick);
 
   const water = {
-    frequency: read.uint8(),
-    size: read.uint8()
+    scale: read.float(),
+    coverage: read.float(),
   };
   console.log(`Water:`);
-  console.log(` Frequency: ${water.frequency == 0 ? 'Only in starting area' : frequencies[water.frequency]}`);
-  console.log(` Size: ${sizes[water.size]}`);
+  console.log(` Scale: ${water.scale}`);
+  console.log(` Coverage: ${water.coverage}`);
 
   const resourceCount = read.uint8();
   for (let i = 0; i < resourceCount; i++) {
     const name = read.string();
-    const [frequency, size, richness] = [frequencies[read.uint8()], sizes[read.uint8()], richnesses[read.uint8()]];
+    const [frequency, size, richness] = [read.float(), read.float(), read.float()];
     console.log(`${name}:`);
     console.log(` Frequency: ${frequency}`);
     console.log(` Size: ${size}`);
@@ -69,70 +70,42 @@ const loadLevelDat = (arrayBuffer) => {
   const [mapWidth, mapHeight] = [read.uint32(), read.uint32()];
   console.log(`Map size: ${mapWidth}x${mapHeight}`);
 
-  expect(read.uint32, 0x30007fff);
-  expect(read.uint32, 0x3000ffff);
+  expect(read.uint32, 0x20007fff);
+  expect(read.uint32, 0x2000ffff);
   expect(read.uint32, 0x7fffffff);
-  expect(read.uint32, 0xd000);
-  expect(read.uint32, 0xd000);
-  expect(read.uint32, 0);
+  expect(read.uint32, 0xe000);
+  expect(read.uint32, 0xe000);
+  expect(read.uint32, 0x80010000);
 
-  const startingArea = read.uint8();
-  console.log(`Starting area: ${sizes[startingArea]}`);
+  const startingArea = read.float();
+  console.log(`Starting area: ${startingArea}`);
 
   const isPeaceful = read.bool();
   console.log(`Peaceful: ${isPeaceful}`);
 
   expect(read.uint8, 1);
-  expect(read.uint32, 0x7fff);
+  expect(read.uint16, 0x7fff);
   expect(read.uint8, 0);
   expect(read.uint32, 0);
-  expect(read.uint16, 0);
-
-  const cliffSizes = {
-    1024: 'None',
-    40: 'Very small',
-    20: 'Small',
-    10: 'Medium',
-    5: 'Big',
-    2.5: 'Very big'
-  };
-
-  const cliffFrequencies = {
-    40: 'Very low',
-    20: 'Low',
-    10: 'Normal',
-    5: 'High',
-    2.5: 'Very high'
-  };
+  expect(read.uint32, 0);
 
   expect(read.string, 'cliff');
   const cliff = {
-    size: read.float(),
-    frequency: read.float()
+    frequency: read.float(),
+    continuity: read.float()
   };
-  let cliffFrequencyString = cliffFrequencies[cliff.frequency];
-  if (cliffFrequencyString === undefined) {
-    cliffFrequencyString = '';
-  } else {
-    cliffFrequencyString = ` (${cliffFrequencyString})`;
-  }
-  let cliffSizeString = cliffSizes[cliff.size];
-  if (cliffSizeString === undefined) {
-    cliffSizeString = '';
-  } else {
-    cliffSizeString = ` (${cliffSizeString})`;
-  }
 
   console.log(`Cliffs:`)
-  console.log(` Frequency: ${cliff.frequency}${cliffFrequencyString}`)
-  console.log(` Size: ${cliff.size}${cliffSizeString}`)
+  console.log(` Frequency: ${cliff.frequency}`)
+  console.log(` Continuity: ${cliff.continuity}`)
 
+  expect(read.float, 1);
   expect(read.uint8, 1);
   const pollutionEnabled = read.bool();
   console.log(`Pollution: ${pollutionEnabled ? 'Enabled' : 'Disabled'}`);
   console.log(` Diffusion ratio: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Dissipation rate: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Absorption modifier: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Minimum to damage trees: ${expect(read.uint8, 1), read.double()}`);
@@ -140,6 +113,7 @@ const loadLevelDat = (arrayBuffer) => {
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Absorbed per damaged tree: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Attack cost modifier: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
@@ -148,8 +122,8 @@ const loadLevelDat = (arrayBuffer) => {
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
 
-  console.log(`Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
   console.log(`Evolution: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
   console.log(` Time factor: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Destroy factor: ${expect(read.uint8, 1), read.double()}`);
@@ -183,42 +157,60 @@ const loadLevelDat = (arrayBuffer) => {
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
 
-  console.log(`Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
   console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
+  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+
+  console.log(` Unknown: ${expect(read.uint8, 1), read.uint8()}`);
+
+  expect(read.uint32, 0);
+  expect(read.uint32, 100);
+  expect(read.uint32, 500);
+
+  expect(read.uint8, 1);
+  expect(read.uint8, 3);
+  expect(read.double, 2);
+  expect(read.double, 3);
+  expect(read.double, 4);
+
 
   expect(read.uint32, 3);
-  console.log(`Recipe difficulty: ${read.bool() ? 'Expensive' : 'Normal'}`);
-  console.log(`Technology difficulty: ${read.bool() ? 'Expensive' : 'Normal'}`);
-  console.log(`Technology price multiplier: ${read.double()}`);
+  expect(read.uint32, 0);
+  expect(read.uint32, 0);
+  // console.log(`Recipe difficulty: ${read.bool() ? 'Expensive' : 'Normal'}`);
+  // console.log(`Technology difficulty: ${read.bool() ? 'Expensive' : 'Normal'}`);
+  // console.log(`Technology price multiplier: ${read.double()}`);
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 16; i++) {
     console.log(`Unknown: ${read.checkSum()}`);
   }
+  expect(read.uint32, 0);
   expect(read.uint32, 0);
 
   const parseDataValues = (name, readNum) => {
@@ -247,6 +239,15 @@ const loadLevelDat = (arrayBuffer) => {
     parseDataValues(idMapTypes[i][0], read[idMapTypes[i][1]]);
   }
 
+  const numJsons = read.uint8();
+  if (numJsons > 0) {
+    console.log('Json files:');
+  }
+  for (let i = 0; i < numJsons; i++) {
+    console.log(` ${read.string()}: ${read.string()}`);
+  }
+
+  expect(read.uint32, 316);
   expect(read.uint32, 1);
   expect(read.uint32, 1);
   expect(read.uint32, 1);
@@ -257,14 +258,6 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.uint32, 0);
   expect(read.uint32, 0);
   expect(read.uint8, 0);
-
-  const numJsons = read.uint8();
-  if (numJsons > 0) {
-    console.log('Json files:');
-  }
-  for (let i = 0; i < numJsons; i++) {
-    console.log(` ${read.string()}: ${read.string()}`);
-  }
 
   const numForces = read.uint32();
   idMaps.force = {};
@@ -281,6 +274,9 @@ const loadLevelDat = (arrayBuffer) => {
     // Boatload of data for each force, (check LuaForce for a small sample)
     // We'll just cheat to skip it now, but it may be worth parsing someday
     // Hope this doesn't change size much...
+    // Update 0.18.21, this section is now variable size so we need to actually
+    // figure this out
+    if (true) return;
     read.bytes(49314);
   }
   console.log(' };');

@@ -1,6 +1,6 @@
 import { parseReplayDat, getReplayDatBytes, stableSort, compareTick, comparePlayer } from './index.mjs';
 import { loadLevelDat } from './level_loader.mjs';
-import { parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
+import { parseLevelFromZip, parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
 import { parseReplayJs } from './replay_framework.mjs';
 import { progress } from './parse.mjs';
 
@@ -71,11 +71,14 @@ const loadReplayJs = (text) => {
 }
 
 const loadZip = (arrayBuffer) => {
-  parseReplayFromZip(arrayBuffer).then((replayDat) => {
-    loadReplayDat(replayDat);
-    exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
-    exportZipButton.hidden = false;
-  }, console.error);
+  (parseLevelDat.checked ?
+    parseLevelFromZip(arrayBuffer).then(loadLevelDat) :
+    Promise.resolve()).then(() =>
+      parseReplayFromZip(arrayBuffer).then((replayDat) => {
+        loadReplayDat(replayDat);
+        exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
+        exportZipButton.hidden = false;
+      }, console.error));
 }
 
 // Probably accurate enough?

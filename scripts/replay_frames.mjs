@@ -46,9 +46,7 @@ export const frameHandlers = [
   [0x2d, 'MoveTrain', ['trainJunctionChoice', 'trainAcceleration']],
   [0x2e, 'OpenEquipmentGrid', 'slotInInventory'],
   [0x32, 'SplitItemStack', 'slotInInventory'],
-  [0x33, 'TransferItemStack', 'slotInInventory'],
   [0x34, 'TransferInventory', 'slotInInventory'],
-  [0x36, 'Craft', ['recipe', 'uint32OrAll']],
   [0x39, 'ChooseRecipe', ['recipe']],
   [0x3a, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
   [0x3b, 'Pipette', 'uint16'],
@@ -56,7 +54,6 @@ export const frameHandlers = [
   [0x3f, 'ToggleFilter', ['slotInInventory', 'item']],
   [0x43, 'ChooseTechnology', 'technology'],
   [0x48, 'Chat', 'string'],
-  [0x4c, 'ChooseCraftingItemGroup', 'itemGroup'],
   [0x51, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
   [0x52, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
   [0x56, 'LimitSlots', 'slotInInventory'],
@@ -108,17 +105,11 @@ export const frameHandlers = [
   [0x98, 'SelectTrain', 'uint32'],
   [0x99, 'Toolbelt', 'uint16'],
   [0x9a, 'ChooseWeapon', 'uint16'],
-  [0xa2, 'RotateEntity', () => {
-    const isCounterClockwise = read.bool();
-    return isCounterClockwise ? 'CCW' : 'CW';
-  }, () => {
-    write.bool(fetch.string() == 'CCW');
-  }],
   [0xa7, 'UnknownA7', 'uint8'],
   [0xab, 'SetTreesRocksOnly', 'bool'],
   [0xb4, 'LeaveGame', 'leaveReason'],*/
 
-  // Apparently changed sometime between 0.17.early and 0.18.recent
+  // Apparently changed sometime between 0.16.late and 0.18.recent
   [0x19, 'JoinSinglePlayer'],
   [0x1a, 'JoinMultiPlayer'],
   [0x2d, 'StartServer?'],
@@ -126,9 +117,12 @@ export const frameHandlers = [
   [0x37, 'Build', ['fixed32', 'fixed32', 'direction', 'isNotDragging', 'isNotGhost', 'uint16ProbablyZero']],
   [0x38, 'Run', 'direction'],
   [0x3e, 'ClickItemStack', 'slotInInventory'],
+  [0x40, 'TransferItemStack', 'slotInInventory'],
   [0x42, 'CheckSum', ['checkSum', 'previousTick']],
+  [0x43, 'Craft', ['recipe', 'uint32OrAll']],
   [0x45, 'ShootSelected', ['uint8', 'fixed32', 'fixed32']],
   [0x47, 'Shoot', ['fixed32', 'fixed32']],
+  [0x5a, 'ChooseCraftingItemGroup', 'itemGroup'],
   [0x7a, 'LoadSavedBlueprints', () => {
     // Can't just use read.player since it's a uint16 here, not an optUint16
     const playerNumber = read.uint16();
@@ -217,6 +211,8 @@ export const frameHandlers = [
     write.force(force);
     write.string(true, name);
   }],
+  [0xaa, 'Unknownaa', ['uint8', 'int32', 'uint16']],
+  [0xab, 'Unknownab', ['uint16', 'uint16']],
   [0xb5, 'MoveSelectionSmall', () => {
     const rawDelta = read.uint8();
     const x = ((rawDelta & 0xf0) / 0x10) - 8;
@@ -242,5 +238,12 @@ export const frameHandlers = [
     write.fixed16(x);
   }],
   [0xc0, 'TransferEntityStack', 'inOut'],
+  [0xc1, 'RotateEntity', () => {
+    const isCounterClockwise = read.bool();
+    return isCounterClockwise ? 'CCW' : 'CW';
+  }, () => {
+    write.bool(fetch.string() == 'CCW');
+  }],
   [0xc2, 'SplitEntityStack', 'inOut'],
+  [0xd3, 'Unknownd3', 'uint8'],
 ];

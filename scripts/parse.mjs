@@ -279,7 +279,11 @@ const read = {
     return read.bytes(endIndex - startIndex);
   },
   bool: () => {
-    return read.uint8() == 1;
+    const parsed = read.uint8();
+    if (parsed != 0 && parsed != 1) {
+      console.error(`Invalid bool value: ${parsed}`);
+    }
+    return parsed == 1;
   },
   checkSum: () => {
     const rawCheckSum = read.uint32();
