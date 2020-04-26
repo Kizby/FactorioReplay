@@ -10,7 +10,6 @@ export const resetPlayers = () => {
 };
 
 export const frameHandlers = [
-  //[0x00, 'IgnoreRemaining'], This is an invalid frame, better to let tryFindHeartbeat take over
   [0x01, 'StopRunning'],
   [0x02, 'StartMining'],
   [0x03, 'StopMining'],
@@ -22,41 +21,24 @@ export const frameHandlers = [
   [0x09, 'DisconnectTrain'],
   [0x0a, 'ClearSelection'],
   [0x0b, 'ClearCursor'],
-  [0x0c, 'Unknown0C'],
   [0x0d, 'OpenTechnologies'],
-  [0x0e, 'Unknown0E'],
-  [0x0f, 'Unknown0F'],
-  [0x10, 'OpenBlueprintLibrary'],
-  [0x11, 'OpenProductionStatistics'],
+  [0x0f, 'OpenBlueprintLibrary'],
+  [0x10, 'OpenProductionStatistics'],
   [0x12, 'OpenKillStatistics'],
-  [0x13, 'Unknown13'],
-  [0x14, 'Unknown14'],
-  [0x15, 'Unknown15'],
-  [0x16, 'CopyEntitySettings'],
-  [0x17, 'Unknown17'],
-  [0x18, 'Unknown18'],/*
-  [0x19, 'ShowInfo'],
-  [0x1c, 'Unknown1C'],
-  [0x1d, 'OpenBonuses'],
-  [0x1e, 'OpenTrains'],
-  [0x1f, 'OpenAchievements'],
-  [0x23, 'Lag?'],
+  [0x14, 'CopyEntitySettings'],
+  [0x15, 'PasteEntitySettings'],
+  [0x18, 'ShowInfo'],
+  [0x1c, 'OpenBonuses'],
+  [0x1d, 'OpenTrains'],
+  [0x1e, 'OpenAchievements'],
+  [0x1f, 'OpenTutorials'],/*
   [0x27, 'OpenLogisticNetworks'],
-  [0x29, 'DropItem', ['fixed32', 'fixed32']],
   [0x2d, 'MoveTrain', ['trainJunctionChoice', 'trainAcceleration']],
-  [0x2e, 'OpenEquipmentGrid', 'slotInInventory'],
-  [0x32, 'SplitItemStack', 'slotInInventory'],
-  [0x34, 'TransferInventory', 'slotInInventory'],
-  [0x39, 'ChooseRecipe', ['recipe']],
   [0x3a, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
   [0x3b, 'Pipette', 'uint16'],
   [0x3d, 'SplitInventory', 'slotInInventory'],
   [0x3f, 'ToggleFilter', ['slotInInventory', 'item']],
-  [0x43, 'ChooseTechnology', 'technology'],
   [0x48, 'Chat', 'string'],
-  [0x51, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
-  [0x52, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
-  [0x56, 'LimitSlots', 'slotInInventory'],
   [0x57, 'ChooseFilterCategory', 'itemGroup'],
   [0x5b, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
   [0x5d, 'SaveBlueprint', ['uint8', 'uint8', 'uint8', 'uint8', 'uint32', 'blueprintIcons']],
@@ -99,11 +81,8 @@ export const frameHandlers = [
   [0x7b, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
   [0x8f, 'SetDestructionFilter', ['entity', 'uint16']],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
-  [0x92, 'Unknown92', 'double'],
   [0x9c, 'EnableAutoLaunch', 'bool'],
-  [0x94, 'PickUpNearbyItems', 'bool'],
   [0x98, 'SelectTrain', 'uint32'],
-  [0x99, 'Toolbelt', 'uint16'],
   [0x9a, 'ChooseWeapon', 'uint16'],
   [0xa7, 'UnknownA7', 'uint8'],
   [0xab, 'SetTreesRocksOnly', 'bool'],
@@ -112,22 +91,36 @@ export const frameHandlers = [
   // Apparently changed sometime between 0.16.late and 0.18.recent
   [0x19, 'JoinSinglePlayer'],
   [0x1a, 'JoinMultiPlayer'],
+  [0x2a, 'ToggleExoskeleton'],
   [0x2d, 'StartServer?'],
-  [0x35, 'Unknown35'],
+  [0x32, 'TogglePersonalRoboport'],
+  [0x33, 'ToggleExoskeleton'],
+  [0x34, 'TogglePersonalLogistics'],
+  [0x35, 'CLICK'],
+  [0x36, 'DropItem', ['fixed32', 'fixed32']],
   [0x37, 'Build', ['fixed32', 'fixed32', 'direction', 'isNotDragging', 'isNotGhost', 'uint16ProbablyZero']],
   [0x38, 'Run', 'direction'],
+  [0x3b, 'OpenEquipmentGrid', 'slotInInventory'],
   [0x3e, 'ClickItemStack', 'slotInInventory'],
+  [0x3f, 'SplitItemStack', 'slotInInventory'],
   [0x40, 'TransferItemStack', 'slotInInventory'],
+  [0x41, 'TransferInventory', 'slotInInventory'],
   [0x42, 'CheckSum', ['checkSum', 'previousTick']],
   [0x43, 'Craft', ['recipe', 'uint32OrAll']],
   [0x45, 'ShootSelected', ['uint8', 'fixed32', 'fixed32']],
+  [0x46, 'ChooseRecipe', ['recipe']],
   [0x47, 'Shoot', ['fixed32', 'fixed32']],
+  [0x50, 'ChooseTechnology', 'technology'],
+  [0x54, 'Cheat', ['cheatType', 'uint32', 'uint8']],
   [0x5a, 'ChooseCraftingItemGroup', 'itemGroup'],
+  [0x5c, 'ChooseCharacterTab', 'characterTab'],
+  [0x64, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
+  [0x65, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
+  [0x68, 'LimitSlots', 'slotInInventory'],
   [0x7a, 'LoadSavedBlueprints', () => {
     // Can't just use read.player since it's a uint16 here, not an optUint16
     const playerNumber = read.uint16();
-    const nextBlueprintId = read.uint16();
-    const unknown = read.uint16();
+    const nextBlueprintId = read.uint32();
     const checkSum = read.checkSum();
     const unknown2 = read.uint8ProbablyZero();
     const blueprintCount = read.uint8();
@@ -151,7 +144,7 @@ export const frameHandlers = [
     // Can't just use write.player since it's a uint16 here, not an optUint16
     write.uint16(idMaps.player[fetch.string(' ')]);
     if (!fetch.literalString('(nextId=')) return;
-    write.uint16();
+    write.uint32();
     if (!fetch.literalString('checksum=')) return;
     const checkSum = fetch.checkSum(')');
     write.checkSum(checkSum);
@@ -174,7 +167,7 @@ export const frameHandlers = [
     const force = read.force();
     const name = read.string();
     const wat = read.uint16();
-    let extras = '';
+    let extras = `, ${wat}`;
     if (playerNumber == playerCount) {
       idMaps.player[name] = playerNumber;
       idMaps.player[playerNumber] = name;
@@ -193,6 +186,7 @@ export const frameHandlers = [
     return `${name}${extras}`;
   }, () => {
     const name = fetch.string(',');
+    const wat = fetch.num();
     let extra = fetch.string(',');
     let playerNumber = idMaps.player[name] || playerCount;
     if (extra != '' && /[1234567890]/.test(extra[0])) {
@@ -207,12 +201,15 @@ export const frameHandlers = [
     }
     idMaps.player[name] = playerNumber;
     idMaps.player[playerNumber] = name;
-    write.optUint16(playerNumber);
+    write.uint24(playerNumber);
     write.force(force);
     write.string(true, name);
+    write.uint16(wat);
   }],
-  [0xaa, 'Unknownaa', ['uint8', 'int32', 'uint16']],
-  [0xab, 'Unknownab', ['uint16', 'uint16']],
+  [0xaa, 'SetQuickbarSlot', ['uint16', 'uint32', 'uint8ProbablyZero']],
+  [0xab, 'Quickbar', ['uint16', 'uint16ProbablyZero']],
+  [0xac, 'SetActiveQuickbar', ['uint8', 'uint8']],
+  [0xb4, 'PickUpNearbyItems', 'bool'],
   [0xb5, 'MoveSelectionSmall', () => {
     const rawDelta = read.uint8();
     const x = ((rawDelta & 0xf0) / 0x10) - 8;
@@ -223,7 +220,7 @@ export const frameHandlers = [
     write.uint8((x + 8) * 16 + (y + 8));
   }],
   [0xb6, 'MoveSelectionTiny', () => {
-    return `${(read.uint8() - 128) / 256}, ${(read.uint8() - 128) / 256}`;
+    return `${(read.uint8() - 128) / 256}, ${(read.uint8() - 128) / 256} `;
   }, () => {
     write.uint8((fetch.num() * 256) + 128);
     write.uint8((fetch.num() * 256) + 128);
@@ -231,7 +228,7 @@ export const frameHandlers = [
   [0xb7, 'MoveSelection', () => {
     const y = read.fixed16();
     const x = read.fixed16();
-    return `${x}, ${y}`
+    return `${x}, ${y} `
   }, () => {
     const x = fetch.num();
     write.fixed16(); // Write y first
@@ -245,5 +242,8 @@ export const frameHandlers = [
     write.bool(fetch.string() == 'CCW');
   }],
   [0xc2, 'SplitEntityStack', 'inOut'],
-  [0xd3, 'Unknownd3', 'uint8'],
+  [0xc4, 'SetZoom', 'double'],
+  [0xd3, 'RotateActiveQuickbars', 'uint8'],
+  [0xdd, 'ToggleMap', 'uint8'],
+  [0xde, 'SetPlayerColorBGRA', ['uint8', 'uint8', 'uint8', 'uint8']],
 ];

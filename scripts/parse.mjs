@@ -150,11 +150,24 @@ const inventories = [[],
 [],
 [],
 [],
+[],
+[],
+[],
+[],
+[],
+[],
+[],
 []];
 const shotTargets = ['None', 'Enemy', 'Selected'];
 const transferCounts = ['None?', 'One', 'All'];
 const trainAccelerations = ['Coast', 'Accelerate', 'Decelerate', 'Reverse'];
 const trainJunctionChoices = ['Right', 'Straight', 'Left'];
+const cheatIndex = [
+  0, 1, 2, 3, 4, 5, 6, 'AllTechs', 'NotAllTechs', 9, 10, 11, 'StarterItems', 'NoStarterItems', 14, 'GodMode', 'NotGodMode', 17, 'AlwaysDay', 'NotAlwaysDay'
+];
+const characterTabs = [
+  undefined, 'Crafting', 'Character', 'Logistics'
+];
 
 const mapValIfPossible = (val, category) => {
   let idMap, mapped;
@@ -430,7 +443,15 @@ const read = {
       result = `${result};`;
     }
     return result;
-  }
+  },
+  cheatType: () => {
+    const val = read.uint32();
+    return cheatIndex[val] || val;
+  },
+  characterTab: () => {
+    const val = read.uint8();
+    return characterTabs[val] || val;
+  },
 };
 
 const write = {
@@ -574,11 +595,11 @@ const write = {
     write.uint16();
     write.uint16(inventoryContext);
   },
-  isDragging: () => {
-    write.bool(fetch.string(',') == 'Dragging');
+  isNotDragging: () => {
+    write.bool(fetch.string(',') != 'Dragging');
   },
-  isGhost: () => {
-    write.bool(fetch.string(',') == 'Ghost');
+  isNotGhost: () => {
+    write.bool(fetch.string(',') != 'Ghost');
   },
   uint8ProbablyZero: (next = '\n') => {
     const num = (buffer[curIndex] == next) ? 0 : fetch.num(next);
@@ -773,7 +794,17 @@ const write = {
         datString = datString.substring(0, savedDatLen) + countBytes + datString.substring(savedDatLen + 2);
       }
     }
-  }
+  },
+  cheatType: () => {
+    const val = fetch.string();
+    const index = cheatIndex.indexOf(val);
+    write.uint32(index != -1 ? index : val);
+  },
+  characterTab: () => {
+    const val = fetch.string();
+    const index = characterTabs.indexOf(val);
+    write.uint8(index != -1 ? index : val);
+  },
 };
 
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
