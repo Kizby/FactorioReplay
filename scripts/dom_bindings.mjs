@@ -72,13 +72,13 @@ const loadReplayJs = (text) => {
 
 const loadZip = (arrayBuffer) => {
   (parseLevelDat.checked ?
-    parseLevelFromZip(arrayBuffer).then(loadLevelDat) :
-    Promise.resolve()).then(() =>
+    parseLevelFromZip(arrayBuffer).then(loadLevelDat, console.error) :
+    Promise.resolve()).finally(() =>
       parseReplayFromZip(arrayBuffer).then((replayDat) => {
         loadReplayDat(replayDat);
         exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
         exportZipButton.hidden = false;
-      }, console.error));
+      }));
 }
 
 // Probably accurate enough?

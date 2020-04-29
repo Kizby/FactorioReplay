@@ -459,6 +459,9 @@ const write = {
     let num = parseInt(val);
     if (isNaN(num) && category !== undefined) {
       num = mapValIfPossible(val, category);
+      if (isNaN(num)) {
+        error = `Can't parse ${val} as a ${category}`;
+      }
     }
     let result = num.toString(16);
     if (result.length < 2) {
@@ -471,6 +474,9 @@ const write = {
     let num = parseInt(val);
     if (isNaN(num) && category !== undefined) {
       num = mapValIfPossible(val, category);
+      if (isNaN(num)) {
+        error = `Can't parse ${val} as a ${category}`;
+      }
     }
     write.uint8(num & 0xff);
     write.uint8((num / 0x100) & 0xff);
@@ -854,6 +860,7 @@ const expect = (func, data) => {
   let nextBytes = func();
   if (nextBytes != data) {
     console.log(`Unexpected bytes (0x${nextBytes.toString(16)}) at offset 0x${lastIndex.toString(16)}`);
+    throw 'Not parsing more';
   }
 };
 
