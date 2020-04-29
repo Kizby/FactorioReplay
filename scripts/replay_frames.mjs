@@ -112,6 +112,7 @@ export const frameHandlers = [
   [0x47, 'Shoot', ['fixed32', 'fixed32']],
   [0x50, 'ChooseTechnology', 'technology'],
   [0x54, 'Cheat', ['cheatType', 'uint32', 'uint8']],
+  [0x57, 'BuyFromMarket', ['uint32', 'uint32']],
   [0x5a, 'ChooseCraftingItemGroup', 'itemGroup'],
   [0x5c, 'ChooseCharacterTab', 'characterTab'],
   [0x64, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
@@ -166,45 +167,52 @@ export const frameHandlers = [
     const playerNumber = read.uint24();
     const force = read.force();
     const name = read.string();
-    const wat = read.uint16();
-    let extras = `, ${wat}`;
+    const playerType = read.uint16();
+    let extras = ``;
+    if (playerType != 256) {
+      // Map editor player?
+      extras = `, type=${playerType}`;
+    }
     if (playerNumber == playerCount) {
       idMaps.player[name] = playerNumber;
       idMaps.player[playerNumber] = name;
       ++playerCount;
     } else if (idMaps.player[playerNumber] != name) {
       // Factorio won't be happy, but let's make it representable
-      extras = `${extras}, ${playerNumber}`;
+      extras = `${extras}, id=${playerNumber}`;
 
       // Go ahead and add it to the map anyway
       idMaps.player[name] = playerNumber;
       idMaps.player[playerNumber] = name;
     }
     if (force != 'player') {
-      extras = `${extras}, ${force}`;
+      extras = `${extras}, force=${force}`;
     }
     return `${name}${extras}`;
   }, () => {
     const name = fetch.string(',');
-    const wat = fetch.num();
     let extra = fetch.string(',');
     let playerNumber = idMaps.player[name] || playerCount;
-    if (extra != '' && /[1234567890]/.test(extra[0])) {
-      playerNumber = parseInt(extra);
-      extra = fetch.string(',');
-    } else if (playerNumber == playerCount) {
-      playerCount++;
-    }
+    let playerType = 256; // Regular player
     let force = 'player';
-    if (extra != '') {
-      force = extra;
+    while (extra != '') {
+      const parts = extra.split('=');
+      switch (parts[0]) {
+        case 'type': playerType = parts[1]; break;
+        case 'id': playerNumber = parts[1]; break;
+        case 'force': force = parts[1]; break;
+      }
+      extra = fetch.string(',');
+    }
+    if (playerNumber == playerCount) {
+      playerCount++;
     }
     idMaps.player[name] = playerNumber;
     idMaps.player[playerNumber] = name;
     write.uint24(playerNumber);
     write.force(force);
     write.string(true, name);
-    write.uint16(wat);
+    write.uint16(playerType);
   }],
   [0xaa, 'SetQuickbarSlot', ['uint16', 'uint32', 'uint8ProbablyZero']],
   [0xab, 'Quickbar', ['uint16', 'uint16ProbablyZero']],
