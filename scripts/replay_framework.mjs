@@ -27,6 +27,7 @@ globalObject.Player = class {
     this.cursorSlot = -1;
     this.cursorStack = undefined;
     this.inventory = [{ name: 'iron-plate', amount: 8 }, { name: 'wood', amount: 1 }, { name: 'burner-mining-drill', amount: 1 }, { name: 'stone-furnace', amount: 1 }];
+    this.craftEndTick = -1;
     this.scheduledActions = {};
     if (initializedServer) {
       serverPlayer.tick = tick;
@@ -184,6 +185,12 @@ globalObject.Player.prototype.stopRunning = function () {
 
 globalObject.Player.prototype.print = function (str) {
   this.chat(`/c game.players[1].print(${str})`)
+};
+
+globalObject.Player.prototype.checkInventory = function (str) {
+  this.print(`"Checking inventory - expected: {${this.inventory.reduce((a, b) => a + `${b.name}: ${b.amount}, `, '')}}"`);
+  this.print(`"-----------------------actual:"`);
+  this.chat("/c for item, count in pairs(game.player.get_inventory(1).get_contents()) do game.player.print(item .. \": \" .. count) end");
 };
 
 globalObject.Player.prototype.checkPosition = function () {
@@ -466,13 +473,15 @@ globalObject.Player.prototype.craft = function (recipeName, count) {
   }
 
   // Schedule the crafts
+  const startTick = this.craftEndTick <= this.tick ? this.tick : this.craftEndTick;
   for (const product of products) {
     for (let i = 1; i <= realCount; ++i) {
-      this.schedule(this.tick + 1 + i * 60 * recipe.energy, () => {
+      this.schedule(startTick + i * (1 + 60 * recipe.energy), () => {
         this.stow(product.name, product.amount);
       });
     }
   }
+  this.craftEndTick = startTick + realCount * (1 + 60 * recipe.energy);
 
   this._craft(recipeName, count);
 }
