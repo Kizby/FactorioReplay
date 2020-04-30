@@ -1,4 +1,6 @@
 import { frameHandlers } from './replay_frames.mjs';
+import { idMaps } from './id_maps.mjs';
+import { recipes } from './recipes.mjs';
 
 const isMultiplayer = true;
 
@@ -22,6 +24,10 @@ globalObject.Player = class {
     this.velocity = [0, 0];
     this.runSpeed = 0.15;
     this.selection = [0, 0];
+    this.cursorSlot = -1;
+    this.cursorStack = undefined;
+    this.inventory = [{ name: 'iron-plate', amount: 8 }, { name: 'wood', amount: 1 }, { name: 'burner-mining-drill', amount: 1 }, { name: 'stone-furnace', amount: 1 }];
+    this.scheduledActions = {};
     if (initializedServer) {
       serverPlayer.tick = tick;
       serverPlayer.act(`AddPlayer ${name}`);
@@ -32,13 +38,82 @@ globalObject.Player = class {
     return this._tick;
   }
   set tick(newTick) {
-    if (!warnedAboutNegativeTicks && (this != serverPlayer) && newTick < this._tick) {
-      console.warn(`Reducing player tick from ${this._tick} to ${newTick} - position information can no longer be guanteed valid`);
+    if (newTick == this._tick) {
+      // Nothing to do
+      return;
     }
-    this.position[0] += (newTick - this._tick) * this.velocity[0];
-    this.position[1] += (newTick - this._tick) * this.velocity[1];
-    this._tick = newTick;
+    if (this != serverPlayer) {
+      if (newTick < this._tick) {
+        if (!warnedAboutNegativeTicks) {
+          console.warn(`Reducing player tick from ${this._tick} to ${newTick} - position/inventory information can no longer be guanteed valid`);
+        }
+      } else {
+        for (let i = this._tick + 1; i <= newTick; ++i) {
+          if (this.scheduledActions[i]) {
+            doTickUpdate(this, i);
+            for (const action of this.scheduledActions[i]) {
+              action();
+            }
+            delete this.scheduledActions[i];
+          }
+        }
+      }
+    }
+    doTickUpdate(this, newTick);
   }
+};
+
+const sortInventory = (player) => {
+  player.inventory.sort((a, b) => {
+    let result = idMaps.item[a.name] - idMaps.item[b.name];
+    if (result != 0) {
+      return result;
+    }
+    return b.amount - a.amount;
+  });
+};
+
+const doTickUpdate = (player, newTick) => {
+  player.position[0] += (newTick - player._tick) * player.velocity[0];
+  player.position[1] += (newTick - player._tick) * player.velocity[1];
+  if (-1 != player.cursorSlot) {
+    // The cursorSlot item doesn't get sorted
+    const currentCursorStack = player.inventory.splice(player.cursorSlot, 1)[0];
+    if (currentCursorStack != player.cursorStack) {
+      console.warn(`cursorStack/cursorSlot mismatch!? cursorStack claims ${player.cursorStack} but cursorSlot (${player.cursorSlot}) claims ${currentCursorStack}`)
+    };
+  }
+  for (let i = 0; i < player.inventory.length; ++i) {
+    if (player.inventory[i].amount === 0) {
+      if (player.cursorSlot == i) {
+        player.cursorSlot = -1;
+        player.cursorStack = undefined;
+      }
+      player.inventory.splice(i, 1);
+      --i;
+    }
+  }
+  sortInventory(player);
+  if (-1 != player.cursorSlot) {
+    player.inventory.splice(player.cursorSlot, 0, player.cursorStack);
+  }
+  player._tick = newTick;
+};
+
+globalObject.Player.prototype.schedule = function (tick, action) {
+  if (tick < this.tick) {
+    console.warn(`Can't schedule an action for the past! ${tick} < ${this.tick}`);
+    return;
+  }
+  if (tick === this.tick) {
+    // Just do it now, I guess
+    action();
+    return;
+  }
+  if (this.scheduledActions[tick] === undefined) {
+    this.scheduledActions[tick] = [];
+  }
+  this.scheduledActions[tick].push(action);
 };
 
 for (const frameHandler of frameHandlers) {
@@ -261,4 +336,165 @@ globalObject.Player.prototype.isSelectedBy = function (pos) {
   const delta = [pos[0] - this.position[0], pos[1] - this.position[1]];
   return -0.4 < delta[0] && delta[0] < 0.4 &&
     -1.4 < delta[1] && delta[1] < 0.2;
+};
+
+globalObject.Player.prototype._clickItemStack = globalObject.Player.prototype.clickItemStack;
+globalObject.Player.prototype.clickItemStack = function (context, slot) {
+  if (context === 'Player') {
+    if (slot === this.cursorSlot) {
+      // Deselecting
+      this.cursorSlot = -1;
+      this.cursorStack = undefined;
+    } else if (this.cursorSlot === -1) {
+      // Selecting
+      this.cursorSlot = slot;
+      this.cursorStack = this.inventory[this.cursorSlot];
+    } else {
+      // Swapping
+      this.cursorStack = this.inventory.splice(slot, 1, this.cursorStack)[0];
+      this.inventory.splice(this.cursorSlot, 1, this.cursorStack);
+    }
+  }
+  this._clickItemStack(context, slot);
+};
+
+globalObject.Player.prototype._build = globalObject.Player.prototype.build;
+globalObject.Player.prototype.build = function (x, y, direction) {
+  if (-1 == this.cursorSlot) {
+    console.warn('Nothing on the cursor to build!');
+  } else {
+    this.cursorStack.amount--;
+    if (this.cursorStack.amount == 0) {
+      this.cursorSlot = -1;
+      this.cursorStack = undefined;
+    }
+  }
+  this._build(x, y, direction);
+};
+
+globalObject.Player.prototype._dropItem = globalObject.Player.prototype.dropItem;
+globalObject.Player.prototype.dropItem = function (x, y) {
+  if (-1 == this.cursorSlot) {
+    console.warn('Nothing on the cursor to dropItem!');
+  } else {
+    this.cursorStack.amount--;
+    if (this.cursorStack.amount == 0) {
+      this.cursorSlot = -1;
+      this.cursorStack = undefined;
+    }
+  }
+  this._dropItem(x, y);
+};
+
+globalObject.Player.prototype._transferEntityStack = globalObject.Player.prototype.transferEntityStack;
+globalObject.Player.prototype.transferEntityStack = function (inOut) {
+  if (inOut === "In") {
+    if (-1 == this.cursorSlot) {
+      console.warn('Nothing on the cursor to transferEntityStack In!');
+    } else {
+      this.cursorStack.amount = 0;
+      this.cursorSlot = -1;
+      this.cursorStack = undefined;
+    }
+  }
+  this._transferEntityStack(inOut);
+};
+
+globalObject.Player.prototype._clearCursor = globalObject.Player.prototype.clearCursor;
+globalObject.Player.prototype.clearCursor = function () {
+  this.cursorSlot = -1;
+  this.cursorStack = undefined;
+  this._clearCursor();
+};
+
+globalObject.Player.prototype._craft = globalObject.Player.prototype.craft;
+globalObject.Player.prototype.craft = function (recipeName, count) {
+  const recipe = recipes[recipeName];
+  const ingredients = recipe.ingredients;
+  const products = recipe.products;
+
+  // Count how many of each of the ingredients we currently have
+  let invIngredients = Array(ingredients.length).fill(0);
+  for (let i = 0; i < ingredients.length; ++i) {
+    for (const invStack of this.inventory) {
+      if (invStack.name === ingredients[i].name) {
+        invIngredients[i] += invStack.amount;
+      }
+    }
+  }
+
+  let realCount = count;
+  if (realCount === 'all') {
+    for (let i = 0; i < invIngredients.length; ++i) {
+      const newCount = invIngredients[i] / ingredients[i].amount;
+      if (0 == newCount) {
+        console.warn(`Don't have the ${ingredients[i].name} for any ${recipeName}`);
+      }
+      if (realCount === 'all' || newCount < realCount) {
+        realCount = newCount;
+      }
+    }
+  }
+
+  // Confirm we have as many as we need
+  let haveEnough = true;
+  for (let i = 0; i < ingredients.length; ++i) {
+    if (ingredients[i].amount * realCount > invIngredients[i]) {
+      console.warn(`Don't have enough ${ingredients[i].name} for ${recipeName} (have ${invIngredients[i]}, need ${ingredients[i].amount * realCount})`);
+      haveEnough = false;
+    }
+  }
+  if (!haveEnough) {
+    console.warn(`Skipping Craft ${recipeName} ${count}`);
+    return;
+  }
+
+  // Remove the ingredients from the inventory
+  for (const ingredient of ingredients) {
+    let toRemove = ingredient.amount * realCount;
+    for (let invStack of this.inventory) {
+      if (invStack.name === ingredient.name) {
+        if (toRemove <= invStack.amount) {
+          invStack.amount -= toRemove;
+          break;
+        } else {
+          toRemove -= invStack.amount;
+          invStack.amount = 0;
+        }
+      }
+    }
+  }
+
+  // Schedule the crafts
+  for (const product of products) {
+    for (let i = 1; i <= realCount; ++i) {
+      this.schedule(this.tick + 1 + i * 60 * recipe.energy, () => {
+        this.stow(product.name, product.amount);
+      });
+    }
+  }
+
+  this._craft(recipeName, count);
 }
+
+globalObject.Player.prototype.grab = function (item) {
+  for (let i = 0; i < this.inventory.length; ++i) {
+    if (this.inventory[i].name === item) {
+      this.clickItemStack('Player', i);
+      return;
+    }
+  }
+  console.warn(`No ${item} in inventory to grab! Did you forget to explicitly stow it?`);
+};
+
+globalObject.Player.prototype.stow = function (item, count) {
+  for (const stack of this.inventory) {
+    if (stack.name === item) {
+      // TODO: handle stack limits
+      stack.amount += count;
+      return;
+    }
+  }
+  this.inventory.push({ name: item, amount: count });
+  sortInventory(this);
+};
