@@ -5,8 +5,8 @@ const loadLevelDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
   const [major, minor, patch] = [read.uint16(), read.uint16(), read.uint16()];
   console.log(`Factorio version: ${major}.${minor}.${patch}`);
-  if (major != 0 || minor != 18 || patch != 21) {
-    console.error(`This tool has only been tested on Factorio 0.18.21! Use it with version ${major}.${minor}.${patch} at your own risk!`);
+  if (major != 0 || minor != 18 || patch != 22) {
+    console.error(`This tool has only been tested on Factorio 0.18.22! Use it with version ${major}.${minor}.${patch} at your own risk!`);
   }
 
   console.log(`Unknown: ${read.uint32()}`);
