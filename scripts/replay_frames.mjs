@@ -22,6 +22,7 @@ export const frameHandlers = [
   [0x0a, 'ClearSelection'],
   [0x0b, 'ClearCursor'],
   [0x0d, 'OpenTechnologies'],
+  [0x0e, 'LaunchRocket'],
   [0x0f, 'OpenBlueprintLibrary'],
   [0x10, 'OpenProductionStatistics'],
   [0x12, 'OpenKillStatistics'],
@@ -68,9 +69,7 @@ export const frameHandlers = [
     write.uint8ProbablyZero();
   }],
   [0x7a, 'SetItemName', 'string'],
-  [0x8f, 'SetDestructionFilter', ['entity', 'uint16']],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
-  [0x9c, 'EnableAutoLaunch', 'bool'],
   [0xa7, 'UnknownA7', 'uint8'],
   [0x47, 'Shoot', ['fixed32', 'fixed32']],
   [0xb4, 'LeaveGame', 'leaveReason'],*/
@@ -113,6 +112,7 @@ export const frameHandlers = [
   [0x65, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
   [0x68, 'LimitSlots', 'slotInInventory'],
   [0x6b, 'SelectDestructionArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
+  [0x6c, 'SelectUpgradeArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
   [0x6f, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
   [0x71, 'SaveBlueprint', ['string', 'uint32', 'uint32', 'uint32', 'uint32', 'bool', 'bool', 'bool', 'bool', 'uint32', 'blueprintIcons', 'uint16ProbablyZero']],
   [0x78, 'NewBlueprint', 'item'],
@@ -214,6 +214,10 @@ export const frameHandlers = [
   }],
   [0x8c, 'CustomInput', 'customInput'],
   [0x8e, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
+  [0x97, 'SetLogisticSlot', ['item', 'uint8', 'uint16', 'uint16', 'uint16']],
+  [0xa6, 'SetDestructionEntityFilter', ['entity', 'uint16']],
+  [0xa7, 'SetDestructionTileFilter', ['tile', 'uint16']],
+  [0xa8, 'SetUpgradeSlot', ['bool', 'entity', 'uint8', 'bool', 'uint8']],
   [0xaa, 'SetQuickbarSlot', ['uint16', 'uint32', 'uint8ProbablyZero']],
   [0xab, 'Quickbar', ['uint16', 'uint16ProbablyZero']],
   [0xac, 'SetActiveQuickbar', ['uint8', 'uint8']],
@@ -243,6 +247,7 @@ export const frameHandlers = [
     write.fixed16(x);
   }],
   [0xb8, 'SelectTrain', 'uint32'],
+  [0xba, 'EnableAutoLaunch', 'bool'],
   [0xc0, 'TransferEntityStack', 'inOut'],
   [0xc1, 'RotateEntity', () => {
     const isCounterClockwise = read.bool();
@@ -255,6 +260,7 @@ export const frameHandlers = [
   [0xc4, 'SetZoom', 'double'],
   [0xca, 'SetTreesRocksOnly', 'bool'],
   [0xcb, 'SetEntityFilterType', 'uint8'],
+  [0xd0, 'EnableRemoveUnfilteredItems', 'bool'],
   [0xd3, 'RotateActiveQuickbars', 'uint8'],
   [0xdd, 'ToggleMap', 'uint8'],
   [0xde, 'SetPlayerColorBGRA', ['uint8', 'uint8', 'uint8', 'uint8']],
