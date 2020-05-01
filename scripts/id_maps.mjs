@@ -1,6 +1,6 @@
 // These are in the order they appear in level.dat files
 export const idMapTypes = [
-  ['mod', 'uint16'],
+  ['customInput', 'uint16'],
   ['grid', 'uint8'],
   ['item', 'uint16'],
   ['tile', 'uint8'],
@@ -42,7 +42,7 @@ export const signalIdTypes = {
 };
 
 export const idMaps = {
-  mod: {
+  customInput: {
     // custom-input:
     "give-blueprint": 1,
     1: "give-blueprint",

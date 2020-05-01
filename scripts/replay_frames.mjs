@@ -33,17 +33,8 @@ export const frameHandlers = [
   [0x1e, 'OpenAchievements'],
   [0x1f, 'OpenTutorials'],/*
   [0x27, 'OpenLogisticNetworks'],
-  [0x2d, 'MoveTrain', ['trainJunctionChoice', 'trainAcceleration']],
-  [0x3a, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
-  [0x3b, 'Pipette', 'uint16'],
-  [0x3d, 'SplitInventory', 'slotInInventory'],
-  [0x3f, 'ToggleFilter', ['slotInInventory', 'item']],
-  [0x57, 'ChooseFilterCategory', 'itemGroup'],
-  [0x5b, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
-  [0x5d, 'SaveBlueprint', ['uint8', 'uint8', 'uint8', 'uint8', 'uint32', 'blueprintIcons']],
   [0x60, 'OpenMyBlueprint', 'uint32'],
   [0x65, 'DeleteMyBlueprint', 'uint32'],
-  [0x66, 'NewBlueprint', 'item'],
   //[0x6a, 'Unknown6A', () => {
   //  return read.bytes(102); // Or something -.-
   //}, write.bytes],
@@ -77,28 +68,27 @@ export const frameHandlers = [
     write.uint8ProbablyZero();
   }],
   [0x7a, 'SetItemName', 'string'],
-  [0x7b, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
   [0x8f, 'SetDestructionFilter', ['entity', 'uint16']],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
   [0x9c, 'EnableAutoLaunch', 'bool'],
-  [0x98, 'SelectTrain', 'uint32'],
-  [0x9a, 'ChooseWeapon', 'uint16'],
   [0xa7, 'UnknownA7', 'uint8'],
-  [0xab, 'SetTreesRocksOnly', 'bool'],
+  [0x47, 'Shoot', ['fixed32', 'fixed32']],
   [0xb4, 'LeaveGame', 'leaveReason'],*/
 
   // Apparently changed sometime between 0.16.late and 0.18.recent
   [0x19, 'JoinSinglePlayer'],
   [0x1a, 'JoinMultiPlayer'],
-  [0x2a, 'ToggleExoskeleton'],
+  [0x26, 'ToggleDestructionTileWhitelist'],
+  [0x27, 'ToggleDestructionEntityWhitelist'],
+  [0x2a, 'NextWeapon'],
   [0x2d, 'StartServer?'],
   [0x32, 'TogglePersonalRoboport'],
-  [0x33, 'ToggleExoskeleton'],
   [0x34, 'TogglePersonalLogistics'],
   [0x35, 'CLICK'],
   [0x36, 'DropItem', ['fixed32', 'fixed32']],
   [0x37, 'Build', ['fixed32', 'fixed32', 'direction', 'isNotDragging', 'isNotGhost', 'uint16ProbablyZero']],
   [0x38, 'Run', 'direction'],
+  [0x3a, 'MoveTrain', ['trainJunctionChoice', 'trainAcceleration']],
   [0x3b, 'OpenEquipmentGrid', 'slotInInventory'],
   [0x3e, 'ClickItemStack', 'slotInInventory'],
   [0x3f, 'SplitItemStack', 'slotInInventory'],
@@ -106,18 +96,26 @@ export const frameHandlers = [
   [0x41, 'TransferInventory', 'slotInInventory'],
   [0x42, 'CheckSum', ['checkSum', 'previousTick']],
   [0x43, 'Craft', ['recipe', 'uint32OrAll']],
-  [0x45, 'ShootSelected', ['uint8', 'fixed32', 'fixed32']],
+  [0x45, 'ShootTarget', ['uint8', 'fixed32', 'fixed32']],
   [0x46, 'ChooseRecipe', ['recipe']],
-  [0x47, 'Shoot', ['fixed32', 'fixed32']],
+  [0x47, 'MoveSelectionLarge', ['fixed32', 'fixed32']],
+  [0x48, 'Pipette', ['uint32', 'uint16']],
+  [0x4a, 'SplitInventory', 'slotInInventory'],
+  [0x4c, 'ToggleFilter', ['slotInInventory', 'item']],
   [0x50, 'ChooseTechnology', 'technology'],
   [0x54, 'Cheat', ['cheatType', 'uint32', 'uint8']],
   [0x56, 'Chat', 'string'],
   [0x57, 'BuyFromMarket', ['uint32', 'uint32']],
   [0x5a, 'ChooseCraftingItemGroup', 'itemGroup'],
+  [0x5b, 'ChooseFilterCategory', 'itemGroup'],
   [0x5c, 'ChooseCharacterTab', 'characterTab'],
   [0x64, 'PlaceInEquipmentGrid', ['uint32', 'uint32', 'uint8ProbablyFour']],
   [0x65, 'TransferFromEquipmentGrid', ['uint32', 'uint32', 'transferCount']],
   [0x68, 'LimitSlots', 'slotInInventory'],
+  [0x6b, 'SelectDestructionArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
+  [0x6f, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
+  [0x71, 'SaveBlueprint', ['string', 'uint32', 'uint32', 'uint32', 'uint32', 'bool', 'bool', 'bool', 'bool', 'uint32', 'blueprintIcons', 'uint16ProbablyZero']],
+  [0x78, 'NewBlueprint', 'item'],
   [0x7a, 'LoadSavedBlueprints', () => {
     // Can't just use read.player since it's a uint16 here, not an optUint16
     const playerNumber = read.uint16();
@@ -214,6 +212,8 @@ export const frameHandlers = [
     write.string(true, name);
     write.uint16(playerType);
   }],
+  [0x8c, 'CustomInput', 'customInput'],
+  [0x8e, 'RailPlanner', ['fixed32', 'fixed32', 'int8', 'direction', 'uint8', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero', 'uint8ProbablyZero']],
   [0xaa, 'SetQuickbarSlot', ['uint16', 'uint32', 'uint8ProbablyZero']],
   [0xab, 'Quickbar', ['uint16', 'uint16ProbablyZero']],
   [0xac, 'SetActiveQuickbar', ['uint8', 'uint8']],
@@ -242,6 +242,7 @@ export const frameHandlers = [
     write.fixed16(); // Write y first
     write.fixed16(x);
   }],
+  [0xb8, 'SelectTrain', 'uint32'],
   [0xc0, 'TransferEntityStack', 'inOut'],
   [0xc1, 'RotateEntity', () => {
     const isCounterClockwise = read.bool();
@@ -250,7 +251,10 @@ export const frameHandlers = [
     write.bool(fetch.string() == 'CCW');
   }],
   [0xc2, 'SplitEntityStack', 'inOut'],
+  [0xc3, 'SetTrainManual', 'bool'],
   [0xc4, 'SetZoom', 'double'],
+  [0xca, 'SetTreesRocksOnly', 'bool'],
+  [0xcb, 'SetEntityFilterType', 'uint8'],
   [0xd3, 'RotateActiveQuickbars', 'uint8'],
   [0xdd, 'ToggleMap', 'uint8'],
   [0xde, 'SetPlayerColorBGRA', ['uint8', 'uint8', 'uint8', 'uint8']],
