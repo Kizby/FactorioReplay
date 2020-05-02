@@ -540,8 +540,14 @@ const write = {
     }
     write.uint16(num);
   },
-  optUint16: (val = fetch.string(), category) => {
-    const num = parseInt(mapValIfPossible(val, category));
+  optUint16: (val = fetch.string(), category, hint) => {
+    let num = parseInt(mapValIfPossible(val, category));
+    if (isNaN(num)) {
+      // Don't have this id wired up yet - do that now
+      num = hint;
+      idMaps[category][num] = val;
+      idMaps[category][val] = num;
+    }
     if (num > 254) {
       write.uint8(255);
       write.uint16(num);

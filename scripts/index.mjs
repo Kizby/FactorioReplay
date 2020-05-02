@@ -77,7 +77,14 @@ const getReplayDatBytes = (text) => {
 
       write.uint8(frameHandler[0]);
       write.uint32(tick);
-      write.optUint16(player, 'player');
+
+      // If this is a Join frame, we won't have server id info wired up yet
+      let hint;
+      switch (name) {
+        case 'JoinMultiPlayer': hint = 65535; break;
+        case 'JoinSinglePlayer': hint = 255; break;
+      }
+      write.optUint16(player, 'player', hint);
 
       if (frameHandler.length == 4) {
         // Arbitrary read/write functions
