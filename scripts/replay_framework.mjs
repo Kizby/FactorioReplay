@@ -24,6 +24,7 @@ globalObject.Player = class {
     this.velocity = [0, 0];
     this.runSpeed = 0.15;
     this.selection = [0, 0];
+    this.selectionStack = [];
     this.cursorSlot = -1;
     this.cursorStack = undefined;
     this.inventory = [{ name: 'iron-plate', amount: 8 }, { name: 'wood', amount: 1 }, { name: 'burner-mining-drill', amount: 1 }, { name: 'stone-furnace', amount: 1 }];
@@ -339,6 +340,15 @@ globalObject.Player.prototype.moveSelectionTo = function (pos) {
   const x = pos[0] - this.selection[0];
   const y = pos[1] - this.selection[1];
   this.moveSelection(x, y);
+};
+
+globalObject.Player.prototype.pushSelection = function (newPos) {
+  this.selectionStack.push([...this.selection]);
+  this.moveSelectionTo(newPos);
+};
+
+globalObject.Player.prototype.popSelection = function () {
+  this.moveSelectionTo(this.selectionStack.pop());
 };
 
 globalObject.Player.prototype.isSelectedBy = function (pos) {
