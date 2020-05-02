@@ -224,7 +224,7 @@ const read = {
   optUint16: (category) => {
     let num = read.uint8();
     if (255 == num) {
-      num = read.uint16(category);
+      num = read.uint16();
     }
     return mapValIfPossible(num, category);
   },
@@ -263,7 +263,7 @@ const read = {
     }
     return result;
   },
-  bytesUntil: (targetBytes) => {
+  bytesUntil: (targetBytes, inclusive = true) => {
     const startIndex = curIndex;
     const actualBytes = [];
     for (let i = 0; i < targetBytes.length && !eof(); i++) {
@@ -280,6 +280,9 @@ const read = {
       }
       if (found || eof()) {
         endIndex = curIndex;
+        if (!inclusive) {
+          endIndex -= targetBytes.length;
+        }
         curIndex = startIndex;
         break;
       }
@@ -323,6 +326,11 @@ const read = {
     lastTickStart = curIndex;
     curTick = read.uint32();
     curPlayer = read.optUint16('player');
+    if (idMaps.player['Server'] === undefined) {
+      idMaps.player['Server'] = curPlayer;
+      idMaps.player[curPlayer] = 'Server';
+      curPlayer = 'Server';
+    }
     return `@${curTick}(${curPlayer}): `;
   },
   isNotDragging: () => {
@@ -376,11 +384,14 @@ const read = {
     return fromIEEE754Double(bytes.reverse());
   },
   curPlayer: () => {
-    const playerNum = read.uint16();
-    if (mapValIfPossible(playerNum, 'player') == curPlayer) {
+    const player = read.player();
+    if (player == curPlayer) {
       return '';
     }
-    return playerNum;
+    return player;
+  },
+  player: () => {
+    return mapValIfPossible(read.uint16(), 'player');
   },
   trainJunctionChoice: () => {
     return trainJunctionChoices[read.uint8()];
@@ -402,7 +413,7 @@ const read = {
   },
   blueprintOrBook: (recursive = false) => {
     let result = '';
-    const blueprintId = read.uint16();
+    const blueprintId = read.uint32();
     let blueprintContainer;
     if (recursive) {
       blueprintContainer = read.item();
@@ -416,8 +427,8 @@ const read = {
     const icons = read.blueprintIcons();
     const name = read.string();
     if (!recursive) {
-      const terminus = read.uint16();
-      if (terminus != 0xffff) {
+      const terminus = read.uint32();
+      if (terminus != 0xffffffff) {
         throw `No terminus on saved blueprint?`;
       }
     }
@@ -443,6 +454,34 @@ const read = {
       result = `${result};`;
     }
     return result;
+  },
+  blueprintDesc: () => {
+    // ['uint16', 'uint32', 'checkSum', 'checkSum', 'uint16', 'uint16', 'bool', 'uint16', 'uint16', 'uint16', 'uint8', 'entity', 'fixed16', 'fixed16', 'uint16', 'uint16', 'item', 'uint16', 'checkSum', 'uint8']
+    const unknown1 = read.uint16();
+    const blueprintId = read.uint32();
+    const unknown2 = read.bytes(8);
+    const extraBytes = read.bytesUntil([0, 0, 18, 0], /*inclusive=*/false);
+    const major = read.uint16();
+    const minor = read.uint16();
+    const patch = read.uint16();
+    const unknown4 = read.uint24();
+    const itemCount = extraBytes.length == 8 ? 1 : read.uint32();
+    if (itemCount > 9000) {
+      throw 'Oops';
+    }
+    const items = [];
+    for (let i = 0; i < itemCount; ++i) {
+      const name = `${read.entity()}`;
+      const x = read.fixed16();
+      const y = read.fixed16();
+      const unknown5 = read.uint16();
+      items.push(`${name} at ${x}, ${y} (${unknown5})`);
+    }
+    const icons = read.blueprintIcons();
+    const unknown6 = read.uint16();
+    const unknown7 = read.uint8();
+    const unknown8 = read.checkSum();
+    return `Blueprint ${blueprintId} (from ${major}.${minor}.${patch}): [${items.join(', ')}] with icons ${icons}, [${unknown1}, ${unknown2}, ${extraBytes}, ${unknown6}, ${unknown7}, ${unknown8}]`;
   },
   cheatType: () => {
     const val = read.uint32();

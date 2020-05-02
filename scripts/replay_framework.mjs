@@ -126,8 +126,7 @@ for (const frameHandler of frameHandlers) {
 }
 
 let initializedServer = false;
-const serverPlayer = new Player(isMultiplayer ? '65535' : '255');
-initializedServer = true;
+const serverPlayer = new Player('Server');
 
 globalObject.Player.prototype.act = function (action) {
   const frameText = `@${this.tick}(${this.name}): ${action}`;
@@ -138,6 +137,9 @@ const parseReplayJs = (text) => {
   nextPlayerId = 0;
   globalObject.currentTick = 0;
   serverPlayer.tick = 0;
+  serverPlayer.id = isMultiplayer ? 65535 : 255;
+  initializedServer = true;
+
   serverPlayer[`join${isMultiplayer ? 'Multi' : 'Single'}Player`]();
   new Function(text)();
 };

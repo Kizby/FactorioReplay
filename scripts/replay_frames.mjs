@@ -68,7 +68,6 @@ export const frameHandlers = [
     write.bool(isGhost);
     write.uint8ProbablyZero();
   }],
-  [0x7a, 'SetItemName', 'string'],
   [0x91, 'UpdateResolution', ['uint32', 'uint32']],
   [0xa7, 'UnknownA7', 'uint8'],
   [0x47, 'Shoot', ['fixed32', 'fixed32']],
@@ -114,7 +113,11 @@ export const frameHandlers = [
   [0x6b, 'SelectDestructionArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
   [0x6c, 'SelectUpgradeArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
   [0x6f, 'SelectBlueprintArea', ['fixed32', 'fixed32', 'fixed32', 'fixed32', 'uint32', 'item', 'uint8']],
-  [0x71, 'SaveBlueprint', ['string', 'uint32', 'uint32', 'uint32', 'uint32', 'bool', 'bool', 'bool', 'bool', 'uint32', 'blueprintIcons', 'uint16ProbablyZero']],
+  [0x71, 'UpdateBlueprint', ['string', 'uint32', 'uint32', 'uint32', 'uint32', 'bool', 'bool', 'bool', 'bool', 'uint16', 'uint16', 'blueprintIcons', 'uint16ProbablyZero']],
+  [0x72, 'UpdateSavedBlueprint', ['string', 'uint32', 'uint32', 'uint32', 'uint32', 'bool', 'bool', 'bool', 'bool', 'uint16', 'uint16', 'blueprintIcons', 'uint16ProbablyZero']],
+  [0x73, 'OpenSavedBlueprint', ['int16', 'uint32']],
+  [0x75, 'SaveBlueprint', ['int16', 'uint32']],
+  [0x76, 'SelectSavedBlueprint', ['uint16', 'int16', 'int32']],
   [0x78, 'NewBlueprint', 'item'],
   [0x7a, 'LoadSavedBlueprints', () => {
     // Can't just use read.player since it's a uint16 here, not an optUint16
@@ -161,6 +164,9 @@ export const frameHandlers = [
     }
     write.uint8(0);
   }],
+  //[0x7c, 'BlueprintDesc', 'blueprintDesc'],
+  [0x7f, 'Blueprint7f?', ['int32', 'int32']],
+  [0x80, 'ExportBlueprintToInventory', ['uint32', 'uint16']],
   [0x81, 'AddPlayer', () => {
     const playerNumber = read.uint24();
     const force = read.force();
