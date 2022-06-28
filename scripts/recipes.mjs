@@ -4570,4 +4570,4 @@ export const recipes = {
     ],
     energy: 60,
   },
-}
+};

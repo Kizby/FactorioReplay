@@ -1,13 +1,13 @@
-import { read, write, fetch } from './parse.mjs'
-import { idMaps } from './id_maps.mjs'
+import { read, write, fetch } from './parse.mjs';
+import { idMaps } from './id_maps.mjs';
 
 // Keep track of player names the same way we track everything else
-idMaps.player = {}
-let playerCount = 0
+idMaps.player = {};
+let playerCount = 0;
 export const resetPlayers = () => {
-  idMaps.player = {}
-  playerCount = 0
-}
+  idMaps.player = {};
+  playerCount = 0;
+};
 
 export const frameHandlers = [
   [0x01, 'StopRunning'],
@@ -73,18 +73,18 @@ export const frameHandlers = [
     0x3c,
     'Build',
     () => {
-      let result = ''
-      result += read.fixed32() + ', ' // x
-      result += read.fixed32() + ', ' // y
-      result += read.uint8() + ', ' //entityOverride ID<EntityPrototype,unsigned_short>
-      result += read.direction() + ', ' // direction
-      let isDragging = read.bool()
+      let result = '';
+      result += read.fixed32() + ', '; // x
+      result += read.fixed32() + ', '; // y
+      result += read.uint8() + ', '; //entityOverride ID<EntityPrototype,unsigned_short>
+      result += read.direction() + ', '; // direction
+      let isDragging = read.bool();
       result += isDragging
         ? `dragging, ${read.fixed32()}, ${read.fixed32()}, `
-        : 'notDragging, '
+        : 'notDragging, ';
       if (isDragging)
-        result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse'
-      return result
+        result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse';
+      return result;
     },
     () => {
       // isNotDragging
@@ -213,62 +213,62 @@ export const frameHandlers = [
     0x8e,
     'PlayerJoinGame',
     () => {
-      const playerNumber = read.uint24()
-      const force = read.force()
-      const name = read.string()
-      const playerType = read.uint16()
-      let extras = ``
+      const playerNumber = read.uint24();
+      const force = read.force();
+      const name = read.string();
+      const playerType = read.uint16();
+      let extras = ``;
       if (playerType != 256) {
         // Map editor player?
-        extras = `, type=${playerType}`
+        extras = `, type=${playerType}`;
       }
       if (playerNumber == playerCount) {
-        idMaps.player[name] = playerNumber
-        idMaps.player[playerNumber] = name
-        ++playerCount
+        idMaps.player[name] = playerNumber;
+        idMaps.player[playerNumber] = name;
+        ++playerCount;
       } else if (idMaps.player[playerNumber] != name) {
         // Factorio won't be happy, but let's make it representable
-        extras = `${extras}, id=${playerNumber}`
+        extras = `${extras}, id=${playerNumber}`;
 
         // Go ahead and add it to the map anyway
-        idMaps.player[name] = playerNumber
-        idMaps.player[playerNumber] = name
+        idMaps.player[name] = playerNumber;
+        idMaps.player[playerNumber] = name;
       }
       if (force != 'player') {
-        extras = `${extras}, force=${force}`
+        extras = `${extras}, force=${force}`;
       }
-      return `${name}${extras}`
+      return `${name}${extras}`;
     },
     () => {
-      const name = fetch.string(',')
-      let extra = fetch.string(',')
-      let playerNumber = idMaps.player[name] || playerCount
-      let playerType = 256 // Regular player
-      let force = 'player'
+      const name = fetch.string(',');
+      let extra = fetch.string(',');
+      let playerNumber = idMaps.player[name] || playerCount;
+      let playerType = 256; // Regular player
+      let force = 'player';
       while (extra != '') {
-        const parts = extra.split('=')
+        const parts = extra.split('=');
         switch (parts[0]) {
           case 'type':
-            playerType = parts[1]
-            break
+            playerType = parts[1];
+            break;
           case 'id':
-            playerNumber = parts[1]
-            break
+            playerNumber = parts[1];
+            break;
           case 'force':
-            force = parts[1]
-            break
+            force = parts[1];
+            break;
         }
-        extra = fetch.string(',')
+        extra = fetch.string(',');
       }
       if (playerNumber == playerCount) {
-        playerCount++
+        playerCount++;
       }
-      idMaps.player[name] = playerNumber
-      idMaps.player[playerNumber] = name
-      write.uint24(playerNumber)
-      write.force(force)
-      write.string(true, name)
-      write.uint16(playerType)
+      idMaps.player[name] = playerNumber;
+      idMaps.player[playerNumber] = name;
+      write.uint24(playerNumber);
+      write.force(force);
+      write.string(true, name);
+      write.uint16(playerType);
     },
   ],
   [0x8f, 'PlayerAdminChange'],
@@ -398,4 +398,4 @@ export const frameHandlers = [
   [0xf3, 'SetTrainsLimit'],
   [0xf4, 'ClearRecipeNotification', 'recipe'],
   [0xf5, 'SetLinkedContainerLinkID'],
-]
+];

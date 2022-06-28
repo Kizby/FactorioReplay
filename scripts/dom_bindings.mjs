@@ -1,6 +1,16 @@
-import { parseReplayDat, getReplayDatBytes, stableSort, compareTick, comparePlayer } from './index.mjs';
+import {
+  parseReplayDat,
+  getReplayDatBytes,
+  stableSort,
+  compareTick,
+  comparePlayer,
+} from './index.mjs';
 import { loadLevelDat } from './level_loader.mjs';
-import { parseLevelFromZip, parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
+import {
+  parseLevelFromZip,
+  parseReplayFromZip,
+  getZipWithReplay,
+} from './zip_loader.mjs';
 import { parseReplayJs } from './replay_framework.mjs';
 import { progress } from './parse.mjs';
 
@@ -10,10 +20,12 @@ let replayText = '';
 // From https://stackoverflow.com/a/30832210
 const download = (data, filename, type) => {
   var file = new Blob([data], { type: type });
-  if (window.navigator.msSaveOrOpenBlob) // IE10+
+  if (window.navigator.msSaveOrOpenBlob)
+    // IE10+
     window.navigator.msSaveOrOpenBlob(file, filename);
-  else { // Others
-    var a = document.createElement("a"),
+  else {
+    // Others
+    var a = document.createElement('a'),
       url = URL.createObjectURL(file);
     a.href = url;
     a.download = filename;
@@ -28,7 +40,10 @@ const download = (data, filename, type) => {
 
 const showReplayTxt = () => {
   if (replayText.length > 5000000) {
-    replayTextArea.value = `// Only showing first 5MB of replay.txt so your tab stays responsive; you can still download the whole thing if you'd like\n${replayText.substring(0, 5000000)}`;
+    replayTextArea.value = `// Only showing first 5MB of replay.txt so your tab stays responsive; you can still download the whole thing if you'd like\n${replayText.substring(
+      0,
+      5000000
+    )}`;
     replayTextArea.readOnly = true;
   } else {
     replayTextArea.value = replayText;
@@ -50,11 +65,13 @@ const generateLines = (generator) => {
     replayTextArea.value = `Loading ${(progress() * 100).toFixed(1)}%`;
     setTimeout(generateLines, 0, generator);
   } else {
-    const expectedRenderTime = Math.ceil(Math.min(replayText.length / 500000, 10));
+    const expectedRenderTime = Math.ceil(
+      Math.min(replayText.length / 500000, 10)
+    );
     replayTextArea.value = `Rendering replay.txt! It could take up to ${expectedRenderTime} seconds.`;
     setTimeout(showReplayTxt, expectedRenderTime > 5 ? 500 : 0); // Make sure the render warning can render if it will take more than 5 seconds
   }
-}
+};
 
 const loadReplayDat = (arrayBuffer) => {
   const lineGenerator = parseReplayDat(arrayBuffer);
@@ -68,18 +85,20 @@ const loadReplayJs = (text) => {
   replayTextArea.value = '';
   parseReplayJs(text);
   sortReplayLines(compareTick);
-}
+};
 
 const loadZip = (arrayBuffer) => {
-  (parseLevelDat.checked ?
-    parseLevelFromZip(arrayBuffer).then(loadLevelDat, console.error) :
-    Promise.resolve()).finally(() =>
-      parseReplayFromZip(arrayBuffer).then((replayDat) => {
-        loadReplayDat(replayDat);
-        exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
-        exportZipButton.hidden = false;
-      }));
-}
+  (parseLevelDat.checked
+    ? parseLevelFromZip(arrayBuffer).then(loadLevelDat, console.error)
+    : Promise.resolve()
+  ).finally(() =>
+    parseReplayFromZip(arrayBuffer).then((replayDat) => {
+      loadReplayDat(replayDat);
+      exportZipButton.innerText = `Save ${getZipWithReplay().name}.zip`;
+      exportZipButton.hidden = false;
+    })
+  );
+};
 
 // Probably accurate enough?
 const lineBreak = /Win/.test(navigator.platform) ? '\r\n' : '\n';
@@ -94,12 +113,14 @@ const getTextRecursively = (node, respectPlatform) => {
     result = result.replace(/\n/g, lineBreak);
   }
   return result;
-}
+};
 
 document.body.addEventListener('dragover', (event) => {
-  if (event.dataTransfer.items &&
+  if (
+    event.dataTransfer.items &&
     event.dataTransfer.items.length > 0 &&
-    event.dataTransfer.items[0].kind == 'file') {
+    event.dataTransfer.items[0].kind == 'file'
+  ) {
     event.preventDefault();
   }
 });
@@ -154,7 +175,11 @@ exportTxtButton.addEventListener('click', () => {
     download(downloadText, 'replay.txt', 'text/plain');
   } else {
     // User may have edited this, so get what's actually there
-    download(getTextRecursively(replayTextArea, true), 'replay.txt', 'text/plain');
+    download(
+      getTextRecursively(replayTextArea, true),
+      'replay.txt',
+      'text/plain'
+    );
   }
 });
 
@@ -177,21 +202,21 @@ exportZipButton.addEventListener('click', () => {
   const text = getTextRecursively(replayTextArea, true);
   const dat = getReplayDatBytes(text);
   const zip = getZipWithReplay(dat);
-  zip.zip.generateAsync({
-    type: "arraybuffer",
-    compression: "DEFLATE",
-    compressionOptions: {
-      level: 5
-    }
-  }).then((array) =>
-    download(array, zip.name, 'application/zip')
-  );
+  zip.zip
+    .generateAsync({
+      type: 'arraybuffer',
+      compression: 'DEFLATE',
+      compressionOptions: {
+        level: 5,
+      },
+    })
+    .then((array) => download(array, zip.name, 'application/zip'));
 });
 
 const sortReplayLines = (compare) => {
   const initialText = getTextRecursively(replayTextArea);
   if (initialText.indexOf('+') != -1) {
-    console.error('Can\'t sort by tick with relative ticks');
+    console.error("Can't sort by tick with relative ticks");
     return;
   }
   let lines = initialText.split('\n');
@@ -204,7 +229,9 @@ const sortReplayLines = (compare) => {
 };
 
 sortByTickButton.addEventListener('click', () => sortReplayLines(compareTick));
-sortByPlayerButton.addEventListener('click', () => sortReplayLines(comparePlayer));
+sortByPlayerButton.addEventListener('click', () =>
+  sortReplayLines(comparePlayer)
+);
 
 // Adapted from http://jsfiddle.net/2wAzx/13/
 const makeIndentsBetter = (el) => {
@@ -223,14 +250,18 @@ const makeIndentsBetter = (el) => {
     let textToInsert = '';
     let caretMove = 0;
 
-    if (key === 9) { // tab was pressed
+    if (key === 9) {
+      // tab was pressed
       textToInsert = '\t';
       caretMove = 1;
-    } else if (key === 13) { // enter was pressed
+    } else if (key === 13) {
+      // enter was pressed
       // Use the indentation of the current line on the next line
       // Implicitly handles the not found (-1) case
       const lastLineEnd = val.lastIndexOf('\n', start - 1);
-      const currentIndent = val.substring(lastLineEnd + 1).match(/([ \t]*).*/)[1];
+      const currentIndent = val
+        .substring(lastLineEnd + 1)
+        .match(/([ \t]*).*/)[1];
 
       textToInsert = lineBreak + currentIndent;
       // Only advance the caret past the line break if it's not already there
@@ -250,11 +281,14 @@ const makeIndentsBetter = (el) => {
     el.focus();
     return false;
   });
-}
+};
 
 for (let textArea of document.getElementsByTagName('textarea')) {
   makeIndentsBetter(textArea);
 }
 
 // Expose this for convenience
-window.loadText = (text) => { replayText = text; showReplayTxt(); };
+window.loadText = (text) => {
+  replayText = text;
+  showReplayTxt();
+};
