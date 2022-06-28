@@ -363,11 +363,19 @@ const read = {
   leaveReason: () => {
     return leaveReasons[read.uint8()];
   },
+  itemStackTarget: () => {
+    const inventory = idMaps['inventory'][read.uint8()];
+    const invType = idMaps['inventoryType'][read.uint8()];
+    const localShelfTarget = read.bool();
+    return `${inventory}, ${invType}, ${localShelfTarget}`;
+  },
   slotInInventory: () => {
     const whichInventory = read.uint8();
     const slot = read.uint16();
     const inventoryContext = read.uint16();
-    const inventory = inventories[inventoryContext][whichInventory];
+    let inventory = inventories[inventoryContext];
+    if (inventory) inventory = inventory[whichInventory];
+    if (!inventory) inventory = 'a';
     return `${
       inventory ? inventory : `${whichInventory}, ${inventoryContext}`
     }, ${slot}`;

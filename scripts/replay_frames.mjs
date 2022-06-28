@@ -81,7 +81,7 @@ export const frameHandlers = [
       let isDragging = read.isDragging();
       result += isDragging
         ? `dragging, ${read.fixed32()}, ${read.fixed32()}, `
-        : 'notDragging, ';
+        : 'notDragging';
       if (isDragging)
         result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse';
       return result;
@@ -131,18 +131,18 @@ export const frameHandlers = [
   [0x55, 'CheckCRC'],
   [0x56, 'SetCircuitCondition'],
   [0x57, 'SetSignal'],
-  [0x58, 'StartResearch'],
+  [0x58, 'StartResearch', ['fixed32']],
   [0x59, 'SetLogisticFilterItem'],
   [0x5a, 'SetLogisticFilterSignal'],
   [0x5b, 'SetCircuitModeOfOperation'],
   [0x5c, 'GuiClick'],
   [0x5d, 'GuiConfirmed'],
-  [0x5e, 'WriteToConsole'],
+  [0x5e, 'WriteToConsole', 'string'],
   [0x5f, 'MarketOffer'],
   [0x60, 'AddTrainStation'],
   [0x61, 'ChangeTrainStopStation'],
   [0x62, 'ChangeActiveItemGroupForCrafting', 'itemGroup'],
-  [0x63, 'ChangeActiveItemGroupForFilters'],
+  [0x63, 'ChangeActiveItemGroupForFilters', 'itemGroup'],
   [0x64, 'ChangeActiveCharacterTab'],
   [0x65, 'GuiTextChanged'],
   [0x66, 'GuiCheckedStateChanged'],
@@ -151,8 +151,8 @@ export const frameHandlers = [
   [0x69, 'GuiValueChanged'],
   [0x6a, 'GuiSwitchStateChanged'],
   [0x6b, 'GuiLocationChanged'],
-  [0x6c, 'PlaceEquipment'],
-  [0x6d, 'TakeEquipment'],
+  [0x6c, 'PlaceEquipment', ['int32', 'int32', 'int8']],
+  [0x6d, 'TakeEquipment', ['int32', 'int32', 'int8']],
   [0x6e, 'UseItem'],
   [0x6f, 'SendSpidertron', ['fixed32', 'fixed32']],
   [0x70, 'UseArtilleryRemote'],
@@ -334,7 +334,166 @@ export const frameHandlers = [
   [0xbb, 'QuickBarPickSlot'],
   [0xbc, 'QuickBarSetSelectedPage'],
   [0xbd, 'PlayerLeaveGame'],
-  [0xbe, 'MapEditorAction'],
+  [
+    0xbe,
+    'MapEditorAction',
+    () => {
+      let result = '';
+      const action = read.uint8('editorAction');
+      result += action + ', ';
+      switch (action) {
+        case 'BuildEntity':
+          result += read.fixed32() + ', '; // x
+          result += read.fixed32() + ', '; // y
+          result += read.direction() + ', '; // direction
+          let isDragging = read.isDragging();
+          result += isDragging + ', ';
+          if (isDragging)
+            result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse';
+        case 'DropItem':
+          result += read.uint32() + ', '; // surfaceIndex
+          result += read.fixed32() + ', ';
+          result += read.fixed32() + ', ';
+          result += read.uint8() + ', '; // entityPrototype
+          break;
+        case 'DeleteSurface':
+        case 'RemoveAllEntities':
+        case 'ReplaceTilesWithLabTiles':
+        case 'RegenerateAllDecoratives':
+        case 'RemoveEmptyChunks':
+          result += read.uint32() + ', '; // surfaceIndex
+          break;
+        case 'CloneItem':
+        case 'DeleteItem':
+          result += read.uint32() + ', '; // ItemStackTargetSpecification
+          result += read.uint32() + ', '; //
+          break;
+        case 'SetForceCeaseFire':
+        case 'SetForceFriend':
+          result += read.uint8() + ', '; // force id
+          result += read.bool() + ', '; // bool
+          result += read.uint32() + ', ';
+          result += read.uint32() + ', ';
+          result += read.uint8() + ', ';
+          break;
+        case 'SetForceShareChart':
+        case 'SetForceFriendlyFireEnabled':
+          result += read.uint8() + ', '; // force id
+          result += read.bool() + ', '; // bool
+          break;
+        case 'CreateSurface':
+          result += read.string() + ', ';
+          result += read.uint32() + ', ';
+          result += read.uint32() + ', ';
+          break;
+        case 'SetEditorTool':
+          result += idMaps['editorType'][read.uint8()] + ', ';
+          result += read.uint32(); // toolIndex
+          break;
+        case 'SetCliffEditorID':
+        case 'SetResourceEditorID':
+        case 'SetEntityEditorID':
+          result += idMaps['entity'][read.uint8()] + ', ' + read.uint8(); // entityId
+          break;
+        case 'RemoveEntity':
+        case 'ChangeTileVariation':
+          result += read.fixed32() + ', ';
+          result += read.fixed32() + ', ';
+          result += read.bool();
+          break;
+        case 'DeleteForce':
+        case 'SetBuildAsForce':
+        case 'SetDestinationForce':
+        case 'SwitchToForce':
+          result += idMaps['force'][read.uint8()]; // forceId
+          break;
+        case 'SwitchToSurface':
+        case 'CreateForce':
+        case 'SetEntityTag':
+          result += read.string() + ', ';
+          break;
+        case 'SetEntityVariation':
+        case 'SetEntityDifficultyMask':
+          result += read.uint8() + ', ';
+          break;
+        case 'SetEntityHealth':
+        case 'TickCustom':
+        case 'SetBrushToolSize':
+        case 'SetBrushToolIntensity':
+        case 'SetBrushToolRepetition':
+        case 'SetCursorToolIntensity':
+        case 'ChangeToolSize':
+          result += read.uint32() + ', ';
+          break;
+        case 'SetBrushToolShape':
+          result += idMaps['editorType'][read.uint8()] + ', ';
+          result += read.uint32() + ', '; // toolIndex
+          result += read.uint32() + ', ';
+          result += read.uint32() + ', ';
+          result += read.uint8() + ', ';
+          break;
+        case 'SetTileEditorID':
+        case 'InstantResearch':
+        case 'UnResearch':
+        case 'SetDecorativeEditorID':
+        case 'ClearCursor':
+        // result += read.uint32() + ', ';
+        case 'SetActiveEditor':
+          result += idMaps['editorType'][read.uint8()];
+          break;
+        case 'SetCorpseExpires':
+        case 'SetPlacedCorpsesNeverExpire':
+        case 'SetShowCharacterTabInControllerGui':
+        case 'SetShowInfinityFiltersInControllerGui':
+        case 'SetInfinityRemoveUnfilteredItems':
+        case 'SetEntityIndestructible':
+        case 'SetEntityNotMinable':
+        case 'SetEntityNotRotatable':
+        case 'SetEntityNotOperable':
+        case 'SetEntityToBeLooted':
+        case 'SetRecipeLocked':
+        case 'ChangeEntityVariation':
+        case 'ChangeCliffVariation':
+        case 'ChangeResourceVariation':
+        case 'SetAlwaysDrawPositions':
+        case 'SetAlwaysDrawAreas':
+        case 'SetSnapScriptingObjectsToGrid':
+        case 'SetCloneAreaManualCollisionMode':
+        case 'SetCloneAreaSmartDragMode':
+        case 'SetSnapCloneAreaToChunk':
+        case 'SetSnapCloneAreaToGrid':
+        case 'SetClearDestinationDecoratives':
+        case 'SetClearDestinationEntities':
+        case 'SetCloneDecoratives':
+        case 'SetCloneEntities':
+        case 'SetCloneTiles':
+        case 'SetSmartOutOfMapCollisionMode':
+        case 'SetSmartEntityCollisionMode':
+        case 'SetSmartTileCollisionMode':
+        case 'SetRemoveCollidingDecoratives':
+        case 'SetShowHiddenEntities':
+        case 'SetFillBuiltEntityEnergyBuffers':
+        case 'SetGenerateNeighborChunks':
+        case 'SetInstantRailPlanner':
+        case 'SetInstantUpgrading':
+        case 'SetInstantDeconstruction':
+        case 'SetInstantBlueprintBuilding':
+        case 'SetDrawCursorLight':
+        case 'SetShowAdditionalEntityInfoGui':
+        case 'SetShowEntityHealthBars':
+        case 'SetShowEntityTags':
+        case 'SetShowStatusIcons':
+        case 'SetRenderAsDay':
+        case 'SetEntityUpdatePaused':
+          result += read.bool() + ', ';
+          break;
+        default:
+          break;
+      }
+      return result;
+    },
+    () => {}, // todo
+  ],
   [0xbf, 'PutSpecialItemInMap'],
   [0xc0, 'PutSpecialRecordInMap'],
   [0xc1, 'ChangeMultiplayerConfig'],
@@ -364,7 +523,7 @@ export const frameHandlers = [
   [0xd5, 'RotateEntity', 'direction'],
   [0xd6, 'FastEntitySplit'],
   [0xd7, 'SetTrainStopped'],
-  [0xd8, 'ChangeControllerSpeed'],
+  [0xd8, 'ChangeControllerSpeed', ['uint32', 'uint32']],
   [0xd9, 'SetAllowCommands'],
   [0xda, 'SetResearchFinishedStopsGame'],
   [0xdb, 'SetInserterMaxStackSize'],
@@ -395,3 +554,5 @@ export const frameHandlers = [
   [0xf4, 'ClearRecipeNotification', 'recipe'],
   [0xf5, 'SetLinkedContainerLinkID'],
 ];
+
+function handleEditorActions() {}
