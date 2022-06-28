@@ -11,17 +11,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 */
 
 (function (f) {
-  if (typeof exports === "object" && typeof module !== "undefined") {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = f();
-  } else if (typeof define === "function" && define.amd) {
+  } else if (typeof define === 'function' && define.amd) {
     define([], f);
   } else {
     var g;
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       g = window;
-    } else if (typeof global !== "undefined") {
+    } else if (typeof global !== 'undefined') {
       g = global;
-    } else if (typeof self !== "undefined") {
+    } else if (typeof self !== 'undefined') {
       g = self;
     } else {
       g = this;
@@ -34,11 +34,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
     function s(o, u) {
       if (!n[o]) {
         if (!t[o]) {
-          var a = typeof require == "function" && require;
+          var a = typeof require == 'function' && require;
           if (!u && a) return a(o, !0);
           if (i) return i(o, !0);
           var f = new Error("Cannot find module '" + o + "'");
-          throw ((f.code = "MODULE_NOT_FOUND"), f);
+          throw ((f.code = 'MODULE_NOT_FOUND'), f);
         }
         var l = (n[o] = { exports: {} });
         t[o][0].call(
@@ -57,19 +57,19 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       }
       return n[o].exports;
     }
-    var i = typeof require == "function" && require;
+    var i = typeof require == 'function' && require;
     for (var o = 0; o < r.length; o++) s(r[o]);
     return s;
   })(
     {
       1: [
         function (require, module, exports) {
-          "use strict";
-          var utils = require("./utils");
-          var support = require("./support");
+          'use strict';
+          var utils = require('./utils');
+          var support = require('./support');
           // private property
           var _keyStr =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
           // public method for encoding
           exports.encode = function (input) {
@@ -79,7 +79,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               len = input.length,
               remainingBytes = len;
 
-            var isArray = utils.getTypeOf(input) !== "string";
+            var isArray = utils.getTypeOf(input) !== 'string';
             while (i < input.length) {
               remainingBytes = len - i;
 
@@ -106,7 +106,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               );
             }
 
-            return output.join("");
+            return output.join('');
           };
 
           // public method for decoding
@@ -116,7 +116,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var i = 0,
               resultIndex = 0;
 
-            var dataUrlPrefix = "data:";
+            var dataUrlPrefix = 'data:';
 
             if (input.substr(0, dataUrlPrefix.length) === dataUrlPrefix) {
               // This is a common error: people give a data url
@@ -126,11 +126,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // *can't* be sure it is one: removing everything up to the comma would
               // be too dangerous.
               throw new Error(
-                "Invalid base64 input, it looks like a data url."
+                'Invalid base64 input, it looks like a data url.'
               );
             }
 
-            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
 
             var totalLength = (input.length * 3) / 4;
             if (input.charAt(input.length - 1) === _keyStr.charAt(64)) {
@@ -146,7 +146,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // - the input is *almost* a base64 content, with a extra chars at the
               //   beginning or at the end
               // - the input uses a base64 variant (base64url for example)
-              throw new Error("Invalid base64 input, bad content length.");
+              throw new Error('Invalid base64 input, bad content length.');
             }
             var output;
             if (support.uint8array) {
@@ -178,17 +178,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             return output;
           };
         },
-        { "./support": 30, "./utils": 32 },
+        { './support': 30, './utils': 32 },
       ],
       2: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var external = require("./external");
-          var DataWorker = require("./stream/DataWorker");
-          var DataLengthProbe = require("./stream/DataLengthProbe");
-          var Crc32Probe = require("./stream/Crc32Probe");
-          var DataLengthProbe = require("./stream/DataLengthProbe");
+          var external = require('./external');
+          var DataWorker = require('./stream/DataWorker');
+          var DataLengthProbe = require('./stream/DataLengthProbe');
+          var Crc32Probe = require('./stream/Crc32Probe');
+          var DataLengthProbe = require('./stream/DataLengthProbe');
 
           /**
            * Represent a compressed object, with everything needed to decompress it.
@@ -223,12 +223,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 external.Promise.resolve(this.compressedContent)
               )
                 .pipe(this.compression.uncompressWorker())
-                .pipe(new DataLengthProbe("data_length"));
+                .pipe(new DataLengthProbe('data_length'));
 
               var that = this;
-              worker.on("end", function () {
-                if (this.streamInfo["data_length"] !== that.uncompressedSize) {
-                  throw new Error("Bug : uncompressed data size mismatch");
+              worker.on('end', function () {
+                if (this.streamInfo['data_length'] !== that.uncompressedSize) {
+                  throw new Error('Bug : uncompressed data size mismatch');
                 }
               });
               return worker;
@@ -241,10 +241,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               return new DataWorker(
                 external.Promise.resolve(this.compressedContent)
               )
-                .withStreamInfo("compressedSize", this.compressedSize)
-                .withStreamInfo("uncompressedSize", this.uncompressedSize)
-                .withStreamInfo("crc32", this.crc32)
-                .withStreamInfo("compression", this.compression);
+                .withStreamInfo('compressedSize', this.compressedSize)
+                .withStreamInfo('uncompressedSize', this.uncompressedSize)
+                .withStreamInfo('crc32', this.crc32)
+                .withStreamInfo('compression', this.compression);
             },
           };
 
@@ -263,45 +263,45 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           ) {
             return uncompressedWorker
               .pipe(new Crc32Probe())
-              .pipe(new DataLengthProbe("uncompressedSize"))
+              .pipe(new DataLengthProbe('uncompressedSize'))
               .pipe(compression.compressWorker(compressionOptions))
-              .pipe(new DataLengthProbe("compressedSize"))
-              .withStreamInfo("compression", compression);
+              .pipe(new DataLengthProbe('compressedSize'))
+              .withStreamInfo('compression', compression);
           };
 
           module.exports = CompressedObject;
         },
         {
-          "./external": 6,
-          "./stream/Crc32Probe": 25,
-          "./stream/DataLengthProbe": 26,
-          "./stream/DataWorker": 27,
+          './external': 6,
+          './stream/Crc32Probe': 25,
+          './stream/DataLengthProbe': 26,
+          './stream/DataWorker': 27,
         },
       ],
       3: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var GenericWorker = require("./stream/GenericWorker");
+          var GenericWorker = require('./stream/GenericWorker');
 
           exports.STORE = {
-            magic: "\x00\x00",
+            magic: '\x00\x00',
             compressWorker: function (compressionOptions) {
-              return new GenericWorker("STORE compression");
+              return new GenericWorker('STORE compression');
             },
             uncompressWorker: function () {
-              return new GenericWorker("STORE decompression");
+              return new GenericWorker('STORE decompression');
             },
           };
-          exports.DEFLATE = require("./flate");
+          exports.DEFLATE = require('./flate');
         },
-        { "./flate": 7, "./stream/GenericWorker": 28 },
+        { './flate': 7, './stream/GenericWorker': 28 },
       ],
       4: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("./utils");
+          var utils = require('./utils');
 
           /**
            * The following functions come from pako, from pako/lib/zlib/crc32.js
@@ -366,11 +366,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           }
 
           module.exports = function crc32wrapper(input, crc) {
-            if (typeof input === "undefined" || !input.length) {
+            if (typeof input === 'undefined' || !input.length) {
               return 0;
             }
 
-            var isArray = utils.getTypeOf(input) !== "string";
+            var isArray = utils.getTypeOf(input) !== 'string';
 
             if (isArray) {
               return crc32(crc | 0, input, input.length, 0);
@@ -379,11 +379,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
           };
         },
-        { "./utils": 32 },
+        { './utils': 32 },
       ],
       5: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
           exports.base64 = false;
           exports.binary = false;
           exports.dir = false;
@@ -400,16 +400,16 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       6: [
         function (require, module, exports) {
           /* global Promise */
-          "use strict";
+          'use strict';
 
           // load the global object first:
           // - it should be better integrated in the system (unhandledRejection in node)
           // - the environment may have a custom Promise implementation (see zone.js)
           var ES6Promise = null;
-          if (typeof Promise !== "undefined") {
+          if (typeof Promise !== 'undefined') {
             ES6Promise = Promise;
           } else {
-            ES6Promise = require("lie");
+            ES6Promise = require('lie');
           }
 
           /**
@@ -423,19 +423,19 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       7: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
           var USE_TYPEDARRAY =
-            typeof Uint8Array !== "undefined" &&
-            typeof Uint16Array !== "undefined" &&
-            typeof Uint32Array !== "undefined";
+            typeof Uint8Array !== 'undefined' &&
+            typeof Uint16Array !== 'undefined' &&
+            typeof Uint32Array !== 'undefined';
 
-          var pako = require("pako");
-          var utils = require("./utils");
-          var GenericWorker = require("./stream/GenericWorker");
+          var pako = require('pako');
+          var utils = require('./utils');
+          var GenericWorker = require('./stream/GenericWorker');
 
-          var ARRAY_TYPE = USE_TYPEDARRAY ? "uint8array" : "array";
+          var ARRAY_TYPE = USE_TYPEDARRAY ? 'uint8array' : 'array';
 
-          exports.magic = "\x08\x00";
+          exports.magic = '\x08\x00';
 
           /**
            * Create a worker that uses pako to inflate/deflate.
@@ -444,7 +444,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @param {Object} options the options to use when (de)compressing.
            */
           function FlateWorker(action, options) {
-            GenericWorker.call(this, "FlateWorker/" + action);
+            GenericWorker.call(this, 'FlateWorker/' + action);
 
             this._pako = null;
             this._pakoAction = action;
@@ -506,23 +506,23 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           exports.compressWorker = function (compressionOptions) {
-            return new FlateWorker("Deflate", compressionOptions);
+            return new FlateWorker('Deflate', compressionOptions);
           };
           exports.uncompressWorker = function () {
-            return new FlateWorker("Inflate", {});
+            return new FlateWorker('Inflate', {});
           };
         },
-        { "./stream/GenericWorker": 28, "./utils": 32, pako: 59 },
+        { './stream/GenericWorker': 28, './utils': 32, pako: 59 },
       ],
       8: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var GenericWorker = require("../stream/GenericWorker");
-          var utf8 = require("../utf8");
-          var crc32 = require("../crc32");
-          var signature = require("../signature");
+          var utils = require('../utils');
+          var GenericWorker = require('../stream/GenericWorker');
+          var utf8 = require('../utf8');
+          var crc32 = require('../crc32');
+          var signature = require('../signature');
 
           /**
            * Transform an integer into a string in hexadecimal.
@@ -532,7 +532,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @returns {string} the result.
            */
           var decToHex = function (dec, bytes) {
-            var hex = "",
+            var hex = '',
               i;
             for (i = 0; i < bytes; i++) {
               hex += String.fromCharCode(dec & 0xff);
@@ -603,24 +603,24 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             platform,
             encodeFileName
           ) {
-            var file = streamInfo["file"],
-              compression = streamInfo["compression"],
+            var file = streamInfo['file'],
+              compression = streamInfo['compression'],
               useCustomEncoding = encodeFileName !== utf8.utf8encode,
               encodedFileName = utils.transformTo(
-                "string",
+                'string',
                 encodeFileName(file.name)
               ),
               utfEncodedFileName = utils.transformTo(
-                "string",
+                'string',
                 utf8.utf8encode(file.name)
               ),
               comment = file.comment,
               encodedComment = utils.transformTo(
-                "string",
+                'string',
                 encodeFileName(comment)
               ),
               utfEncodedComment = utils.transformTo(
-                "string",
+                'string',
                 utf8.utf8encode(comment)
               ),
               useUTF8ForFileName =
@@ -628,9 +628,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               useUTF8ForComment = utfEncodedComment.length !== comment.length,
               dosTime,
               dosDate,
-              extraFields = "",
-              unicodePathExtraField = "",
-              unicodeCommentExtraField = "",
+              extraFields = '',
+              unicodePathExtraField = '',
+              unicodeCommentExtraField = '',
               dir = file.dir,
               date = file.date;
 
@@ -643,9 +643,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             // if the content is streamed, the sizes/crc32 are only available AFTER
             // the end of the stream.
             if (!streamedContent || streamingEnded) {
-              dataInfo.crc32 = streamInfo["crc32"];
-              dataInfo.compressedSize = streamInfo["compressedSize"];
-              dataInfo.uncompressedSize = streamInfo["uncompressedSize"];
+              dataInfo.crc32 = streamInfo['crc32'];
+              dataInfo.compressedSize = streamInfo['compressedSize'];
+              dataInfo.uncompressedSize = streamInfo['uncompressedSize'];
             }
 
             var bitflag = 0;
@@ -669,7 +669,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // dos or unix, we set the dos dir flag
               extFileAttr |= 0x00010;
             }
-            if (platform === "UNIX") {
+            if (platform === 'UNIX') {
               versionMadeBy = 0x031e; // UNIX, version 3.0
               extFileAttr |= generateUnixExternalFileAttr(
                 file.unixPermissions,
@@ -721,7 +721,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
               extraFields +=
                 // Info-ZIP Unicode Path Extra Field
-                "\x75\x70" +
+                '\x75\x70' +
                 // size
                 decToHex(unicodePathExtraField.length, 2) +
                 // content
@@ -739,17 +739,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
               extraFields +=
                 // Info-ZIP Unicode Path Extra Field
-                "\x75\x63" +
+                '\x75\x63' +
                 // size
                 decToHex(unicodeCommentExtraField.length, 2) +
                 // content
                 unicodeCommentExtraField;
             }
 
-            var header = "";
+            var header = '';
 
             // version needed to extract
-            header += "\x0A\x00";
+            header += '\x0A\x00';
             // general purpose bit flag
             header += decToHex(bitflag, 2);
             // compression method
@@ -784,9 +784,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // file comment length
               decToHex(encodedComment.length, 2) +
               // disk number start
-              "\x00\x00" +
+              '\x00\x00' +
               // internal file attributes TODO
-              "\x00\x00" +
+              '\x00\x00' +
               // external file attributes
               decToHex(extFileAttr, 4) +
               // relative offset of local header
@@ -820,9 +820,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             comment,
             encodeFileName
           ) {
-            var dirEnd = "";
+            var dirEnd = '';
             var encodedComment = utils.transformTo(
-              "string",
+              'string',
               encodeFileName(comment)
             );
 
@@ -830,9 +830,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             dirEnd =
               signature.CENTRAL_DIRECTORY_END +
               // number of this disk
-              "\x00\x00" +
+              '\x00\x00' +
               // number of the disk with the start of the central directory
-              "\x00\x00" +
+              '\x00\x00' +
               // total number of entries in the central directory on this disk
               decToHex(entriesCount, 2) +
               // total number of entries in the central directory
@@ -856,15 +856,15 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @return {String} the data descriptors.
            */
           var generateDataDescriptors = function (streamInfo) {
-            var descriptor = "";
+            var descriptor = '';
             descriptor =
               signature.DATA_DESCRIPTOR +
               // crc-32                          4 bytes
-              decToHex(streamInfo["crc32"], 4) +
+              decToHex(streamInfo['crc32'], 4) +
               // compressed size                 4 bytes
-              decToHex(streamInfo["compressedSize"], 4) +
+              decToHex(streamInfo['compressedSize'], 4) +
               // uncompressed size               4 bytes
-              decToHex(streamInfo["uncompressedSize"], 4);
+              decToHex(streamInfo['uncompressedSize'], 4);
 
             return descriptor;
           };
@@ -883,7 +883,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             platform,
             encodeFileName
           ) {
-            GenericWorker.call(this, "ZipFileWorker");
+            GenericWorker.call(this, 'ZipFileWorker');
             // The number of bytes written so far. This doesn't count accumulated chunks.
             this.bytesWritten = 0;
             // The comment of the zip file
@@ -948,9 +948,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           ZipFileWorker.prototype.openedSource = function (streamInfo) {
             this.currentSourceOffset = this.bytesWritten;
-            this.currentFile = streamInfo["file"].name;
+            this.currentFile = streamInfo['file'].name;
 
-            var streamedContent = this.streamFiles && !streamInfo["file"].dir;
+            var streamedContent = this.streamFiles && !streamInfo['file'].dir;
 
             // don't stream folders (because they don't have any content)
             if (streamedContent) {
@@ -978,7 +978,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           ZipFileWorker.prototype.closedSource = function (streamInfo) {
             this.accumulate = false;
-            var streamedContent = this.streamFiles && !streamInfo["file"].dir;
+            var streamedContent = this.streamFiles && !streamInfo['file'].dir;
             var record = generateZipParts(
               streamInfo,
               streamedContent,
@@ -1056,10 +1056,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             this._sources.push(previous);
             var self = this;
 
-            previous.on("data", function (chunk) {
+            previous.on('data', function (chunk) {
               self.processChunk(chunk);
             });
-            previous.on("end", function () {
+            previous.on('end', function () {
               self.closedSource(self.previous.streamInfo);
               if (self._sources.length) {
                 self.prepareNextSource();
@@ -1067,7 +1067,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 self.end();
               }
             });
-            previous.on("error", function (e) {
+            previous.on('error', function (e) {
               self.error(e);
             });
             return this;
@@ -1127,19 +1127,19 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = ZipFileWorker;
         },
         {
-          "../crc32": 4,
-          "../signature": 23,
-          "../stream/GenericWorker": 28,
-          "../utf8": 31,
-          "../utils": 32,
+          '../crc32': 4,
+          '../signature': 23,
+          '../stream/GenericWorker': 28,
+          '../utf8': 31,
+          '../utils': 32,
         },
       ],
       9: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var compressions = require("../compressions");
-          var ZipFileWorker = require("./ZipFileWorker");
+          var compressions = require('../compressions');
+          var ZipFileWorker = require('./ZipFileWorker');
 
           /**
            * Find the compression to use.
@@ -1152,7 +1152,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var compression = compressions[compressionName];
             if (!compression) {
               throw new Error(
-                compressionName + " is not a valid compression method !"
+                compressionName + ' is not a valid compression method !'
               );
             }
             return compression;
@@ -1188,11 +1188,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
                 file
                   ._compressWorker(compression, compressionOptions)
-                  .withStreamInfo("file", {
+                  .withStreamInfo('file', {
                     name: relativePath,
                     dir: dir,
                     date: date,
-                    comment: file.comment || "",
+                    comment: file.comment || '',
                     unixPermissions: file.unixPermissions,
                     dosPermissions: file.dosPermissions,
                   })
@@ -1206,11 +1206,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             return zipFileWorker;
           };
         },
-        { "../compressions": 3, "./ZipFileWorker": 8 },
+        { '../compressions': 3, './ZipFileWorker': 8 },
       ],
       10: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           /**
            * Representation a of zip file in js
@@ -1224,7 +1224,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
             if (arguments.length) {
               throw new Error(
-                "The constructor with parameters has been removed in JSZip 3.0, please check the upgrade guide."
+                'The constructor with parameters has been removed in JSZip 3.0, please check the upgrade guide.'
               );
             }
 
@@ -1238,51 +1238,51 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             this.comment = null;
 
             // Where we are in the hierarchy
-            this.root = "";
+            this.root = '';
             this.clone = function () {
               var newObj = new JSZip();
               for (var i in this) {
-                if (typeof this[i] !== "function") {
+                if (typeof this[i] !== 'function') {
                   newObj[i] = this[i];
                 }
               }
               return newObj;
             };
           }
-          JSZip.prototype = require("./object");
-          JSZip.prototype.loadAsync = require("./load");
-          JSZip.support = require("./support");
-          JSZip.defaults = require("./defaults");
+          JSZip.prototype = require('./object');
+          JSZip.prototype.loadAsync = require('./load');
+          JSZip.support = require('./support');
+          JSZip.defaults = require('./defaults');
 
           // TODO find a better way to handle this version,
           // a require('package.json').version doesn't work with webpack, see #327
-          JSZip.version = "3.1.5";
+          JSZip.version = '3.1.5';
 
           JSZip.loadAsync = function (content, options) {
             return new JSZip().loadAsync(content, options);
           };
 
-          JSZip.external = require("./external");
+          JSZip.external = require('./external');
           module.exports = JSZip;
         },
         {
-          "./defaults": 5,
-          "./external": 6,
-          "./load": 11,
-          "./object": 15,
-          "./support": 30,
+          './defaults': 5,
+          './external': 6,
+          './load': 11,
+          './object': 15,
+          './support': 30,
         },
       ],
       11: [
         function (require, module, exports) {
-          "use strict";
-          var utils = require("./utils");
-          var external = require("./external");
-          var utf8 = require("./utf8");
-          var utils = require("./utils");
-          var ZipEntries = require("./zipEntries");
-          var Crc32Probe = require("./stream/Crc32Probe");
-          var nodejsUtils = require("./nodejsUtils");
+          'use strict';
+          var utils = require('./utils');
+          var external = require('./external');
+          var utf8 = require('./utf8');
+          var utils = require('./utils');
+          var ZipEntries = require('./zipEntries');
+          var Crc32Probe = require('./stream/Crc32Probe');
+          var nodejsUtils = require('./nodejsUtils');
 
           /**
            * Check the CRC32 of an entry.
@@ -1295,12 +1295,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 .getContentWorker()
                 .pipe(new Crc32Probe());
               worker
-                .on("error", function (e) {
+                .on('error', function (e) {
                   reject(e);
                 })
-                .on("end", function () {
+                .on('end', function () {
                   if (worker.streamInfo.crc32 !== zipEntry.decompressed.crc32) {
-                    reject(new Error("Corrupted zip : CRC32 mismatch"));
+                    reject(new Error('Corrupted zip : CRC32 mismatch'));
                   } else {
                     resolve();
                   }
@@ -1329,7 +1329,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
             return utils
               .prepareContent(
-                "the loaded zip file",
+                'the loaded zip file',
                 data,
                 true,
                 options.optimizedBinaryString,
@@ -1377,20 +1377,20 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
         },
         {
-          "./external": 6,
-          "./nodejsUtils": 14,
-          "./stream/Crc32Probe": 25,
-          "./utf8": 31,
-          "./utils": 32,
-          "./zipEntries": 33,
+          './external': 6,
+          './nodejsUtils': 14,
+          './stream/Crc32Probe': 25,
+          './utf8': 31,
+          './utils': 32,
+          './zipEntries': 33,
         },
       ],
       12: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var GenericWorker = require("../stream/GenericWorker");
+          var utils = require('../utils');
+          var GenericWorker = require('../stream/GenericWorker');
 
           /**
            * A worker that use a nodejs stream as source.
@@ -1401,7 +1401,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           function NodejsStreamInputAdapter(filename, stream) {
             GenericWorker.call(
               this,
-              "Nodejs stream input adapter for " + filename
+              'Nodejs stream input adapter for ' + filename
             );
             this._upstreamEnded = false;
             this._bindStream(stream);
@@ -1419,7 +1419,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             this._stream = stream;
             stream.pause();
             stream
-              .on("data", function (chunk) {
+              .on('data', function (chunk) {
                 self.push({
                   data: chunk,
                   meta: {
@@ -1427,14 +1427,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   },
                 });
               })
-              .on("error", function (e) {
+              .on('error', function (e) {
                 if (self.isPaused) {
                   this.generatedError = e;
                 } else {
                   self.error(e);
                 }
               })
-              .on("end", function () {
+              .on('end', function () {
                 if (self.isPaused) {
                   self._upstreamEnded = true;
                 } else {
@@ -1465,15 +1465,15 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
           module.exports = NodejsStreamInputAdapter;
         },
-        { "../stream/GenericWorker": 28, "../utils": 32 },
+        { '../stream/GenericWorker': 28, '../utils': 32 },
       ],
       13: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var Readable = require("readable-stream").Readable;
+          var Readable = require('readable-stream').Readable;
 
-          var utils = require("../utils");
+          var utils = require('../utils');
           utils.inherits(NodejsStreamOutputAdapter, Readable);
 
           /**
@@ -1490,7 +1490,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
             var self = this;
             helper
-              .on("data", function (data, meta) {
+              .on('data', function (data, meta) {
                 if (!self.push(data)) {
                   self._helper.pause();
                 }
@@ -1498,10 +1498,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   updateCb(meta);
                 }
               })
-              .on("error", function (e) {
-                self.emit("error", e);
+              .on('error', function (e) {
+                self.emit('error', e);
               })
-              .on("end", function () {
+              .on('end', function () {
                 self.push(null);
               });
           }
@@ -1512,11 +1512,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
           module.exports = NodejsStreamOutputAdapter;
         },
-        { "../utils": 32, "readable-stream": 16 },
+        { '../utils': 32, 'readable-stream': 16 },
       ],
       14: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           module.exports = {
             /**
@@ -1524,7 +1524,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * In a browser, browserify won't include this file and the whole module
              * will be resolved an empty object.
              */
-            isNode: typeof Buffer !== "undefined",
+            isNode: typeof Buffer !== 'undefined',
             /**
              * Create a new nodejs Buffer from an existing content.
              * @param {Object} data the data to pass to the constructor.
@@ -1564,9 +1564,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             isStream: function (obj) {
               return (
                 obj &&
-                typeof obj.on === "function" &&
-                typeof obj.pause === "function" &&
-                typeof obj.resume === "function"
+                typeof obj.on === 'function' &&
+                typeof obj.pause === 'function' &&
+                typeof obj.resume === 'function'
               );
             },
           };
@@ -1575,17 +1575,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       15: [
         function (require, module, exports) {
-          "use strict";
-          var utf8 = require("./utf8");
-          var utils = require("./utils");
-          var GenericWorker = require("./stream/GenericWorker");
-          var StreamHelper = require("./stream/StreamHelper");
-          var defaults = require("./defaults");
-          var CompressedObject = require("./compressedObject");
-          var ZipObject = require("./zipObject");
-          var generate = require("./generate");
-          var nodejsUtils = require("./nodejsUtils");
-          var NodejsStreamInputAdapter = require("./nodejs/NodejsStreamInputAdapter");
+          'use strict';
+          var utf8 = require('./utf8');
+          var utils = require('./utils');
+          var GenericWorker = require('./stream/GenericWorker');
+          var StreamHelper = require('./stream/StreamHelper');
+          var defaults = require('./defaults');
+          var CompressedObject = require('./compressedObject');
+          var ZipObject = require('./zipObject');
+          var generate = require('./generate');
+          var nodejsUtils = require('./nodejsUtils');
+          var NodejsStreamInputAdapter = require('./nodejs/NodejsStreamInputAdapter');
 
           /**
            * Add a file in the current folder.
@@ -1610,7 +1610,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               o.compression = o.compression.toUpperCase();
             }
 
-            if (typeof o.unixPermissions === "string") {
+            if (typeof o.unixPermissions === 'string') {
               o.unixPermissions = parseInt(o.unixPermissions, 8);
             }
 
@@ -1631,10 +1631,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
 
             var isUnicodeString =
-              dataType === "string" && o.binary === false && o.base64 === false;
+              dataType === 'string' && o.binary === false && o.base64 === false;
             if (
               !originalOptions ||
-              typeof originalOptions.binary === "undefined"
+              typeof originalOptions.binary === 'undefined'
             ) {
               o.binary = !isUnicodeString;
             }
@@ -1645,9 +1645,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             if (isCompressedEmpty || o.dir || !data || data.length === 0) {
               o.base64 = false;
               o.binary = true;
-              data = "";
-              o.compression = "STORE";
-              dataType = "string";
+              data = '';
+              o.compression = 'STORE';
+              dataType = 'string';
             }
 
             /*
@@ -1695,11 +1695,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @return {string} the parent folder, or ""
            */
           var parentFolder = function (path) {
-            if (path.slice(-1) === "/") {
+            if (path.slice(-1) === '/') {
               path = path.substring(0, path.length - 1);
             }
-            var lastSlash = path.lastIndexOf("/");
-            return lastSlash > 0 ? path.substring(0, lastSlash) : "";
+            var lastSlash = path.lastIndexOf('/');
+            return lastSlash > 0 ? path.substring(0, lastSlash) : '';
           };
 
           /**
@@ -1710,8 +1710,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           var forceTrailingSlash = function (path) {
             // Check the name ends with a /
-            if (path.slice(-1) !== "/") {
-              path += "/"; // IE doesn't like substr(-1)
+            if (path.slice(-1) !== '/') {
+              path += '/'; // IE doesn't like substr(-1)
             }
             return path;
           };
@@ -1726,7 +1726,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           var folderAdd = function (name, createFolders) {
             createFolders =
-              typeof createFolders !== "undefined"
+              typeof createFolders !== 'undefined'
                 ? createFolders
                 : defaults.createFolders;
 
@@ -1749,7 +1749,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * false otherwise
            */
           function isRegExp(object) {
-            return Object.prototype.toString.call(object) === "[object RegExp]";
+            return Object.prototype.toString.call(object) === '[object RegExp]';
           }
 
           // return the actual prototype of JSZip
@@ -1759,7 +1759,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              */
             load: function () {
               throw new Error(
-                "This method has been removed in JSZip 3.0, please check the upgrade guide."
+                'This method has been removed in JSZip 3.0, please check the upgrade guide.'
               );
             },
 
@@ -1877,8 +1877,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               var file = this.files[name];
               if (!file) {
                 // Look for any folders
-                if (name.slice(-1) !== "/") {
-                  name += "/";
+                if (name.slice(-1) !== '/') {
+                  name += '/';
                 }
                 file = this.files[name];
               }
@@ -1908,7 +1908,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              */
             generate: function (options) {
               throw new Error(
-                "This method has been removed in JSZip 3.0, please check the upgrade guide."
+                'This method has been removed in JSZip 3.0, please check the upgrade guide.'
               );
             },
 
@@ -1925,12 +1925,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               try {
                 opts = utils.extend(options || {}, {
                   streamFiles: false,
-                  compression: "STORE",
+                  compression: 'STORE',
                   compressionOptions: null,
-                  type: "",
-                  platform: "DOS",
+                  type: '',
+                  platform: 'DOS',
                   comment: null,
-                  mimeType: "application/zip",
+                  mimeType: 'application/zip',
                   encodeFileName: utf8.utf8encode,
                 });
 
@@ -1938,38 +1938,38 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 opts.compression = opts.compression.toUpperCase();
 
                 // "binarystring" is prefered but the internals use "string".
-                if (opts.type === "binarystring") {
-                  opts.type = "string";
+                if (opts.type === 'binarystring') {
+                  opts.type = 'string';
                 }
 
                 if (!opts.type) {
-                  throw new Error("No output type specified.");
+                  throw new Error('No output type specified.');
                 }
 
                 utils.checkSupport(opts.type);
 
                 // accept nodejs `process.platform`
                 if (
-                  opts.platform === "darwin" ||
-                  opts.platform === "freebsd" ||
-                  opts.platform === "linux" ||
-                  opts.platform === "sunos"
+                  opts.platform === 'darwin' ||
+                  opts.platform === 'freebsd' ||
+                  opts.platform === 'linux' ||
+                  opts.platform === 'sunos'
                 ) {
-                  opts.platform = "UNIX";
+                  opts.platform = 'UNIX';
                 }
-                if (opts.platform === "win32") {
-                  opts.platform = "DOS";
+                if (opts.platform === 'win32') {
+                  opts.platform = 'DOS';
                 }
 
-                var comment = opts.comment || this.comment || "";
+                var comment = opts.comment || this.comment || '';
                 worker = generate.generateWorker(this, opts, comment);
               } catch (e) {
-                worker = new GenericWorker("error");
+                worker = new GenericWorker('error');
                 worker.error(e);
               }
               return new StreamHelper(
                 worker,
-                opts.type || "string",
+                opts.type || 'string',
                 opts.mimeType
               );
             },
@@ -1987,7 +1987,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             generateNodeStream: function (options, onUpdate) {
               options = options || {};
               if (!options.type) {
-                options.type = "nodebuffer";
+                options.type = 'nodebuffer';
               }
               return this.generateInternalStream(options).toNodejsStream(
                 onUpdate
@@ -1997,16 +1997,16 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = out;
         },
         {
-          "./compressedObject": 2,
-          "./defaults": 5,
-          "./generate": 9,
-          "./nodejs/NodejsStreamInputAdapter": 12,
-          "./nodejsUtils": 14,
-          "./stream/GenericWorker": 28,
-          "./stream/StreamHelper": 29,
-          "./utf8": 31,
-          "./utils": 32,
-          "./zipObject": 35,
+          './compressedObject': 2,
+          './defaults': 5,
+          './generate': 9,
+          './nodejs/NodejsStreamInputAdapter': 12,
+          './nodejsUtils': 14,
+          './stream/GenericWorker': 28,
+          './stream/StreamHelper': 29,
+          './utf8': 31,
+          './utils': 32,
+          './zipObject': 35,
         },
       ],
       16: [
@@ -2019,15 +2019,15 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * reduce the final size of the bundle (only one stream implementation, not
            * two).
            */
-          module.exports = require("stream");
+          module.exports = require('stream');
         },
         { stream: undefined },
       ],
       17: [
         function (require, module, exports) {
-          "use strict";
-          var DataReader = require("./DataReader");
-          var utils = require("../utils");
+          'use strict';
+          var DataReader = require('./DataReader');
+          var utils = require('../utils');
 
           function ArrayReader(data) {
             DataReader.call(this, data);
@@ -2096,12 +2096,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = ArrayReader;
         },
-        { "../utils": 32, "./DataReader": 18 },
+        { '../utils': 32, './DataReader': 18 },
       ],
       18: [
         function (require, module, exports) {
-          "use strict";
-          var utils = require("../utils");
+          'use strict';
+          var utils = require('../utils');
 
           function DataReader(data) {
             this.data = data; // type : see implementation
@@ -2126,11 +2126,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             checkIndex: function (newIndex) {
               if (this.length < this.zero + newIndex || newIndex < 0) {
                 throw new Error(
-                  "End of data reached (data length = " +
+                  'End of data reached (data length = ' +
                     this.length +
-                    ", asked index = " +
+                    ', asked index = ' +
                     newIndex +
-                    "). Corrupted zip ?"
+                    '). Corrupted zip ?'
                 );
               }
             },
@@ -2180,7 +2180,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * @return {string} the corresponding string.
              */
             readString: function (size) {
-              return utils.transformTo("string", this.readData(size));
+              return utils.transformTo('string', this.readData(size));
             },
             /**
              * Get raw data without conversion, <size> bytes.
@@ -2226,13 +2226,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = DataReader;
         },
-        { "../utils": 32 },
+        { '../utils': 32 },
       ],
       19: [
         function (require, module, exports) {
-          "use strict";
-          var Uint8ArrayReader = require("./Uint8ArrayReader");
-          var utils = require("../utils");
+          'use strict';
+          var Uint8ArrayReader = require('./Uint8ArrayReader');
+          var utils = require('../utils');
 
           function NodeBufferReader(data) {
             Uint8ArrayReader.call(this, data);
@@ -2253,13 +2253,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = NodeBufferReader;
         },
-        { "../utils": 32, "./Uint8ArrayReader": 21 },
+        { '../utils': 32, './Uint8ArrayReader': 21 },
       ],
       20: [
         function (require, module, exports) {
-          "use strict";
-          var DataReader = require("./DataReader");
-          var utils = require("../utils");
+          'use strict';
+          var DataReader = require('./DataReader');
+          var utils = require('../utils');
 
           function StringReader(data) {
             DataReader.call(this, data);
@@ -2299,13 +2299,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = StringReader;
         },
-        { "../utils": 32, "./DataReader": 18 },
+        { '../utils': 32, './DataReader': 18 },
       ],
       21: [
         function (require, module, exports) {
-          "use strict";
-          var ArrayReader = require("./ArrayReader");
-          var utils = require("../utils");
+          'use strict';
+          var ArrayReader = require('./ArrayReader');
+          var utils = require('../utils');
 
           function Uint8ArrayReader(data) {
             ArrayReader.call(this, data);
@@ -2329,18 +2329,18 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = Uint8ArrayReader;
         },
-        { "../utils": 32, "./ArrayReader": 17 },
+        { '../utils': 32, './ArrayReader': 17 },
       ],
       22: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var support = require("../support");
-          var ArrayReader = require("./ArrayReader");
-          var StringReader = require("./StringReader");
-          var NodeBufferReader = require("./NodeBufferReader");
-          var Uint8ArrayReader = require("./Uint8ArrayReader");
+          var utils = require('../utils');
+          var support = require('../support');
+          var ArrayReader = require('./ArrayReader');
+          var StringReader = require('./StringReader');
+          var NodeBufferReader = require('./NodeBufferReader');
+          var Uint8ArrayReader = require('./Uint8ArrayReader');
 
           /**
            * Create a reader adapted to the data.
@@ -2350,47 +2350,47 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = function (data) {
             var type = utils.getTypeOf(data);
             utils.checkSupport(type);
-            if (type === "string" && !support.uint8array) {
+            if (type === 'string' && !support.uint8array) {
               return new StringReader(data);
             }
-            if (type === "nodebuffer") {
+            if (type === 'nodebuffer') {
               return new NodeBufferReader(data);
             }
             if (support.uint8array) {
               return new Uint8ArrayReader(
-                utils.transformTo("uint8array", data)
+                utils.transformTo('uint8array', data)
               );
             }
-            return new ArrayReader(utils.transformTo("array", data));
+            return new ArrayReader(utils.transformTo('array', data));
           };
         },
         {
-          "../support": 30,
-          "../utils": 32,
-          "./ArrayReader": 17,
-          "./NodeBufferReader": 19,
-          "./StringReader": 20,
-          "./Uint8ArrayReader": 21,
+          '../support': 30,
+          '../utils': 32,
+          './ArrayReader': 17,
+          './NodeBufferReader': 19,
+          './StringReader': 20,
+          './Uint8ArrayReader': 21,
         },
       ],
       23: [
         function (require, module, exports) {
-          "use strict";
-          exports.LOCAL_FILE_HEADER = "PK\x03\x04";
-          exports.CENTRAL_FILE_HEADER = "PK\x01\x02";
-          exports.CENTRAL_DIRECTORY_END = "PK\x05\x06";
-          exports.ZIP64_CENTRAL_DIRECTORY_LOCATOR = "PK\x06\x07";
-          exports.ZIP64_CENTRAL_DIRECTORY_END = "PK\x06\x06";
-          exports.DATA_DESCRIPTOR = "PK\x07\x08";
+          'use strict';
+          exports.LOCAL_FILE_HEADER = 'PK\x03\x04';
+          exports.CENTRAL_FILE_HEADER = 'PK\x01\x02';
+          exports.CENTRAL_DIRECTORY_END = 'PK\x05\x06';
+          exports.ZIP64_CENTRAL_DIRECTORY_LOCATOR = 'PK\x06\x07';
+          exports.ZIP64_CENTRAL_DIRECTORY_END = 'PK\x06\x06';
+          exports.DATA_DESCRIPTOR = 'PK\x07\x08';
         },
         {},
       ],
       24: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var GenericWorker = require("./GenericWorker");
-          var utils = require("../utils");
+          var GenericWorker = require('./GenericWorker');
+          var utils = require('../utils');
 
           /**
            * A worker which convert chunks to a specified type.
@@ -2398,7 +2398,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @param {String} destType the destination type.
            */
           function ConvertWorker(destType) {
-            GenericWorker.call(this, "ConvertWorker to " + destType);
+            GenericWorker.call(this, 'ConvertWorker to ' + destType);
             this.destType = destType;
           }
           utils.inherits(ConvertWorker, GenericWorker);
@@ -2414,23 +2414,23 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = ConvertWorker;
         },
-        { "../utils": 32, "./GenericWorker": 28 },
+        { '../utils': 32, './GenericWorker': 28 },
       ],
       25: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var GenericWorker = require("./GenericWorker");
-          var crc32 = require("../crc32");
-          var utils = require("../utils");
+          var GenericWorker = require('./GenericWorker');
+          var crc32 = require('../crc32');
+          var utils = require('../utils');
 
           /**
            * A worker which calculate the crc32 of the data flowing through.
            * @constructor
            */
           function Crc32Probe() {
-            GenericWorker.call(this, "Crc32Probe");
-            this.withStreamInfo("crc32", 0);
+            GenericWorker.call(this, 'Crc32Probe');
+            this.withStreamInfo('crc32', 0);
           }
           utils.inherits(Crc32Probe, GenericWorker);
 
@@ -2446,14 +2446,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = Crc32Probe;
         },
-        { "../crc32": 4, "../utils": 32, "./GenericWorker": 28 },
+        { '../crc32': 4, '../utils': 32, './GenericWorker': 28 },
       ],
       26: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var GenericWorker = require("./GenericWorker");
+          var utils = require('../utils');
+          var GenericWorker = require('./GenericWorker');
 
           /**
            * A worker which calculate the total length of the data flowing through.
@@ -2461,7 +2461,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @param {String} propName the name used to expose the length
            */
           function DataLengthProbe(propName) {
-            GenericWorker.call(this, "DataLengthProbe for " + propName);
+            GenericWorker.call(this, 'DataLengthProbe for ' + propName);
             this.propName = propName;
             this.withStreamInfo(propName, 0);
           }
@@ -2479,14 +2479,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           module.exports = DataLengthProbe;
         },
-        { "../utils": 32, "./GenericWorker": 28 },
+        { '../utils': 32, './GenericWorker': 28 },
       ],
       27: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var GenericWorker = require("./GenericWorker");
+          var utils = require('../utils');
+          var GenericWorker = require('./GenericWorker');
 
           // the size of the generated chunks
           // TODO expose this as a public variable
@@ -2498,13 +2498,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @param {Promise} dataP the promise of the data to split
            */
           function DataWorker(dataP) {
-            GenericWorker.call(this, "DataWorker");
+            GenericWorker.call(this, 'DataWorker');
             var self = this;
             this.dataIsReady = false;
             this.index = 0;
             this.max = 0;
             this.data = null;
-            this.type = "";
+            this.type = '';
 
             this._tickScheduled = false;
 
@@ -2580,14 +2580,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               return this.end();
             } else {
               switch (this.type) {
-                case "string":
+                case 'string':
                   data = this.data.substring(this.index, nextIndex);
                   break;
-                case "uint8array":
+                case 'uint8array':
                   data = this.data.subarray(this.index, nextIndex);
                   break;
-                case "array":
-                case "nodebuffer":
+                case 'array':
+                case 'nodebuffer':
                   data = this.data.slice(this.index, nextIndex);
                   break;
               }
@@ -2603,11 +2603,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
           module.exports = DataWorker;
         },
-        { "../utils": 32, "./GenericWorker": 28 },
+        { '../utils': 32, './GenericWorker': 28 },
       ],
       28: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           /**
            * A worker that does nothing but passing chunks to the next one. This is like
@@ -2625,7 +2625,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           function GenericWorker(name) {
             // the name of the worker
-            this.name = name || "default";
+            this.name = name || 'default';
             // an object containing metadata about the workers chain
             this.streamInfo = {};
             // an error which happened when the worker was paused
@@ -2654,7 +2654,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * @param {Object} chunk the chunk to push
              */
             push: function (chunk) {
-              this.emit("data", chunk);
+              this.emit('data', chunk);
             },
             /**
              * End the stream.
@@ -2667,11 +2667,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
               this.flush();
               try {
-                this.emit("end");
+                this.emit('end');
                 this.cleanUp();
                 this.isFinished = true;
               } catch (e) {
-                this.emit("error", e);
+                this.emit('error', e);
               }
               return true;
             },
@@ -2690,7 +2690,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               } else {
                 this.isFinished = true;
 
-                this.emit("error", e);
+                this.emit('error', e);
 
                 // in the workers chain exploded in the middle of the chain,
                 // the error event will go downward but we also need to notify
@@ -2764,13 +2764,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               this.mergeStreamInfo();
               this.previous = previous;
               var self = this;
-              previous.on("data", function (chunk) {
+              previous.on('data', function (chunk) {
                 self.processChunk(chunk);
               });
-              previous.on("end", function () {
+              previous.on('end', function () {
                 self.end();
               });
-              previous.on("error", function (e) {
+              previous.on('error', function (e) {
                 self.error(e);
               });
               return this;
@@ -2867,9 +2867,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * Pretty print the workers chain.
              */
             toString: function () {
-              var me = "Worker " + this.name;
+              var me = 'Worker ' + this.name;
               if (this.previous) {
-                return this.previous + " -> " + me;
+                return this.previous + ' -> ' + me;
               } else {
                 return me;
               }
@@ -2882,19 +2882,19 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       29: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("../utils");
-          var ConvertWorker = require("./ConvertWorker");
-          var GenericWorker = require("./GenericWorker");
-          var base64 = require("../base64");
-          var support = require("../support");
-          var external = require("../external");
+          var utils = require('../utils');
+          var ConvertWorker = require('./ConvertWorker');
+          var GenericWorker = require('./GenericWorker');
+          var base64 = require('../base64');
+          var support = require('../support');
+          var external = require('../external');
 
           var NodejsStreamOutputAdapter = null;
           if (support.nodestream) {
             try {
-              NodejsStreamOutputAdapter = require("../nodejs/NodejsStreamOutputAdapter");
+              NodejsStreamOutputAdapter = require('../nodejs/NodejsStreamOutputAdapter');
             } catch (e) {}
           }
 
@@ -2909,12 +2909,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           function transformZipOutput(type, content, mimeType) {
             switch (type) {
-              case "blob":
+              case 'blob':
                 return utils.newBlob(
-                  utils.transformTo("arraybuffer", content),
+                  utils.transformTo('arraybuffer', content),
                   mimeType
                 );
-              case "base64":
+              case 'base64':
                 return base64.encode(content);
               default:
                 return utils.transformTo(type, content);
@@ -2937,18 +2937,18 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               totalLength += dataArray[i].length;
             }
             switch (type) {
-              case "string":
-                return dataArray.join("");
-              case "array":
+              case 'string':
+                return dataArray.join('');
+              case 'array':
                 return Array.prototype.concat.apply([], dataArray);
-              case "uint8array":
+              case 'uint8array':
                 res = new Uint8Array(totalLength);
                 for (i = 0; i < dataArray.length; i++) {
                   res.set(dataArray[i], index);
                   index += dataArray[i].length;
                 }
                 return res;
-              case "nodebuffer":
+              case 'nodebuffer':
                 return Buffer.concat(dataArray);
               default:
                 throw new Error("concat : unsupported type '" + type + "'");
@@ -2971,17 +2971,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 resultType = helper._outputType,
                 mimeType = helper._mimeType;
               helper
-                .on("data", function (data, meta) {
+                .on('data', function (data, meta) {
                   dataArray.push(data);
                   if (updateCallback) {
                     updateCallback(meta);
                   }
                 })
-                .on("error", function (err) {
+                .on('error', function (err) {
                   dataArray = [];
                   reject(err);
                 })
-                .on("end", function () {
+                .on('end', function () {
                   try {
                     var result = transformZipOutput(
                       resultType,
@@ -3008,12 +3008,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           function StreamHelper(worker, outputType, mimeType) {
             var internalType = outputType;
             switch (outputType) {
-              case "blob":
-              case "arraybuffer":
-                internalType = "uint8array";
+              case 'blob':
+              case 'arraybuffer':
+                internalType = 'uint8array';
                 break;
-              case "base64":
-                internalType = "string";
+              case 'base64':
+                internalType = 'string';
                 break;
             }
 
@@ -3030,7 +3030,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // prevent any updates on previous workers.
               worker.lock();
             } catch (e) {
-              this._worker = new GenericWorker("error");
+              this._worker = new GenericWorker('error');
               this._worker.error(e);
             }
           }
@@ -3054,7 +3054,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             on: function (evt, fn) {
               var self = this;
 
-              if (evt === "data") {
+              if (evt === 'data') {
                 this._worker.on(evt, function (chunk) {
                   fn.call(self, chunk.data, chunk.meta);
                 });
@@ -3087,21 +3087,21 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * @return {NodejsStreamOutputAdapter} the nodejs stream.
              */
             toNodejsStream: function (updateCb) {
-              utils.checkSupport("nodestream");
-              if (this._outputType !== "nodebuffer") {
+              utils.checkSupport('nodestream');
+              if (this._outputType !== 'nodebuffer') {
                 // an object stream containing blob/arraybuffer/uint8array/string
                 // is strange and I don't know if it would be useful.
                 // I you find this comment and have a good usecase, please open a
                 // bug report !
                 throw new Error(
-                  this._outputType + " is not supported by this method"
+                  this._outputType + ' is not supported by this method'
                 );
               }
 
               return new NodejsStreamOutputAdapter(
                 this,
                 {
-                  objectMode: this._outputType !== "nodebuffer",
+                  objectMode: this._outputType !== 'nodebuffer',
                 },
                 updateCb
               );
@@ -3111,37 +3111,37 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = StreamHelper;
         },
         {
-          "../base64": 1,
-          "../external": 6,
-          "../nodejs/NodejsStreamOutputAdapter": 13,
-          "../support": 30,
-          "../utils": 32,
-          "./ConvertWorker": 24,
-          "./GenericWorker": 28,
+          '../base64': 1,
+          '../external': 6,
+          '../nodejs/NodejsStreamOutputAdapter': 13,
+          '../support': 30,
+          '../utils': 32,
+          './ConvertWorker': 24,
+          './GenericWorker': 28,
         },
       ],
       30: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           exports.base64 = true;
           exports.array = true;
           exports.string = true;
           exports.arraybuffer =
-            typeof ArrayBuffer !== "undefined" &&
-            typeof Uint8Array !== "undefined";
-          exports.nodebuffer = typeof Buffer !== "undefined";
+            typeof ArrayBuffer !== 'undefined' &&
+            typeof Uint8Array !== 'undefined';
+          exports.nodebuffer = typeof Buffer !== 'undefined';
           // contains true if JSZip can read/generate Uint8Array, false otherwise.
-          exports.uint8array = typeof Uint8Array !== "undefined";
+          exports.uint8array = typeof Uint8Array !== 'undefined';
 
-          if (typeof ArrayBuffer === "undefined") {
+          if (typeof ArrayBuffer === 'undefined') {
             exports.blob = false;
           } else {
             var buffer = new ArrayBuffer(0);
             try {
               exports.blob =
                 new Blob([buffer], {
-                  type: "application/zip",
+                  type: 'application/zip',
                 }).size === 0;
             } catch (e) {
               try {
@@ -3152,7 +3152,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   self.MSBlobBuilder;
                 var builder = new Builder();
                 builder.append(buffer);
-                exports.blob = builder.getBlob("application/zip").size === 0;
+                exports.blob = builder.getBlob('application/zip').size === 0;
               } catch (e) {
                 exports.blob = false;
               }
@@ -3160,21 +3160,21 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           }
 
           try {
-            exports.nodestream = !!require("readable-stream").Readable;
+            exports.nodestream = !!require('readable-stream').Readable;
           } catch (e) {
             exports.nodestream = false;
           }
         },
-        { "readable-stream": 16 },
+        { 'readable-stream': 16 },
       ],
       31: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var utils = require("./utils");
-          var support = require("./support");
-          var nodejsUtils = require("./nodejsUtils");
-          var GenericWorker = require("./stream/GenericWorker");
+          var utils = require('./utils');
+          var support = require('./support');
+          var nodejsUtils = require('./nodejsUtils');
+          var GenericWorker = require('./stream/GenericWorker');
 
           /**
            * The following functions come from pako, from pako/lib/utils/strings
@@ -3372,7 +3372,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           exports.utf8encode = function utf8encode(str) {
             if (support.nodebuffer) {
-              return nodejsUtils.newBufferFrom(str, "utf-8");
+              return nodejsUtils.newBufferFrom(str, 'utf-8');
             }
 
             return string2buf(str);
@@ -3386,11 +3386,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           exports.utf8decode = function utf8decode(buf) {
             if (support.nodebuffer) {
-              return utils.transformTo("nodebuffer", buf).toString("utf-8");
+              return utils.transformTo('nodebuffer', buf).toString('utf-8');
             }
 
             buf = utils.transformTo(
-              support.uint8array ? "uint8array" : "array",
+              support.uint8array ? 'uint8array' : 'array',
               buf
             );
 
@@ -3402,7 +3402,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @constructor
            */
           function Utf8DecodeWorker() {
-            GenericWorker.call(this, "utf-8 decode");
+            GenericWorker.call(this, 'utf-8 decode');
             // the last bytes if a chunk didn't end with a complete codepoint.
             this.leftOver = null;
           }
@@ -3413,7 +3413,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            */
           Utf8DecodeWorker.prototype.processChunk = function (chunk) {
             var data = utils.transformTo(
-              support.uint8array ? "uint8array" : "array",
+              support.uint8array ? 'uint8array' : 'array',
               chunk.data
             );
 
@@ -3469,7 +3469,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @constructor
            */
           function Utf8EncodeWorker() {
-            GenericWorker.call(this, "utf-8 encode");
+            GenericWorker.call(this, 'utf-8 encode');
           }
           utils.inherits(Utf8EncodeWorker, GenericWorker);
 
@@ -3485,21 +3485,21 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           exports.Utf8EncodeWorker = Utf8EncodeWorker;
         },
         {
-          "./nodejsUtils": 14,
-          "./stream/GenericWorker": 28,
-          "./support": 30,
-          "./utils": 32,
+          './nodejsUtils': 14,
+          './stream/GenericWorker': 28,
+          './support': 30,
+          './utils': 32,
         },
       ],
       32: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var support = require("./support");
-          var base64 = require("./base64");
-          var nodejsUtils = require("./nodejsUtils");
-          var setImmediate = require("core-js/library/fn/set-immediate");
-          var external = require("./external");
+          var support = require('./support');
+          var base64 = require('./base64');
+          var nodejsUtils = require('./nodejsUtils');
+          var setImmediate = require('core-js/library/fn/set-immediate');
+          var external = require('./external');
 
           /**
            * Convert a string that pass as a "binary string": it should represent a byte
@@ -3532,7 +3532,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @return {Blob} the created blob.
            */
           exports.newBlob = function (part, type) {
-            exports.checkSupport("blob");
+            exports.checkSupport('blob');
 
             try {
               // Blob constructor
@@ -3602,7 +3602,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 return String.fromCharCode.apply(null, array);
               }
               while (k < len) {
-                if (type === "array" || type === "nodebuffer") {
+                if (type === 'array' || type === 'nodebuffer') {
                   result.push(
                     String.fromCharCode.apply(
                       null,
@@ -3619,7 +3619,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 }
                 k += chunk;
               }
-              return result.join("");
+              return result.join('');
             },
             /**
              * Call String.fromCharCode on every item in the array.
@@ -3629,7 +3629,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * @return {String} the result.
              */
             stringifyByChar: function (array) {
-              var resultStr = "";
+              var resultStr = '';
               for (var i = 0; i < array.length; i++) {
                 resultStr += String.fromCharCode(array[i]);
               }
@@ -3686,9 +3686,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var chunk = 65536,
               type = exports.getTypeOf(array),
               canUseApply = true;
-            if (type === "uint8array") {
+            if (type === 'uint8array') {
               canUseApply = arrayToStringHelper.applyCanBeUsed.uint8array;
-            } else if (type === "nodebuffer") {
+            } else if (type === 'nodebuffer') {
               canUseApply = arrayToStringHelper.applyCanBeUsed.nodebuffer;
             }
 
@@ -3730,13 +3730,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           var transform = {};
 
           // string to ?
-          transform["string"] = {
+          transform['string'] = {
             string: identity,
             array: function (input) {
               return stringToArrayLike(input, new Array(input.length));
             },
             arraybuffer: function (input) {
-              return transform["string"]["uint8array"](input).buffer;
+              return transform['string']['uint8array'](input).buffer;
             },
             uint8array: function (input) {
               return stringToArrayLike(input, new Uint8Array(input.length));
@@ -3750,7 +3750,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           // array to ?
-          transform["array"] = {
+          transform['array'] = {
             string: arrayLikeToString,
             array: identity,
             arraybuffer: function (input) {
@@ -3765,7 +3765,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           // arraybuffer to ?
-          transform["arraybuffer"] = {
+          transform['arraybuffer'] = {
             string: function (input) {
               return arrayLikeToString(new Uint8Array(input));
             },
@@ -3785,7 +3785,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           // uint8array to ?
-          transform["uint8array"] = {
+          transform['uint8array'] = {
             string: arrayLikeToString,
             array: function (input) {
               return arrayLikeToArrayLike(input, new Array(input.length));
@@ -3800,13 +3800,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           // nodebuffer to ?
-          transform["nodebuffer"] = {
+          transform['nodebuffer'] = {
             string: arrayLikeToString,
             array: function (input) {
               return arrayLikeToArrayLike(input, new Array(input.length));
             },
             arraybuffer: function (input) {
-              return transform["nodebuffer"]["uint8array"](input).buffer;
+              return transform['nodebuffer']['uint8array'](input).buffer;
             },
             uint8array: function (input) {
               return arrayLikeToArrayLike(input, new Uint8Array(input.length));
@@ -3826,7 +3826,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             if (!input) {
               // undefined, null, etc
               // an empty string won't harm.
-              input = "";
+              input = '';
             }
             if (!outputType) {
               return input;
@@ -3844,20 +3844,20 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @return {String} the (lowercase) type of the input.
            */
           exports.getTypeOf = function (input) {
-            if (typeof input === "string") {
-              return "string";
+            if (typeof input === 'string') {
+              return 'string';
             }
-            if (Object.prototype.toString.call(input) === "[object Array]") {
-              return "array";
+            if (Object.prototype.toString.call(input) === '[object Array]') {
+              return 'array';
             }
             if (support.nodebuffer && nodejsUtils.isBuffer(input)) {
-              return "nodebuffer";
+              return 'nodebuffer';
             }
             if (support.uint8array && input instanceof Uint8Array) {
-              return "uint8array";
+              return 'uint8array';
             }
             if (support.arraybuffer && input instanceof ArrayBuffer) {
-              return "arraybuffer";
+              return 'arraybuffer';
             }
           };
 
@@ -3869,7 +3869,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           exports.checkSupport = function (type) {
             var supported = support[type.toLowerCase()];
             if (!supported) {
-              throw new Error(type + " is not supported by this platform");
+              throw new Error(type + ' is not supported by this platform');
             }
           };
 
@@ -3882,14 +3882,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
            * @return {string} a pretty string.
            */
           exports.pretty = function (str) {
-            var res = "",
+            var res = '',
               code,
               i;
-            for (i = 0; i < (str || "").length; i++) {
+            for (i = 0; i < (str || '').length; i++) {
               code = str.charCodeAt(i);
               res +=
-                "\\x" +
-                (code < 16 ? "0" : "") +
+                '\\x' +
+                (code < 16 ? '0' : '') +
                 code.toString(16).toUpperCase();
             }
             return res;
@@ -3933,7 +3933,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               for (attr in arguments[i]) {
                 if (
                   arguments[i].hasOwnProperty(attr) &&
-                  typeof result[attr] === "undefined"
+                  typeof result[attr] === 'undefined'
                 ) {
                   result[attr] = arguments[i][attr];
                 }
@@ -3965,11 +3965,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               var isBlob =
                 support.blob &&
                 (data instanceof Blob ||
-                  ["[object File]", "[object Blob]"].indexOf(
+                  ['[object File]', '[object Blob]'].indexOf(
                     Object.prototype.toString.call(data)
                   ) !== -1);
 
-              if (isBlob && typeof FileReader !== "undefined") {
+              if (isBlob && typeof FileReader !== 'undefined') {
                 return new external.Promise(function (resolve, reject) {
                   var reader = new FileReader();
 
@@ -3995,14 +3995,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                     "Can't read the data of '" +
                       name +
                       "'. Is it " +
-                      "in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?"
+                      'in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?'
                   )
                 );
               }
               // special case : it's way easier to work with Uint8Array than with ArrayBuffer
-              if (dataType === "arraybuffer") {
-                data = exports.transformTo("uint8array", data);
-              } else if (dataType === "string") {
+              if (dataType === 'arraybuffer') {
+                data = exports.transformTo('uint8array', data);
+              } else if (dataType === 'string') {
                 if (isBase64) {
                   data = base64.decode(data);
                 } else if (isBinary) {
@@ -4019,22 +4019,22 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
         },
         {
-          "./base64": 1,
-          "./external": 6,
-          "./nodejsUtils": 14,
-          "./support": 30,
-          "core-js/library/fn/set-immediate": 36,
+          './base64': 1,
+          './external': 6,
+          './nodejsUtils': 14,
+          './support': 30,
+          'core-js/library/fn/set-immediate': 36,
         },
       ],
       33: [
         function (require, module, exports) {
-          "use strict";
-          var readerFor = require("./reader/readerFor");
-          var utils = require("./utils");
-          var sig = require("./signature");
-          var ZipEntry = require("./zipEntry");
-          var utf8 = require("./utf8");
-          var support = require("./support");
+          'use strict';
+          var readerFor = require('./reader/readerFor');
+          var utils = require('./utils');
+          var sig = require('./signature');
+          var ZipEntry = require('./zipEntry');
+          var utf8 = require('./utf8');
+          var support = require('./support');
           //  class ZipEntries {{{
           /**
            * All the entries in the zip file.
@@ -4056,12 +4056,12 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 this.reader.index -= 4;
                 var signature = this.reader.readString(4);
                 throw new Error(
-                  "Corrupted zip or bug: unexpected signature " +
-                    "(" +
+                  'Corrupted zip or bug: unexpected signature ' +
+                    '(' +
                     utils.pretty(signature) +
-                    ", expected " +
+                    ', expected ' +
                     utils.pretty(expectedSignature) +
-                    ")"
+                    ')'
                 );
               }
             },
@@ -4095,7 +4095,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // On a linux machine with LANG=en_US.utf8, this field is utf8 encoded.
               // On a windows machine, this field is encoded with the localized windows code page.
               var zipComment = this.reader.readData(this.zipCommentLength);
-              var decodeParamType = support.uint8array ? "uint8array" : "array";
+              var decodeParamType = support.uint8array ? 'uint8array' : 'array';
               // To get consistent behavior with the generation part, we will assume that
               // this is utf8 encoded unless specified otherwise.
               var decodeContent = utils.transformTo(
@@ -4147,7 +4147,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               this.relativeOffsetEndOfZip64CentralDir = this.reader.readInt(8);
               this.disksCount = this.reader.readInt(4);
               if (this.disksCount > 1) {
-                throw new Error("Multi-volumes zip are not supported");
+                throw new Error('Multi-volumes zip are not supported');
               }
             },
             /**
@@ -4189,9 +4189,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   // We expected some records but couldn't find ANY.
                   // This is really suspicious, as if something went wrong.
                   throw new Error(
-                    "Corrupted zip or bug: expected " +
+                    'Corrupted zip or bug: expected ' +
                       this.centralDirRecords +
-                      " records in central dir, got " +
+                      ' records in central dir, got ' +
                       this.files.length
                   );
                 } else {
@@ -4219,7 +4219,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 if (isGarbage) {
                   throw new Error(
                     "Can't find end of central directory : is this a zip file ? " +
-                      "If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html"
+                      'If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html'
                   );
                 } else {
                   throw new Error(
@@ -4326,7 +4326,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 }
               } else if (extraBytes < 0) {
                 throw new Error(
-                  "Corrupted zip: missing " + Math.abs(extraBytes) + " bytes."
+                  'Corrupted zip: missing ' + Math.abs(extraBytes) + ' bytes.'
                 );
               }
             },
@@ -4348,24 +4348,24 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = ZipEntries;
         },
         {
-          "./reader/readerFor": 22,
-          "./signature": 23,
-          "./support": 30,
-          "./utf8": 31,
-          "./utils": 32,
-          "./zipEntry": 34,
+          './reader/readerFor': 22,
+          './signature': 23,
+          './support': 30,
+          './utf8': 31,
+          './utils': 32,
+          './zipEntry': 34,
         },
       ],
       34: [
         function (require, module, exports) {
-          "use strict";
-          var readerFor = require("./reader/readerFor");
-          var utils = require("./utils");
-          var CompressedObject = require("./compressedObject");
-          var crc32fn = require("./crc32");
-          var utf8 = require("./utf8");
-          var compressions = require("./compressions");
-          var support = require("./support");
+          'use strict';
+          var readerFor = require('./reader/readerFor');
+          var utils = require('./utils');
+          var CompressedObject = require('./compressedObject');
+          var crc32fn = require('./crc32');
+          var utf8 = require('./utf8');
+          var compressions = require('./compressions');
+          var support = require('./support');
 
           var MADE_BY_DOS = 0x00;
           var MADE_BY_UNIX = 0x03;
@@ -4448,7 +4448,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               if (this.compressedSize === -1 || this.uncompressedSize === -1) {
                 throw new Error(
                   "Bug or corrupted zip : didn't get enough informations from the central directory " +
-                    "(compressedSize === -1 || uncompressedSize === -1)"
+                    '(compressedSize === -1 || uncompressedSize === -1)'
                 );
               }
 
@@ -4456,11 +4456,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               if (compression === null) {
                 // no compression found
                 throw new Error(
-                  "Corrupted zip : compression " +
+                  'Corrupted zip : compression ' +
                     utils.pretty(this.compressionMethod) +
-                    " unknown (inner file : " +
-                    utils.transformTo("string", this.fileName) +
-                    ")"
+                    ' unknown (inner file : ' +
+                    utils.transformTo('string', this.fileName) +
+                    ')'
                 );
               }
               this.decompressed = new CompressedObject(
@@ -4495,7 +4495,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               this.localHeaderOffset = reader.readInt(4);
 
               if (this.isEncrypted()) {
-                throw new Error("Encrypted zip are not supported");
+                throw new Error('Encrypted zip are not supported');
               }
 
               // will be read in the local part, see the comments there
@@ -4530,7 +4530,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               }
 
               // fail safe : if the name ends with a / it probably means a folder
-              if (!this.dir && this.fileNameStr.slice(-1) === "/") {
+              if (!this.dir && this.fileNameStr.slice(-1) === '/') {
                 this.dir = true;
               }
             },
@@ -4592,7 +4592,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * Apply an UTF8 transformation if needed.
              */
             handleUTF8: function () {
-              var decodeParamType = support.uint8array ? "uint8array" : "array";
+              var decodeParamType = support.uint8array ? 'uint8array' : 'array';
               if (this.useUTF8()) {
                 this.fileNameStr = utf8.utf8decode(this.fileName);
                 this.fileCommentStr = utf8.utf8decode(this.fileComment);
@@ -4680,24 +4680,24 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = ZipEntry;
         },
         {
-          "./compressedObject": 2,
-          "./compressions": 3,
-          "./crc32": 4,
-          "./reader/readerFor": 22,
-          "./support": 30,
-          "./utf8": 31,
-          "./utils": 32,
+          './compressedObject': 2,
+          './compressions': 3,
+          './crc32': 4,
+          './reader/readerFor': 22,
+          './support': 30,
+          './utf8': 31,
+          './utils': 32,
         },
       ],
       35: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var StreamHelper = require("./stream/StreamHelper");
-          var DataWorker = require("./stream/DataWorker");
-          var utf8 = require("./utf8");
-          var CompressedObject = require("./compressedObject");
-          var GenericWorker = require("./stream/GenericWorker");
+          var StreamHelper = require('./stream/StreamHelper');
+          var DataWorker = require('./stream/DataWorker');
+          var utf8 = require('./utf8');
+          var CompressedObject = require('./compressedObject');
+          var GenericWorker = require('./stream/GenericWorker');
 
           /**
            * A simple object representing a file in the zip file.
@@ -4731,16 +4731,16 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              */
             internalStream: function (type) {
               var result = null,
-                outputType = "string";
+                outputType = 'string';
               try {
                 if (!type) {
-                  throw new Error("No output type specified.");
+                  throw new Error('No output type specified.');
                 }
                 outputType = type.toLowerCase();
                 var askUnicodeString =
-                  outputType === "string" || outputType === "text";
-                if (outputType === "binarystring" || outputType === "text") {
-                  outputType = "string";
+                  outputType === 'string' || outputType === 'text';
+                if (outputType === 'binarystring' || outputType === 'text') {
+                  outputType = 'string';
                 }
                 result = this._decompressWorker();
 
@@ -4753,11 +4753,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   result = result.pipe(new utf8.Utf8DecodeWorker());
                 }
               } catch (e) {
-                result = new GenericWorker("error");
+                result = new GenericWorker('error');
                 result.error(e);
               }
 
-              return new StreamHelper(result, outputType, "");
+              return new StreamHelper(result, outputType, '');
             },
 
             /**
@@ -4777,7 +4777,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
              * @return Stream the stream.
              */
             nodeStream: function (type, onUpdate) {
-              return this.internalStream(type || "nodebuffer").toNodejsStream(
+              return this.internalStream(type || 'nodebuffer').toNodejsStream(
                 onUpdate
               );
             },
@@ -4824,15 +4824,15 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
 
           var removedMethods = [
-            "asText",
-            "asBinary",
-            "asNodeBuffer",
-            "asUint8Array",
-            "asArrayBuffer",
+            'asText',
+            'asBinary',
+            'asNodeBuffer',
+            'asUint8Array',
+            'asArrayBuffer',
           ];
           var removedFn = function () {
             throw new Error(
-              "This method has been removed in JSZip 3.0, please check the upgrade guide."
+              'This method has been removed in JSZip 3.0, please check the upgrade guide.'
             );
           };
 
@@ -4842,25 +4842,25 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = ZipObject;
         },
         {
-          "./compressedObject": 2,
-          "./stream/DataWorker": 27,
-          "./stream/GenericWorker": 28,
-          "./stream/StreamHelper": 29,
-          "./utf8": 31,
+          './compressedObject': 2,
+          './stream/DataWorker': 27,
+          './stream/GenericWorker': 28,
+          './stream/StreamHelper': 29,
+          './utf8': 31,
         },
       ],
       36: [
         function (require, module, exports) {
-          require("../modules/web.immediate");
-          module.exports = require("../modules/_core").setImmediate;
+          require('../modules/web.immediate');
+          module.exports = require('../modules/_core').setImmediate;
         },
-        { "../modules/_core": 40, "../modules/web.immediate": 56 },
+        { '../modules/_core': 40, '../modules/web.immediate': 56 },
       ],
       37: [
         function (require, module, exports) {
           module.exports = function (it) {
-            if (typeof it != "function")
-              throw TypeError(it + " is not a function!");
+            if (typeof it != 'function')
+              throw TypeError(it + ' is not a function!');
             return it;
           };
         },
@@ -4868,13 +4868,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       38: [
         function (require, module, exports) {
-          var isObject = require("./_is-object");
+          var isObject = require('./_is-object');
           module.exports = function (it) {
-            if (!isObject(it)) throw TypeError(it + " is not an object!");
+            if (!isObject(it)) throw TypeError(it + ' is not an object!');
             return it;
           };
         },
-        { "./_is-object": 51 },
+        { './_is-object': 51 },
       ],
       39: [
         function (require, module, exports) {
@@ -4888,15 +4888,15 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       40: [
         function (require, module, exports) {
-          var core = (module.exports = { version: "2.3.0" });
-          if (typeof __e == "number") __e = core; // eslint-disable-line no-undef
+          var core = (module.exports = { version: '2.3.0' });
+          if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
         },
         {},
       ],
       41: [
         function (require, module, exports) {
           // optional / simple context binding
-          var aFunction = require("./_a-function");
+          var aFunction = require('./_a-function');
           module.exports = function (fn, that, length) {
             aFunction(fn);
             if (that === undefined) return fn;
@@ -4919,14 +4919,14 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             };
           };
         },
-        { "./_a-function": 37 },
+        { './_a-function': 37 },
       ],
       42: [
         function (require, module, exports) {
           // Thank's IE8 for his funny defineProperty
-          module.exports = !require("./_fails")(function () {
+          module.exports = !require('./_fails')(function () {
             return (
-              Object.defineProperty({}, "a", {
+              Object.defineProperty({}, 'a', {
                 get: function () {
                   return 7;
                 },
@@ -4934,27 +4934,27 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             );
           });
         },
-        { "./_fails": 45 },
+        { './_fails': 45 },
       ],
       43: [
         function (require, module, exports) {
-          var isObject = require("./_is-object"),
-            document = require("./_global").document,
+          var isObject = require('./_is-object'),
+            document = require('./_global').document,
             // in old IE typeof document.createElement is 'object'
             is = isObject(document) && isObject(document.createElement);
           module.exports = function (it) {
             return is ? document.createElement(it) : {};
           };
         },
-        { "./_global": 46, "./_is-object": 51 },
+        { './_global': 46, './_is-object': 51 },
       ],
       44: [
         function (require, module, exports) {
-          var global = require("./_global"),
-            core = require("./_core"),
-            ctx = require("./_ctx"),
-            hide = require("./_hide"),
-            PROTOTYPE = "prototype";
+          var global = require('./_global'),
+            core = require('./_core'),
+            ctx = require('./_ctx'),
+            hide = require('./_hide'),
+            PROTOTYPE = 'prototype';
 
           var $export = function (type, name, source) {
             var IS_FORCED = type & $export.F,
@@ -4982,7 +4982,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               out = own ? target[key] : source[key];
               // prevent global pollution for namespaces
               exports[key] =
-                IS_GLOBAL && typeof target[key] != "function"
+                IS_GLOBAL && typeof target[key] != 'function'
                   ? source[key]
                   : // bind timers to global for call from export context
                   IS_BIND && own
@@ -5008,7 +5008,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                       return F;
                       // make static versions for prototype methods
                     })(out)
-                  : IS_PROTO && typeof out == "function"
+                  : IS_PROTO && typeof out == 'function'
                   ? ctx(Function.call, out)
                   : out;
               // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
@@ -5031,7 +5031,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           $export.R = 128; // real proto method for `library`
           module.exports = $export;
         },
-        { "./_core": 40, "./_ctx": 41, "./_global": 46, "./_hide": 47 },
+        { './_core': 40, './_ctx': 41, './_global': 46, './_hide': 47 },
       ],
       45: [
         function (require, module, exports) {
@@ -5049,20 +5049,20 @@ https://github.com/nodeca/pako/blob/master/LICENSE
         function (require, module, exports) {
           // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
           var global = (module.exports =
-            typeof window != "undefined" && window.Math == Math
+            typeof window != 'undefined' && window.Math == Math
               ? window
-              : typeof self != "undefined" && self.Math == Math
+              : typeof self != 'undefined' && self.Math == Math
               ? self
-              : Function("return this")());
-          if (typeof __g == "number") __g = global; // eslint-disable-line no-undef
+              : Function('return this')());
+          if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
         },
         {},
       ],
       47: [
         function (require, module, exports) {
-          var dP = require("./_object-dp"),
-            createDesc = require("./_property-desc");
-          module.exports = require("./_descriptors")
+          var dP = require('./_object-dp'),
+            createDesc = require('./_property-desc');
+          module.exports = require('./_descriptors')
             ? function (object, key, value) {
                 return dP.f(object, key, createDesc(1, value));
               }
@@ -5071,22 +5071,22 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 return object;
               };
         },
-        { "./_descriptors": 42, "./_object-dp": 52, "./_property-desc": 53 },
+        { './_descriptors': 42, './_object-dp': 52, './_property-desc': 53 },
       ],
       48: [
         function (require, module, exports) {
           module.exports =
-            require("./_global").document && document.documentElement;
+            require('./_global').document && document.documentElement;
         },
-        { "./_global": 46 },
+        { './_global': 46 },
       ],
       49: [
         function (require, module, exports) {
           module.exports =
-            !require("./_descriptors") &&
-            !require("./_fails")(function () {
+            !require('./_descriptors') &&
+            !require('./_fails')(function () {
               return (
-                Object.defineProperty(require("./_dom-create")("div"), "a", {
+                Object.defineProperty(require('./_dom-create')('div'), 'a', {
                   get: function () {
                     return 7;
                   },
@@ -5094,7 +5094,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               );
             });
         },
-        { "./_descriptors": 42, "./_dom-create": 43, "./_fails": 45 },
+        { './_descriptors': 42, './_dom-create': 43, './_fails': 45 },
       ],
       50: [
         function (require, module, exports) {
@@ -5127,21 +5127,21 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       51: [
         function (require, module, exports) {
           module.exports = function (it) {
-            return typeof it === "object"
+            return typeof it === 'object'
               ? it !== null
-              : typeof it === "function";
+              : typeof it === 'function';
           };
         },
         {},
       ],
       52: [
         function (require, module, exports) {
-          var anObject = require("./_an-object"),
-            IE8_DOM_DEFINE = require("./_ie8-dom-define"),
-            toPrimitive = require("./_to-primitive"),
+          var anObject = require('./_an-object'),
+            IE8_DOM_DEFINE = require('./_ie8-dom-define'),
+            toPrimitive = require('./_to-primitive'),
             dP = Object.defineProperty;
 
-          exports.f = require("./_descriptors")
+          exports.f = require('./_descriptors')
             ? Object.defineProperty
             : function defineProperty(O, P, Attributes) {
                 anObject(O);
@@ -5153,17 +5153,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   } catch (e) {
                     /* empty */
                   }
-                if ("get" in Attributes || "set" in Attributes)
-                  throw TypeError("Accessors not supported!");
-                if ("value" in Attributes) O[P] = Attributes.value;
+                if ('get' in Attributes || 'set' in Attributes)
+                  throw TypeError('Accessors not supported!');
+                if ('value' in Attributes) O[P] = Attributes.value;
                 return O;
               };
         },
         {
-          "./_an-object": 38,
-          "./_descriptors": 42,
-          "./_ie8-dom-define": 49,
-          "./_to-primitive": 55,
+          './_an-object': 38,
+          './_descriptors': 42,
+          './_ie8-dom-define': 49,
+          './_to-primitive': 55,
         },
       ],
       53: [
@@ -5181,18 +5181,18 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       54: [
         function (require, module, exports) {
-          var ctx = require("./_ctx"),
-            invoke = require("./_invoke"),
-            html = require("./_html"),
-            cel = require("./_dom-create"),
-            global = require("./_global"),
+          var ctx = require('./_ctx'),
+            invoke = require('./_invoke'),
+            html = require('./_html'),
+            cel = require('./_dom-create'),
+            global = require('./_global'),
             process = global.process,
             setTask = global.setImmediate,
             clearTask = global.clearImmediate,
             MessageChannel = global.MessageChannel,
             counter = 0,
             queue = {},
-            ONREADYSTATECHANGE = "onreadystatechange",
+            ONREADYSTATECHANGE = 'onreadystatechange',
             defer,
             channel,
             port;
@@ -5214,7 +5214,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 i = 1;
               while (arguments.length > i) args.push(arguments[i++]);
               queue[++counter] = function () {
-                invoke(typeof fn == "function" ? fn : Function(fn), args);
+                invoke(typeof fn == 'function' ? fn : Function(fn), args);
               };
               defer(counter);
               return counter;
@@ -5223,7 +5223,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               delete queue[id];
             };
             // Node.js 0.8-
-            if (require("./_cof")(process) == "process") {
+            if (require('./_cof')(process) == 'process') {
               defer = function (id) {
                 process.nextTick(ctx(run, id, 1));
               };
@@ -5237,17 +5237,17 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
             } else if (
               global.addEventListener &&
-              typeof postMessage == "function" &&
+              typeof postMessage == 'function' &&
               !global.importScripts
             ) {
               defer = function (id) {
-                global.postMessage(id + "", "*");
+                global.postMessage(id + '', '*');
               };
-              global.addEventListener("message", listener, false);
+              global.addEventListener('message', listener, false);
               // IE8-
-            } else if (ONREADYSTATECHANGE in cel("script")) {
+            } else if (ONREADYSTATECHANGE in cel('script')) {
               defer = function (id) {
-                html.appendChild(cel("script"))[ONREADYSTATECHANGE] =
+                html.appendChild(cel('script'))[ONREADYSTATECHANGE] =
                   function () {
                     html.removeChild(this);
                     run.call(id);
@@ -5266,18 +5266,18 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
         },
         {
-          "./_cof": 39,
-          "./_ctx": 41,
-          "./_dom-create": 43,
-          "./_global": 46,
-          "./_html": 48,
-          "./_invoke": 50,
+          './_cof': 39,
+          './_ctx': 41,
+          './_dom-create': 43,
+          './_global': 46,
+          './_html': 48,
+          './_invoke': 50,
         },
       ],
       55: [
         function (require, module, exports) {
           // 7.1.1 ToPrimitive(input [, PreferredType])
-          var isObject = require("./_is-object");
+          var isObject = require('./_is-object');
           // instead of the ES6 spec version, we didn't implement @@toPrimitive case
           // and the second argument - flag - preferred type is a string
           module.exports = function (it, S) {
@@ -5285,41 +5285,41 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var fn, val;
             if (
               S &&
-              typeof (fn = it.toString) == "function" &&
+              typeof (fn = it.toString) == 'function' &&
               !isObject((val = fn.call(it)))
             )
               return val;
             if (
-              typeof (fn = it.valueOf) == "function" &&
+              typeof (fn = it.valueOf) == 'function' &&
               !isObject((val = fn.call(it)))
             )
               return val;
             if (
               !S &&
-              typeof (fn = it.toString) == "function" &&
+              typeof (fn = it.toString) == 'function' &&
               !isObject((val = fn.call(it)))
             )
               return val;
             throw TypeError("Can't convert object to primitive value");
           };
         },
-        { "./_is-object": 51 },
+        { './_is-object': 51 },
       ],
       56: [
         function (require, module, exports) {
-          var $export = require("./_export"),
-            $task = require("./_task");
+          var $export = require('./_export'),
+            $task = require('./_task');
           $export($export.G + $export.B, {
             setImmediate: $task.set,
             clearImmediate: $task.clear,
           });
         },
-        { "./_export": 44, "./_task": 54 },
+        { './_export': 44, './_task': 54 },
       ],
       57: [
         function (require, module, exports) {
           (function (global) {
-            "use strict";
+            'use strict';
             var Mutation =
               global.MutationObserver || global.WebKitMutationObserver;
 
@@ -5329,7 +5329,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               if (Mutation) {
                 var called = 0;
                 var observer = new Mutation(nextTick);
-                var element = global.document.createTextNode("");
+                var element = global.document.createTextNode('');
                 observer.observe(element, {
                   characterData: true,
                 });
@@ -5338,7 +5338,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 };
               } else if (
                 !global.setImmediate &&
-                typeof global.MessageChannel !== "undefined"
+                typeof global.MessageChannel !== 'undefined'
               ) {
                 var channel = new global.MessageChannel();
                 channel.port1.onmessage = nextTick;
@@ -5346,13 +5346,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   channel.port2.postMessage(0);
                 };
               } else if (
-                "document" in global &&
-                "onreadystatechange" in global.document.createElement("script")
+                'document' in global &&
+                'onreadystatechange' in global.document.createElement('script')
               ) {
                 scheduleDrain = function () {
                   // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
                   // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-                  var scriptEl = global.document.createElement("script");
+                  var scriptEl = global.document.createElement('script');
                   scriptEl.onreadystatechange = function () {
                     nextTick();
 
@@ -5396,11 +5396,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
           }.call(
             this,
-            typeof global !== "undefined"
+            typeof global !== 'undefined'
               ? global
-              : typeof self !== "undefined"
+              : typeof self !== 'undefined'
               ? self
-              : typeof window !== "undefined"
+              : typeof window !== 'undefined'
               ? window
               : {}
           ));
@@ -5409,23 +5409,23 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       58: [
         function (require, module, exports) {
-          "use strict";
-          var immediate = require("immediate");
+          'use strict';
+          var immediate = require('immediate');
 
           /* istanbul ignore next */
           function INTERNAL() {}
 
           var handlers = {};
 
-          var REJECTED = ["REJECTED"];
-          var FULFILLED = ["FULFILLED"];
-          var PENDING = ["PENDING"];
+          var REJECTED = ['REJECTED'];
+          var FULFILLED = ['FULFILLED'];
+          var PENDING = ['PENDING'];
 
           module.exports = Promise;
 
           function Promise(resolver) {
-            if (typeof resolver !== "function") {
-              throw new TypeError("resolver must be a function");
+            if (typeof resolver !== 'function') {
+              throw new TypeError('resolver must be a function');
             }
             this.state = PENDING;
             this.queue = [];
@@ -5435,13 +5435,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
           }
 
-          Promise.prototype["catch"] = function (onRejected) {
+          Promise.prototype['catch'] = function (onRejected) {
             return this.then(null, onRejected);
           };
           Promise.prototype.then = function (onFulfilled, onRejected) {
             if (
-              (typeof onFulfilled !== "function" && this.state === FULFILLED) ||
-              (typeof onRejected !== "function" && this.state === REJECTED)
+              (typeof onFulfilled !== 'function' && this.state === FULFILLED) ||
+              (typeof onRejected !== 'function' && this.state === REJECTED)
             ) {
               return this;
             }
@@ -5458,11 +5458,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           };
           function QueueItem(promise, onFulfilled, onRejected) {
             this.promise = promise;
-            if (typeof onFulfilled === "function") {
+            if (typeof onFulfilled === 'function') {
               this.onFulfilled = onFulfilled;
               this.callFulfilled = this.otherCallFulfilled;
             }
-            if (typeof onRejected === "function") {
+            if (typeof onRejected === 'function') {
               this.onRejected = onRejected;
               this.callRejected = this.otherCallRejected;
             }
@@ -5491,7 +5491,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               if (returnValue === promise) {
                 handlers.reject(
                   promise,
-                  new TypeError("Cannot resolve promise with itself")
+                  new TypeError('Cannot resolve promise with itself')
                 );
               } else {
                 handlers.resolve(promise, returnValue);
@@ -5501,7 +5501,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
           handlers.resolve = function (self, value) {
             var result = tryCatch(getThen, value);
-            if (result.status === "error") {
+            if (result.status === 'error') {
               return handlers.reject(self, result.value);
             }
             var thenable = result.value;
@@ -5535,8 +5535,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var then = obj && obj.then;
             if (
               obj &&
-              (typeof obj === "object" || typeof obj === "function") &&
-              typeof then === "function"
+              (typeof obj === 'object' || typeof obj === 'function') &&
+              typeof then === 'function'
             ) {
               return function appyThen() {
                 then.apply(obj, arguments);
@@ -5568,7 +5568,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
 
             var result = tryCatch(tryToUnwrap);
-            if (result.status === "error") {
+            if (result.status === 'error') {
               onError(result.value);
             }
           }
@@ -5577,9 +5577,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             var out = {};
             try {
               out.value = func(value);
-              out.status = "success";
+              out.status = 'success';
             } catch (e) {
-              out.status = "error";
+              out.status = 'error';
               out.value = e;
             }
             return out;
@@ -5602,8 +5602,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           Promise.all = all;
           function all(iterable) {
             var self = this;
-            if (Object.prototype.toString.call(iterable) !== "[object Array]") {
-              return this.reject(new TypeError("must be an array"));
+            if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+              return this.reject(new TypeError('must be an array'));
             }
 
             var len = iterable.length;
@@ -5641,8 +5641,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           Promise.race = race;
           function race(iterable) {
             var self = this;
-            if (Object.prototype.toString.call(iterable) !== "[object Array]") {
-              return this.reject(new TypeError("must be an array"));
+            if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+              return this.reject(new TypeError('must be an array'));
             }
 
             var len = iterable.length;
@@ -5681,13 +5681,13 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       59: [
         function (require, module, exports) {
           // Top level file is just a mixin of submodules & constants
-          "use strict";
+          'use strict';
 
-          var assign = require("./lib/utils/common").assign;
+          var assign = require('./lib/utils/common').assign;
 
-          var deflate = require("./lib/deflate");
-          var inflate = require("./lib/inflate");
-          var constants = require("./lib/zlib/constants");
+          var deflate = require('./lib/deflate');
+          var inflate = require('./lib/inflate');
+          var constants = require('./lib/zlib/constants');
 
           var pako = {};
 
@@ -5696,21 +5696,21 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           module.exports = pako;
         },
         {
-          "./lib/deflate": 60,
-          "./lib/inflate": 61,
-          "./lib/utils/common": 62,
-          "./lib/zlib/constants": 65,
+          './lib/deflate': 60,
+          './lib/inflate': 61,
+          './lib/utils/common': 62,
+          './lib/zlib/constants': 65,
         },
       ],
       60: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var zlib_deflate = require("./zlib/deflate");
-          var utils = require("./utils/common");
-          var strings = require("./utils/strings");
-          var msg = require("./zlib/messages");
-          var ZStream = require("./zlib/zstream");
+          var zlib_deflate = require('./zlib/deflate');
+          var utils = require('./utils/common');
+          var strings = require('./utils/strings');
+          var msg = require('./zlib/messages');
+          var ZStream = require('./zlib/zstream');
 
           var toString = Object.prototype.toString;
 
@@ -5831,7 +5831,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 windowBits: 15,
                 memLevel: 8,
                 strategy: Z_DEFAULT_STRATEGY,
-                to: "",
+                to: '',
               },
               options || {}
             );
@@ -5845,7 +5845,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
 
             this.err = 0; // error code, if happens (0 = Z_OK)
-            this.msg = ""; // error message
+            this.msg = ''; // error message
             this.ended = false; // used to avoid multiple onEnd() calls
             this.chunks = []; // chunks of compressed data
 
@@ -5872,11 +5872,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             if (opt.dictionary) {
               var dict;
               // Convert data if needed
-              if (typeof opt.dictionary === "string") {
+              if (typeof opt.dictionary === 'string') {
                 // If we need to compress text, change encoding to utf8.
                 dict = strings.string2buf(opt.dictionary);
               } else if (
-                toString.call(opt.dictionary) === "[object ArrayBuffer]"
+                toString.call(opt.dictionary) === '[object ArrayBuffer]'
               ) {
                 dict = new Uint8Array(opt.dictionary);
               } else {
@@ -5935,10 +5935,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               mode === ~~mode ? mode : mode === true ? Z_FINISH : Z_NO_FLUSH;
 
             // Convert data if needed
-            if (typeof data === "string") {
+            if (typeof data === 'string') {
               // If we need to compress text, change encoding to utf8.
               strm.input = strings.string2buf(data);
-            } else if (toString.call(data) === "[object ArrayBuffer]") {
+            } else if (toString.call(data) === '[object ArrayBuffer]') {
               strm.input = new Uint8Array(data);
             } else {
               strm.input = data;
@@ -5968,7 +5968,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 (strm.avail_in === 0 &&
                   (_mode === Z_FINISH || _mode === Z_SYNC_FLUSH))
               ) {
-                if (this.options.to === "string") {
+                if (this.options.to === 'string') {
                   this.onData(
                     strings.buf2binstring(
                       utils.shrinkBuf(strm.output, strm.next_out)
@@ -6027,8 +6027,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           Deflate.prototype.onEnd = function (status) {
             // On success - join
             if (status === Z_OK) {
-              if (this.options.to === "string") {
-                this.result = this.chunks.join("");
+              if (this.options.to === 'string') {
+                this.result = this.chunks.join('');
               } else {
                 this.result = utils.flattenChunks(this.chunks);
               }
@@ -6119,24 +6119,24 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           exports.gzip = gzip;
         },
         {
-          "./utils/common": 62,
-          "./utils/strings": 63,
-          "./zlib/deflate": 67,
-          "./zlib/messages": 72,
-          "./zlib/zstream": 74,
+          './utils/common': 62,
+          './utils/strings': 63,
+          './zlib/deflate': 67,
+          './zlib/messages': 72,
+          './zlib/zstream': 74,
         },
       ],
       61: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
-          var zlib_inflate = require("./zlib/inflate");
-          var utils = require("./utils/common");
-          var strings = require("./utils/strings");
-          var c = require("./zlib/constants");
-          var msg = require("./zlib/messages");
-          var ZStream = require("./zlib/zstream");
-          var GZheader = require("./zlib/gzheader");
+          var zlib_inflate = require('./zlib/inflate');
+          var utils = require('./utils/common');
+          var strings = require('./utils/strings');
+          var c = require('./zlib/constants');
+          var msg = require('./zlib/messages');
+          var ZStream = require('./zlib/zstream');
+          var GZheader = require('./zlib/gzheader');
 
           var toString = Object.prototype.toString;
 
@@ -6225,7 +6225,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               {
                 chunkSize: 16384,
                 windowBits: 0,
-                to: "",
+                to: '',
               },
               options || {}
             );
@@ -6261,7 +6261,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             }
 
             this.err = 0; // error code, if happens (0 = Z_OK)
-            this.msg = ""; // error message
+            this.msg = ''; // error message
             this.ended = false; // used to avoid multiple onEnd() calls
             this.chunks = []; // chunks of compressed data
 
@@ -6330,10 +6330,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 : c.Z_NO_FLUSH;
 
             // Convert data if needed
-            if (typeof data === "string") {
+            if (typeof data === 'string') {
               // Only binary strings can be decompressed on practice
               strm.input = strings.binstring2buf(data);
-            } else if (toString.call(data) === "[object ArrayBuffer]") {
+            } else if (toString.call(data) === '[object ArrayBuffer]') {
               strm.input = new Uint8Array(data);
             } else {
               strm.input = data;
@@ -6356,10 +6356,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 
               if (status === c.Z_NEED_DICT && dictionary) {
                 // Convert data if needed
-                if (typeof dictionary === "string") {
+                if (typeof dictionary === 'string') {
                   dict = strings.string2buf(dictionary);
                 } else if (
-                  toString.call(dictionary) === "[object ArrayBuffer]"
+                  toString.call(dictionary) === '[object ArrayBuffer]'
                 ) {
                   dict = new Uint8Array(dictionary);
                 } else {
@@ -6387,7 +6387,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   (strm.avail_in === 0 &&
                     (_mode === c.Z_FINISH || _mode === c.Z_SYNC_FLUSH))
                 ) {
-                  if (this.options.to === "string") {
+                  if (this.options.to === 'string') {
                     next_out_utf8 = strings.utf8border(
                       strm.output,
                       strm.next_out
@@ -6479,10 +6479,10 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           Inflate.prototype.onEnd = function (status) {
             // On success - join
             if (status === c.Z_OK) {
-              if (this.options.to === "string") {
+              if (this.options.to === 'string') {
                 // Glue & convert here, until we teach pako to send
                 // utf8 alligned strings to onData
-                this.result = this.chunks.join("");
+                this.result = this.chunks.join('');
               } else {
                 this.result = utils.flattenChunks(this.chunks);
               }
@@ -6573,23 +6573,23 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           exports.ungzip = inflate;
         },
         {
-          "./utils/common": 62,
-          "./utils/strings": 63,
-          "./zlib/constants": 65,
-          "./zlib/gzheader": 68,
-          "./zlib/inflate": 70,
-          "./zlib/messages": 72,
-          "./zlib/zstream": 74,
+          './utils/common': 62,
+          './utils/strings': 63,
+          './zlib/constants': 65,
+          './zlib/gzheader': 68,
+          './zlib/inflate': 70,
+          './zlib/messages': 72,
+          './zlib/zstream': 74,
         },
       ],
       62: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           var TYPED_OK =
-            typeof Uint8Array !== "undefined" &&
-            typeof Uint16Array !== "undefined" &&
-            typeof Int32Array !== "undefined";
+            typeof Uint8Array !== 'undefined' &&
+            typeof Uint16Array !== 'undefined' &&
+            typeof Int32Array !== 'undefined';
 
           exports.assign = function (obj /*from1, from2, from3, ...*/) {
             var sources = Array.prototype.slice.call(arguments, 1);
@@ -6599,8 +6599,8 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                 continue;
               }
 
-              if (typeof source !== "object") {
-                throw new TypeError(source + "must be non-object");
+              if (typeof source !== 'object') {
+                throw new TypeError(source + 'must be non-object');
               }
 
               for (var p in source) {
@@ -6694,9 +6694,9 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       63: [
         function (require, module, exports) {
           // String encode/decode helpers
-          "use strict";
+          'use strict';
 
-          var utils = require("./common");
+          var utils = require('./common');
 
           // Quick check if we can use fast array to bin string conversion
           //
@@ -6812,7 +6812,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
               }
             }
 
-            var result = "";
+            var result = '';
             for (var i = 0; i < len; i++) {
               result += String.fromCharCode(buf[i]);
             }
@@ -6920,11 +6920,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
             return pos + _utf8len[buf[pos]] > max ? pos : max;
           };
         },
-        { "./common": 62 },
+        { './common': 62 },
       ],
       64: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // Note: adler32 takes 12% for level 0 and 2% for level 6.
           // It doesn't worth to make additional optimizationa as in original.
@@ -6979,7 +6979,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       65: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -7050,7 +7050,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       66: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // Note: we can't get significant speed boost here.
           // So write code to minimize size - no pregenerated tables
@@ -7113,7 +7113,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
       ],
       67: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -7134,11 +7134,11 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           //   misrepresented as being the original software.
           // 3. This notice may not be removed or altered from any source distribution.
 
-          var utils = require("../utils/common");
-          var trees = require("./trees");
-          var adler32 = require("./adler32");
-          var crc32 = require("./crc32");
-          var msg = require("./messages");
+          var utils = require('../utils/common');
+          var trees = require('./trees');
+          var adler32 = require('./adler32');
+          var crc32 = require('./crc32');
+          var msg = require('./messages');
 
           /* Public constants ==========================================================*/
           /* ===========================================================================*/
@@ -7935,7 +7935,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
                   s.match_length <= 5 &&
                   (s.strategy === Z_FILTERED ||
                     (s.match_length === MIN_MATCH &&
-                      s.strstart - s.match_start > 4096) /*TOO_FAR*/)
+                      s.strstart - s.match_start > 4096)) /*TOO_FAR*/
                 ) {
                   /* If prev_match is also MIN_MATCH, match_start is garbage
                    * but we will ignore the current match anyway.
@@ -9145,7 +9145,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
           exports.deflate = deflate;
           exports.deflateEnd = deflateEnd;
           exports.deflateSetDictionary = deflateSetDictionary;
-          exports.deflateInfo = "pako deflate (from Nodeca project)";
+          exports.deflateInfo = 'pako deflate (from Nodeca project)';
 
           /* Not implemented
 exports.deflateBound = deflateBound;
@@ -9157,16 +9157,16 @@ exports.deflateTune = deflateTune;
 */
         },
         {
-          "../utils/common": 62,
-          "./adler32": 64,
-          "./crc32": 66,
-          "./messages": 72,
-          "./trees": 73,
+          '../utils/common': 62,
+          './adler32': 64,
+          './crc32': 66,
+          './messages': 72,
+          './trees': 73,
         },
       ],
       68: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -9210,11 +9210,11 @@ exports.deflateTune = deflateTune;
             /* space at extra (only when reading header) */
             // this.extra_max  = 0;
             /* pointer to zero-terminated file name or Z_NULL */
-            this.name = "";
+            this.name = '';
             /* space at name (only when reading header) */
             // this.name_max   = 0;
             /* pointer to zero-terminated comment or Z_NULL */
-            this.comment = "";
+            this.comment = '';
             /* space at comment (only when reading header) */
             // this.comm_max   = 0;
             /* true if there was or will be a header crc */
@@ -9229,7 +9229,7 @@ exports.deflateTune = deflateTune;
       ],
       69: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -9413,7 +9413,7 @@ exports.deflateTune = deflateTune;
                       dist += hold & ((1 << op) - 1);
                       //#ifdef INFLATE_STRICT
                       if (dist > dmax) {
-                        strm.msg = "invalid distance too far back";
+                        strm.msg = 'invalid distance too far back';
                         state.mode = BAD;
                         break top;
                       }
@@ -9427,7 +9427,7 @@ exports.deflateTune = deflateTune;
                         op = dist - op; /* distance back in window */
                         if (op > whave) {
                           if (state.sane) {
-                            strm.msg = "invalid distance too far back";
+                            strm.msg = 'invalid distance too far back';
                             state.mode = BAD;
                             break top;
                           }
@@ -9540,7 +9540,7 @@ exports.deflateTune = deflateTune;
                         ];
                       continue dodist;
                     } else {
-                      strm.msg = "invalid distance code";
+                      strm.msg = 'invalid distance code';
                       state.mode = BAD;
                       break top;
                     }
@@ -9560,7 +9560,7 @@ exports.deflateTune = deflateTune;
                   state.mode = TYPE;
                   break top;
                 } else {
-                  strm.msg = "invalid literal/length code";
+                  strm.msg = 'invalid literal/length code';
                   state.mode = BAD;
                   break top;
                 }
@@ -9590,7 +9590,7 @@ exports.deflateTune = deflateTune;
       ],
       70: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -9611,11 +9611,11 @@ exports.deflateTune = deflateTune;
           //   misrepresented as being the original software.
           // 3. This notice may not be removed or altered from any source distribution.
 
-          var utils = require("../utils/common");
-          var adler32 = require("./adler32");
-          var crc32 = require("./crc32");
-          var inflate_fast = require("./inffast");
-          var inflate_table = require("./inftrees");
+          var utils = require('../utils/common');
+          var adler32 = require('./adler32');
+          var crc32 = require('./crc32');
+          var inflate_fast = require('./inffast');
+          var inflate_table = require('./inftrees');
 
           var CODES = 0;
           var LENS = 1;
@@ -9776,7 +9776,7 @@ exports.deflateTune = deflateTune;
             }
             state = strm.state;
             strm.total_in = strm.total_out = state.total = 0;
-            strm.msg = ""; /*Z_NULL*/
+            strm.msg = ''; /*Z_NULL*/
             if (state.wrap) {
               /* to support ill-conceived Java test suite */
               strm.adler = state.wrap & 1;
@@ -10100,12 +10100,12 @@ exports.deflateTune = deflateTune;
                     !(state.wrap & 1) /* check if zlib header allowed */ ||
                     (((hold & 0xff) /*BITS(8)*/ << 8) + (hold >> 8)) % 31
                   ) {
-                    strm.msg = "incorrect header check";
+                    strm.msg = 'incorrect header check';
                     state.mode = BAD;
                     break;
                   }
                   if ((hold & 0x0f) /*BITS(4)*/ !== Z_DEFLATED) {
-                    strm.msg = "unknown compression method";
+                    strm.msg = 'unknown compression method';
                     state.mode = BAD;
                     break;
                   }
@@ -10117,7 +10117,7 @@ exports.deflateTune = deflateTune;
                   if (state.wbits === 0) {
                     state.wbits = len;
                   } else if (len > state.wbits) {
-                    strm.msg = "invalid window size";
+                    strm.msg = 'invalid window size';
                     state.mode = BAD;
                     break;
                   }
@@ -10143,12 +10143,12 @@ exports.deflateTune = deflateTune;
                   //===//
                   state.flags = hold;
                   if ((state.flags & 0xff) !== Z_DEFLATED) {
-                    strm.msg = "unknown compression method";
+                    strm.msg = 'unknown compression method';
                     state.mode = BAD;
                     break;
                   }
                   if (state.flags & 0xe000) {
-                    strm.msg = "unknown header flags set";
+                    strm.msg = 'unknown header flags set';
                     state.mode = BAD;
                     break;
                   }
@@ -10374,7 +10374,7 @@ exports.deflateTune = deflateTune;
                     }
                     //===//
                     if (hold !== (state.check & 0xffff)) {
-                      strm.msg = "header crc mismatch";
+                      strm.msg = 'header crc mismatch';
                       state.mode = BAD;
                       break;
                     }
@@ -10478,7 +10478,7 @@ exports.deflateTune = deflateTune;
                       state.mode = TABLE;
                       break;
                     case 3:
-                      strm.msg = "invalid block type";
+                      strm.msg = 'invalid block type';
                       state.mode = BAD;
                   }
                   //--- DROPBITS(2) ---//
@@ -10502,7 +10502,7 @@ exports.deflateTune = deflateTune;
                   }
                   //===//
                   if ((hold & 0xffff) !== ((hold >>> 16) ^ 0xffff)) {
-                    strm.msg = "invalid stored block lengths";
+                    strm.msg = 'invalid stored block lengths';
                     state.mode = BAD;
                     break;
                   }
@@ -10574,7 +10574,7 @@ exports.deflateTune = deflateTune;
                   //---//
                   //#ifndef PKZIP_BUG_WORKAROUND
                   if (state.nlen > 286 || state.ndist > 30) {
-                    strm.msg = "too many length or distance symbols";
+                    strm.msg = 'too many length or distance symbols';
                     state.mode = BAD;
                     break;
                   }
@@ -10625,7 +10625,7 @@ exports.deflateTune = deflateTune;
                   state.lenbits = opts.bits;
 
                   if (ret) {
-                    strm.msg = "invalid code lengths set";
+                    strm.msg = 'invalid code lengths set';
                     state.mode = BAD;
                     break;
                   }
@@ -10680,7 +10680,7 @@ exports.deflateTune = deflateTune;
                         bits -= here_bits;
                         //---//
                         if (state.have === 0) {
-                          strm.msg = "invalid bit length repeat";
+                          strm.msg = 'invalid bit length repeat';
                           state.mode = BAD;
                           break;
                         }
@@ -10736,7 +10736,7 @@ exports.deflateTune = deflateTune;
                         //---//
                       }
                       if (state.have + copy > state.nlen + state.ndist) {
-                        strm.msg = "invalid bit length repeat";
+                        strm.msg = 'invalid bit length repeat';
                         state.mode = BAD;
                         break;
                       }
@@ -10753,7 +10753,7 @@ exports.deflateTune = deflateTune;
 
                   /* check for end-of-block code (better have one) */
                   if (state.lens[256] === 0) {
-                    strm.msg = "invalid code -- missing end-of-block";
+                    strm.msg = 'invalid code -- missing end-of-block';
                     state.mode = BAD;
                     break;
                   }
@@ -10780,7 +10780,7 @@ exports.deflateTune = deflateTune;
                   // state.lencode = state.next;
 
                   if (ret) {
-                    strm.msg = "invalid literal/lengths set";
+                    strm.msg = 'invalid literal/lengths set';
                     state.mode = BAD;
                     break;
                   }
@@ -10806,7 +10806,7 @@ exports.deflateTune = deflateTune;
                   // state.distcode = state.next;
 
                   if (ret) {
-                    strm.msg = "invalid distances set";
+                    strm.msg = 'invalid distances set';
                     state.mode = BAD;
                     break;
                   }
@@ -10923,7 +10923,7 @@ exports.deflateTune = deflateTune;
                     break;
                   }
                   if (here_op & 64) {
-                    strm.msg = "invalid literal/length code";
+                    strm.msg = 'invalid literal/length code';
                     state.mode = BAD;
                     break;
                   }
@@ -11018,7 +11018,7 @@ exports.deflateTune = deflateTune;
                   //---//
                   state.back += here_bits;
                   if (here_op & 64) {
-                    strm.msg = "invalid distance code";
+                    strm.msg = 'invalid distance code';
                     state.mode = BAD;
                     break;
                   }
@@ -11049,7 +11049,7 @@ exports.deflateTune = deflateTune;
                   }
                   //#ifdef INFLATE_STRICT
                   if (state.offset > state.dmax) {
-                    strm.msg = "invalid distance too far back";
+                    strm.msg = 'invalid distance too far back';
                     state.mode = BAD;
                     break;
                   }
@@ -11067,7 +11067,7 @@ exports.deflateTune = deflateTune;
                     copy = state.offset - copy;
                     if (copy > state.whave) {
                       if (state.sane) {
-                        strm.msg = "invalid distance too far back";
+                        strm.msg = 'invalid distance too far back';
                         state.mode = BAD;
                         break;
                       }
@@ -11149,7 +11149,7 @@ exports.deflateTune = deflateTune;
                     _out = left;
                     // NB: crc32 stored as signed 32-bit int, zswap32 returns signed too
                     if ((state.flags ? hold : zswap32(hold)) !== state.check) {
-                      strm.msg = "incorrect data check";
+                      strm.msg = 'incorrect data check';
                       state.mode = BAD;
                       break;
                     }
@@ -11174,7 +11174,7 @@ exports.deflateTune = deflateTune;
                     }
                     //===//
                     if (hold !== (state.total & 0xffffffff)) {
-                      strm.msg = "incorrect length check";
+                      strm.msg = 'incorrect length check';
                       state.mode = BAD;
                       break;
                     }
@@ -11341,7 +11341,7 @@ exports.deflateTune = deflateTune;
           exports.inflateEnd = inflateEnd;
           exports.inflateGetHeader = inflateGetHeader;
           exports.inflateSetDictionary = inflateSetDictionary;
-          exports.inflateInfo = "pako inflate (from Nodeca project)";
+          exports.inflateInfo = 'pako inflate (from Nodeca project)';
 
           /* Not implemented
 exports.inflateCopy = inflateCopy;
@@ -11354,16 +11354,16 @@ exports.inflateUndermine = inflateUndermine;
 */
         },
         {
-          "../utils/common": 62,
-          "./adler32": 64,
-          "./crc32": 66,
-          "./inffast": 69,
-          "./inftrees": 71,
+          '../utils/common': 62,
+          './adler32': 64,
+          './crc32': 66,
+          './inffast': 69,
+          './inftrees': 71,
         },
       ],
       71: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -11384,7 +11384,7 @@ exports.inflateUndermine = inflateUndermine;
           //   misrepresented as being the original software.
           // 3. This notice may not be removed or altered from any source distribution.
 
-          var utils = require("../utils/common");
+          var utils = require('../utils/common');
 
           var MAXBITS = 15;
           var ENOUGH_LENS = 852;
@@ -11729,11 +11729,11 @@ exports.inflateUndermine = inflateUndermine;
             return 0;
           };
         },
-        { "../utils/common": 62 },
+        { '../utils/common': 62 },
       ],
       72: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -11755,22 +11755,22 @@ exports.inflateUndermine = inflateUndermine;
           // 3. This notice may not be removed or altered from any source distribution.
 
           module.exports = {
-            2: "need dictionary" /* Z_NEED_DICT       2  */,
-            1: "stream end" /* Z_STREAM_END      1  */,
-            0: "" /* Z_OK              0  */,
-            "-1": "file error" /* Z_ERRNO         (-1) */,
-            "-2": "stream error" /* Z_STREAM_ERROR  (-2) */,
-            "-3": "data error" /* Z_DATA_ERROR    (-3) */,
-            "-4": "insufficient memory" /* Z_MEM_ERROR     (-4) */,
-            "-5": "buffer error" /* Z_BUF_ERROR     (-5) */,
-            "-6": "incompatible version" /* Z_VERSION_ERROR (-6) */,
+            2: 'need dictionary' /* Z_NEED_DICT       2  */,
+            1: 'stream end' /* Z_STREAM_END      1  */,
+            0: '' /* Z_OK              0  */,
+            '-1': 'file error' /* Z_ERRNO         (-1) */,
+            '-2': 'stream error' /* Z_STREAM_ERROR  (-2) */,
+            '-3': 'data error' /* Z_DATA_ERROR    (-3) */,
+            '-4': 'insufficient memory' /* Z_MEM_ERROR     (-4) */,
+            '-5': 'buffer error' /* Z_BUF_ERROR     (-5) */,
+            '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */,
           };
         },
         {},
       ],
       73: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -11791,7 +11791,7 @@ exports.inflateUndermine = inflateUndermine;
           //   misrepresented as being the original software.
           // 3. This notice may not be removed or altered from any source distribution.
 
-          var utils = require("../utils/common");
+          var utils = require('../utils/common');
 
           /* Public constants ==========================================================*/
           /* ===========================================================================*/
@@ -13032,11 +13032,11 @@ exports.inflateUndermine = inflateUndermine;
           exports._tr_tally = _tr_tally;
           exports._tr_align = _tr_align;
         },
-        { "../utils/common": 62 },
+        { '../utils/common': 62 },
       ],
       74: [
         function (require, module, exports) {
-          "use strict";
+          'use strict';
 
           // (C) 1995-2013 Jean-loup Gailly and Mark Adler
           // (C) 2014-2017 Vitaly Puzrin and Andrey Tupitsin
@@ -13073,7 +13073,7 @@ exports.inflateUndermine = inflateUndermine;
             /* total number of bytes output so far */
             this.total_out = 0;
             /* last error message, NULL if no error */
-            this.msg = "" /*Z_NULL*/;
+            this.msg = '' /*Z_NULL*/;
             /* not visible by applications */
             this.state = null;
             /* best guess about the data type: binary or text */

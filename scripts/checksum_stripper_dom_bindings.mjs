@@ -1,5 +1,5 @@
-import { parseReplayFromZip, getZipWithReplay } from "./zip_loader.mjs";
-import { tryFindHeartbeat } from "./parse.mjs";
+import { parseReplayFromZip, getZipWithReplay } from './zip_loader.mjs';
+import { tryFindHeartbeat } from './parse.mjs';
 
 // Function to download data to a file
 // From https://stackoverflow.com/a/30832210
@@ -10,7 +10,7 @@ const download = (data, filename, type) => {
     window.navigator.msSaveOrOpenBlob(file, filename);
   else {
     // Others
-    var a = document.createElement("a"),
+    var a = document.createElement('a'),
       url = URL.createObjectURL(file);
     a.href = url;
     a.download = filename;
@@ -52,37 +52,37 @@ const stripZip = (arrayBuffer) => {
     .then((dat) => getZipWithReplay(dat), console.error);
 };
 
-document.body.addEventListener("dragover", (event) => {
+document.body.addEventListener('dragover', (event) => {
   if (
     event.dataTransfer.items &&
     event.dataTransfer.items.length > 0 &&
-    event.dataTransfer.items[0].kind == "file"
+    event.dataTransfer.items[0].kind == 'file'
   ) {
     event.preventDefault();
   }
 });
 
-document.body.addEventListener("drop", (event) => {
+document.body.addEventListener('drop', (event) => {
   event.preventDefault();
   const file = event.dataTransfer.items[0].getAsFile();
   const reader = new FileReader();
   const filename = file.name.toLowerCase();
-  if (filename.endsWith(".dat")) {
-    reader.addEventListener("loadend", () =>
+  if (filename.endsWith('.dat')) {
+    reader.addEventListener('loadend', () =>
       stripReplayDat(reader.result).then(
-        (result) => download(result, file.name, "application/octet-stream"),
+        (result) => download(result, file.name, 'application/octet-stream'),
         console.error
       )
     );
     reader.readAsArrayBuffer(file);
-  } else if (filename.endsWith(".zip")) {
-    reader.addEventListener("loadend", () =>
+  } else if (filename.endsWith('.zip')) {
+    reader.addEventListener('loadend', () =>
       stripZip(reader.result)
         .then(
           (zip) =>
             zip.zip.generateAsync({
-              type: "arraybuffer",
-              compression: "DEFLATE",
+              type: 'arraybuffer',
+              compression: 'DEFLATE',
               compressionOptions: {
                 level: 5,
               },
@@ -90,7 +90,7 @@ document.body.addEventListener("drop", (event) => {
           console.error
         )
         .then(
-          (array) => download(array, file.name, "application/zip"),
+          (array) => download(array, file.name, 'application/zip'),
           console.error
         )
     );

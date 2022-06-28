@@ -48,7 +48,7 @@ function toIEEE754(v, ebits, fbits) {
   }
   bits.push(s ? 1 : 0);
   bits.reverse();
-  var str = bits.join("");
+  var str = bits.join('');
 
   // Bits to bytes
   var bytes = [];
@@ -70,7 +70,7 @@ function fromIEEE754(bytes, ebits, fbits) {
     }
   }
   bits.reverse();
-  var str = bits.join("");
+  var str = bits.join('');
 
   // Unpack sign, exponent, fraction
   var bias = (1 << (ebits - 1)) - 1;
@@ -109,11 +109,11 @@ function toIEEE754Single(v) {
 function toIEEE754DoubleString(v) {
   return toIEEE754Double(v)
     .map(function (n) {
-      for (n = n.toString(2); n.length < 8; n = "0" + n);
+      for (n = n.toString(2); n.length < 8; n = '0' + n);
       return n;
     })
-    .join("")
-    .replace(/(.)(.{11})(.{52})/, "$1 $2 $3");
+    .join('')
+    .replace(/(.)(.{11})(.{52})/, '$1 $2 $3');
 }
 
 export {

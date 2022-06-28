@@ -6,8 +6,8 @@ import {
   eof,
   datString,
   error,
-} from "./parse.mjs";
-import { frameHandlers, resetPlayers } from "./replay_frames.mjs";
+} from './parse.mjs';
+import { frameHandlers, resetPlayers } from './replay_frames.mjs';
 
 let inputActionByteToFrameHandler = [],
   inputActionNameToFrameHandler = [];
@@ -21,12 +21,12 @@ function* parseReplayDat(arrayBuffer) {
   resetPlayers();
 
   while (!eof()) {
-    let line = "";
+    let line = '';
     let inputAction = read.uint8();
     let tickStr = read.tick();
     let frameHandler = inputActionByteToFrameHandler[inputAction];
     if (frameHandler) {
-      let frameArgs = "";
+      let frameArgs = '';
       if (frameHandler.length == 4) {
         // Arbitrary read/write functions
         frameArgs = `${frameHandler[2]()}`;
@@ -69,18 +69,18 @@ const getReplayDatBytes = (text) => {
     !failed && !eof();
     lineType = fetch.char()
   ) {
-    if (lineType == "?") {
+    if (lineType == '?') {
       // Arbitrary bytes
       fetch.tick();
       write.bytes();
-    } else if (lineType == "@" || lineType == "+") {
+    } else if (lineType == '@' || lineType == '+') {
       // Typical case
       // @ - command at a given tick
       // + - command at an offset from the last command
-      const [tick, player] = fetch.tick(lineType == "+");
+      const [tick, player] = fetch.tick(lineType == '+');
       fetch.whitespace();
 
-      let name = fetch.string(" ");
+      let name = fetch.string(' ');
       const frameHandler = inputActionNameToFrameHandler[name];
       if (!frameHandler) {
         console.error(
@@ -96,14 +96,14 @@ const getReplayDatBytes = (text) => {
       // If this is a Join frame, we won't have server id info wired up yet
       let hint;
       switch (name) {
-        case "JoinMultiPlayer":
+        case 'JoinMultiPlayer':
           hint = 65535;
           break;
-        case "JoinSinglePlayer":
+        case 'JoinSinglePlayer':
           hint = 255;
           break;
       }
-      write.optUint16(player, "player", hint);
+      write.optUint16(player, 'player', hint);
 
       if (frameHandler.length == 4) {
         // Arbitrary read/write functions
@@ -118,7 +118,7 @@ const getReplayDatBytes = (text) => {
           write[frameHandler[2]]();
         }
       }
-      if ("" != error) {
+      if ('' != error) {
         console.error(
           `Parse failed with error "${error}"; only emitting before @${tick}(${player}) `
         );
@@ -155,13 +155,13 @@ const stableSort = (array, compare) => {
 const compareTick = (a, b) => {
   let aTick = 0x100000000,
     bTick = 0x100000000; // If we don't get a valid tick, put these elements at the end
-  if (a.startsWith("@") || a.startsWith("?")) {
+  if (a.startsWith('@') || a.startsWith('?')) {
     const parsedTick = parseInt(a.substring(1));
     if (!isNaN(parsedTick)) {
       aTick = parsedTick;
     }
   }
-  if (b.startsWith("@") || b.startsWith("?")) {
+  if (b.startsWith('@') || b.startsWith('?')) {
     const parsedTick = parseInt(b.substring(1));
     if (!isNaN(parsedTick)) {
       bTick = parsedTick;
@@ -171,15 +171,15 @@ const compareTick = (a, b) => {
 };
 
 const comparePlayer = (a, b) => {
-  let aPlayer = "\u00ff",
-    bPlayer = "\u00ff"; // If we don't get a valid player, put these elements at the end
-  const openPosA = a.indexOf("(");
-  const closePosA = a.indexOf(")", openPosA);
+  let aPlayer = '\u00ff',
+    bPlayer = '\u00ff'; // If we don't get a valid player, put these elements at the end
+  const openPosA = a.indexOf('(');
+  const closePosA = a.indexOf(')', openPosA);
   if (openPosA != -1 && closePosA != -1) {
     aPlayer = a.substring(openPosA + 1, closePosA);
   }
-  const openPosB = b.indexOf("(");
-  const closePosB = b.indexOf(")", openPosB);
+  const openPosB = b.indexOf('(');
+  const closePosB = b.indexOf(')', openPosB);
   if (openPosB != -1 && closePosB != -1) {
     bPlayer = b.substring(openPosB + 1, closePosB);
   }

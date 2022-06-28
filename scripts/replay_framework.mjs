@@ -1,16 +1,16 @@
-import { frameHandlers } from "./replay_frames.mjs";
-import { idMaps } from "./id_maps.mjs";
-import { recipes } from "./recipes.mjs";
+import { frameHandlers } from './replay_frames.mjs';
+import { idMaps } from './id_maps.mjs';
+import { recipes } from './recipes.mjs';
 
 const isMultiplayer = true;
 
 // Gross, but we need Player accessible to Function objects
 const globalObject =
-  typeof window != "undefined"
+  typeof window != 'undefined'
     ? window
-    : typeof global != "undefined"
+    : typeof global != 'undefined'
     ? global
-    : typeof WorkerGlobalScope != "undefined"
+    : typeof WorkerGlobalScope != 'undefined'
     ? WorkerGlobalScope
     : this;
 
@@ -32,10 +32,10 @@ globalObject.Player = class {
     this.cursorSlot = -1;
     this.cursorStack = undefined;
     this.inventory = [
-      { name: "iron-plate", amount: 8 },
-      { name: "wood", amount: 1 },
-      { name: "burner-mining-drill", amount: 1 },
-      { name: "stone-furnace", amount: 1 },
+      { name: 'iron-plate', amount: 8 },
+      { name: 'wood', amount: 1 },
+      { name: 'burner-mining-drill', amount: 1 },
+      { name: 'stone-furnace', amount: 1 },
     ];
     this.craftEndTick = -1;
     this.scheduledActions = {};
@@ -137,19 +137,19 @@ for (const frameHandler of frameHandlers) {
   const methodName =
     `${frameHandler[1][0].toLowerCase()}${frameHandler[1].substring(
       1
-    )}`.replace("?", "_");
+    )}`.replace('?', '_');
   globalObject.Player.prototype[methodName] = function (...theArgs) {
-    const argString = theArgs.join(", ");
-    this.act(`${frameHandler[1]}${argString == "" ? "" : ` ${argString}`}`);
+    const argString = theArgs.join(', ');
+    this.act(`${frameHandler[1]}${argString == '' ? '' : ` ${argString}`}`);
   };
 }
 
 let initializedServer = false;
-const serverPlayer = new Player("Server");
+const serverPlayer = new Player('Server');
 
 globalObject.Player.prototype.act = function (action) {
   const frameText = `@${this.tick}(${this.name}): ${action}`;
-  globalObject.dispatchEvent(new CustomEvent("frame", { detail: frameText }));
+  globalObject.dispatchEvent(new CustomEvent('frame', { detail: frameText }));
 };
 
 const parseReplayJs = (text) => {
@@ -159,7 +159,7 @@ const parseReplayJs = (text) => {
   serverPlayer.id = isMultiplayer ? 65535 : 255;
   initializedServer = true;
 
-  serverPlayer[`join${isMultiplayer ? "Multi" : "Single"}Player`]();
+  serverPlayer[`join${isMultiplayer ? 'Multi' : 'Single'}Player`]();
   new Function(text)();
 };
 
@@ -173,7 +173,7 @@ export { parseReplayJs };
 
 // Round toward zero to the next tetrakibitile
 globalObject.roundToFixed = (num) => {
-  return Math[num > 0 ? "floor" : "ceil"](num * 256) / 256;
+  return Math[num > 0 ? 'floor' : 'ceil'](num * 256) / 256;
 };
 
 // Override run to update velocity vector
@@ -213,7 +213,7 @@ globalObject.Player.prototype.checkInventory = function (str) {
   this.print(
     `"Checking inventory - expected: {${this.inventory.reduce(
       (a, b) => a + `${b.name}: ${b.amount}, `,
-      ""
+      ''
     )}}"`
   );
   this.print(`"-----------------------actual:"`);
@@ -344,7 +344,7 @@ globalObject.Player.prototype.runTo = function (targetPos) {
     const orthDistance = Math.min(absDelta[0], absDelta[1]);
     const orthStep = roundToFixed((this.runSpeed * Math.sqrt(2)) / 2);
     const diagTicks = Math.floor(orthDistance / orthStep);
-    this.run(`${targetIsSouth ? "S" : "N"}${targetIsEast ? "E" : "W"}`);
+    this.run(`${targetIsSouth ? 'S' : 'N'}${targetIsEast ? 'E' : 'W'}`);
     this.tick += diagTicks;
 
     // Update deltas for any remaining movement
@@ -357,14 +357,14 @@ globalObject.Player.prototype.runTo = function (targetPos) {
     // It's worth running E/W to get closer
     const step = roundToFixed(this.runSpeed);
     const ticks = Math.floor(absDelta[0] / step);
-    this.run(`${targetIsEast ? "E" : "W"}`);
+    this.run(`${targetIsEast ? 'E' : 'W'}`);
     this.tick += ticks;
   }
   if (absDelta[1] > this.runSpeed) {
     // It's worth running N/S to get closer
     const step = roundToFixed(this.runSpeed);
     const ticks = Math.floor(absDelta[1] / step);
-    this.run(`${targetIsSouth ? "S" : "N"}`);
+    this.run(`${targetIsSouth ? 'S' : 'N'}`);
     this.tick += ticks;
   }
   this.stopRunning();
@@ -401,7 +401,7 @@ globalObject.Player.prototype.isSelectedBy = function (pos) {
 globalObject.Player.prototype._clickItemStack =
   globalObject.Player.prototype.clickItemStack;
 globalObject.Player.prototype.clickItemStack = function (context, slot) {
-  if (context === "Player") {
+  if (context === 'Player') {
     if (slot === this.cursorSlot) {
       // Deselecting
       this.cursorSlot = -1;
@@ -422,7 +422,7 @@ globalObject.Player.prototype.clickItemStack = function (context, slot) {
 globalObject.Player.prototype._build = globalObject.Player.prototype.build;
 globalObject.Player.prototype.build = function (x, y, direction) {
   if (-1 == this.cursorSlot) {
-    console.warn("Nothing on the cursor to build!");
+    console.warn('Nothing on the cursor to build!');
   } else {
     this.cursorStack.amount--;
     if (this.cursorStack.amount == 0) {
@@ -437,7 +437,7 @@ globalObject.Player.prototype._dropItem =
   globalObject.Player.prototype.dropItem;
 globalObject.Player.prototype.dropItem = function (x, y) {
   if (-1 == this.cursorSlot) {
-    console.warn("Nothing on the cursor to dropItem!");
+    console.warn('Nothing on the cursor to dropItem!');
   } else {
     this.cursorStack.amount--;
     if (this.cursorStack.amount == 0) {
@@ -451,9 +451,9 @@ globalObject.Player.prototype.dropItem = function (x, y) {
 globalObject.Player.prototype._transferEntityStack =
   globalObject.Player.prototype.transferEntityStack;
 globalObject.Player.prototype.transferEntityStack = function (inOut) {
-  if (inOut === "In") {
+  if (inOut === 'In') {
     if (-1 == this.cursorSlot) {
-      console.warn("Nothing on the cursor to transferEntityStack In!");
+      console.warn('Nothing on the cursor to transferEntityStack In!');
     } else {
       this.cursorStack.amount = 0;
       this.cursorSlot = -1;
@@ -488,7 +488,7 @@ globalObject.Player.prototype.craft = function (recipeName, count) {
   }
 
   let realCount = count;
-  if (realCount === "all") {
+  if (realCount === 'all') {
     for (let i = 0; i < invIngredients.length; ++i) {
       const newCount = invIngredients[i] / ingredients[i].amount;
       if (0 == newCount) {
@@ -496,7 +496,7 @@ globalObject.Player.prototype.craft = function (recipeName, count) {
           `Don't have the ${ingredients[i].name} for any ${recipeName}`
         );
       }
-      if (realCount === "all" || newCount < realCount) {
+      if (realCount === 'all' || newCount < realCount) {
         realCount = newCount;
       }
     }
@@ -553,7 +553,7 @@ globalObject.Player.prototype.craft = function (recipeName, count) {
 globalObject.Player.prototype.grab = function (item) {
   for (let i = 0; i < this.inventory.length; ++i) {
     if (this.inventory[i].name === item) {
-      this.clickItemStack("Player", i);
+      this.clickItemStack('Player', i);
       return;
     }
   }
