@@ -20,20 +20,6 @@
         list[#list] = list[#list] .. ","
       end
       list[#list+1] = "      {"
-      list[#list+1] = "        \"name\": \"" .. ingredient.name .. "\","
-      list[#list+1] = "        \"amount\": " .. ingredient.amount
-      list[#list+1] = "      }"
-    end
-    list[#list+1] = "    ],"
-    list[#list+1] = "    \"products\": ["
-    start = true
-    for _, product in pairs(recipe.products) do
-      if start then
-        start = false
-      else
-        list[#list] = list[#list] .. ","
-      end
-      list[#list+1] = "      {"
       list[#list+1] = "        \"name\": \"" .. product.name .. "\","
       list[#list+1] = "        \"amount\": " .. product.amount
       list[#list+1] = "      }"
