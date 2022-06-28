@@ -78,7 +78,7 @@ export const frameHandlers = [
       result += read.fixed32() + ', '; // y
       result += read.uint8() + ', '; //entityOverride ID<EntityPrototype,unsigned_short>
       result += read.direction() + ', '; // direction
-      let isDragging = read.bool();
+      let isDragging = read.isDragging();
       result += isDragging
         ? `dragging, ${read.fixed32()}, ${read.fixed32()}, `
         : 'notDragging, ';
@@ -87,22 +87,18 @@ export const frameHandlers = [
       return result;
     },
     () => {
-      // isNotDragging
-      // write.uint8()
-      // write.fixed32()
+      write.fixed32();
+      write.fixed32();
+      write.uint8();
+      write.direction();
+      let isDragging = fetch.string(',');
+      console.log(isDragging);
+      if (isDragging == 'dragging') {
+        write.uint8(1);
+        write.fixed32();
+        write.fixed32();
+      } else write.uint8(32);
     },
-    // ['fixed32', 'fixed32', 'uint8', 'direction', 'uint8'],
-    // [
-    //   'uint8',
-    //   // 'uint8ProbablyZero',
-    //   // 'int16',
-    //   // 'int16',
-    //   // 'isGhost',
-    //   // 'uint8ProbablyZero',
-    //   // 'uint8ProbablyZero',
-    //   // 'uint8ProbablyZero',
-    //   // 'uint8ProbablyZero',
-    // ],
   ],
   [0x3d, 'StartWalking', 'direction'],
   [0x3e, 'BeginMiningTerrain', ['fixed32', 'fixed32']],

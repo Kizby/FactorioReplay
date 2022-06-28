@@ -15,7 +15,6 @@ for (let i = 0; i < frameHandlers.length; i++) {
   inputActionByteToFrameHandler[frameHandlers[i][0]] = frameHandlers[i];
   inputActionNameToFrameHandler[frameHandlers[i][1]] = frameHandlers[i];
 }
-console.log(inputActionNameToFrameHandler);
 
 function* parseReplayDat(arrayBuffer) {
   setBuffer(new Uint8Array(arrayBuffer));
