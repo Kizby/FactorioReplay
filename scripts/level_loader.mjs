@@ -1,12 +1,14 @@
-import { read, write, fetch, setBuffer, expect, eof } from './parse.mjs';
-import { idMapTypes, idMaps } from './id_maps.mjs';
+import { read, write, fetch, setBuffer, expect, eof } from "./parse.mjs";
+import { idMapTypes, idMaps } from "./id_maps.mjs";
 
 const loadLevelDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
   const [major, minor, patch] = [read.uint16(), read.uint16(), read.uint16()];
   console.log(`Factorio version: ${major}.${minor}.${patch}`);
   if (major != 0 || minor != 18 || patch != 22) {
-    console.error(`This tool has only been tested on Factorio 0.18.22! Use it with version ${major}.${minor}.${patch} at your own risk!`);
+    console.error(
+      `This tool has only been tested on Factorio 0.18.22! Use it with version ${major}.${minor}.${patch} at your own risk!`
+    );
   }
 
   console.log(`Unknown: ${read.uint32()}`);
@@ -27,12 +29,18 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.uint8, 1);
 
   const modCount = read.optUint32();
-  console.log('Mods:')
+  console.log("Mods:");
   for (let i = 0; i < modCount; i++) {
     const modName = read.string();
-    const [modMajor, modMinor, modPatch] = [read.uint8(), read.uint8(), read.uint8()];
+    const [modMajor, modMinor, modPatch] = [
+      read.uint8(),
+      read.uint8(),
+      read.uint8(),
+    ];
     const modCheckSum = read.checkSum();
-    console.log(` ${modName} v${modMajor}.${modMinor}.${modPatch}, config checksum ${modCheckSum}`);
+    console.log(
+      ` ${modName} v${modMajor}.${modMinor}.${modPatch}, config checksum ${modCheckSum}`
+    );
   }
 
   expect(read.uint32, 0);
@@ -55,7 +63,11 @@ const loadLevelDat = (arrayBuffer) => {
   const resourceCount = read.uint8();
   for (let i = 0; i < resourceCount; i++) {
     const name = read.string();
-    const [frequency, size, richness] = [read.float(), read.float(), read.float()];
+    const [frequency, size, richness] = [
+      read.float(),
+      read.float(),
+      read.float(),
+    ];
     console.log(`${name}:`);
     console.log(` Frequency: ${frequency}`);
     console.log(` Size: ${size}`);
@@ -89,105 +101,133 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.uint32, 0);
   expect(read.uint32, 0);
 
-  expect(read.string, 'cliff');
+  expect(read.string, "cliff");
   const cliff = {
     frequency: read.float(),
-    continuity: read.float()
+    continuity: read.float(),
   };
 
-  console.log(`Cliffs:`)
-  console.log(` Frequency: ${cliff.frequency}`)
-  console.log(` Continuity: ${cliff.continuity}`)
+  console.log(`Cliffs:`);
+  console.log(` Frequency: ${cliff.frequency}`);
+  console.log(` Continuity: ${cliff.continuity}`);
 
   expect(read.float, 1);
   expect(read.uint8, 1);
   const pollutionEnabled = read.bool();
-  console.log(`Pollution: ${pollutionEnabled ? 'Enabled' : 'Disabled'}`);
-  console.log(` Diffusion ratio: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Absorption modifier: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Minimum to damage trees: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Absorbed per damaged tree: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Attack cost modifier: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(`Pollution: ${pollutionEnabled ? "Enabled" : "Disabled"}`);
+  console.log(` Diffusion ratio: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Absorption modifier: ${(expect(read.uint8, 1), read.double())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Minimum to damage trees: ${(expect(read.uint8, 1), read.double())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Absorbed per damaged tree: ${(expect(read.uint8, 1), read.double())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Attack cost modifier: ${(expect(read.uint8, 1), read.double())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
 
-  console.log(`Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
+  console.log(
+    `Unknown: ${(expect(read.uint8, 1), read.bool()) ? "Enabled" : "Disabled"}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Unknown: ${(expect(read.uint8, 1), read.bool()) ? "Enabled" : "Disabled"}`
+  );
 
-  console.log(`Evolution: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
-  console.log(` Time factor: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Destroy factor: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Pollution factor: ${expect(read.uint8, 1), read.double()}`);
+  console.log(
+    `Evolution: ${
+      (expect(read.uint8, 1), read.bool()) ? "Enabled" : "Disabled"
+    }`
+  );
+  console.log(` Time factor: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Destroy factor: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Pollution factor: ${(expect(read.uint8, 1), read.double())}`);
 
-  console.log(`Enemy Expansion: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
-  console.log(` Maximum expansion distance: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Minimum group size: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Maximum group size: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Minimum cooldown (ticks): ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Maximum cooldown (ticks): ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${(expect(read.uint8, 1), read.bool()) ? 'Enabled' : 'Disabled'}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(
+    `Enemy Expansion: ${
+      (expect(read.uint8, 1), read.bool()) ? "Enabled" : "Disabled"
+    }`
+  );
+  console.log(
+    ` Maximum expansion distance: ${(expect(read.uint8, 1), read.uint32())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Minimum group size: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Maximum group size: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(
+    ` Minimum cooldown (ticks): ${(expect(read.uint8, 1), read.uint32())}`
+  );
+  console.log(
+    ` Maximum cooldown (ticks): ${(expect(read.uint8, 1), read.uint32())}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(
+    ` Unknown: ${(expect(read.uint8, 1), read.bool()) ? "Enabled" : "Disabled"}`
+  );
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
 
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint32()}`);
-  console.log(` Unknown: ${expect(read.uint8, 1), read.double()}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint32())}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.double())}`);
 
-  console.log(` Unknown: ${expect(read.uint8, 1), read.uint8()}`);
+  console.log(` Unknown: ${(expect(read.uint8, 1), read.uint8())}`);
 
   expect(read.uint32, 0);
   expect(read.uint32, 100);
@@ -198,7 +238,6 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.double, 2);
   expect(read.double, 3);
   expect(read.double, 4);
-
 
   expect(read.uint32, 3);
   expect(read.uint32, 0);
@@ -231,9 +270,9 @@ const loadLevelDat = (arrayBuffer) => {
       }
     }
     console.info(`},`);
-  }
+  };
 
-  console.log('idMaps = {');
+  console.log("idMaps = {");
   // We skip the last one (force) for now since that's handled below
   for (let i = 0; i < idMapTypes.length - 1; i++) {
     parseDataValues(idMapTypes[i][0], read[idMapTypes[i][1]]);
@@ -241,7 +280,7 @@ const loadLevelDat = (arrayBuffer) => {
 
   const numJsons = read.uint8();
   if (numJsons > 0) {
-    console.log('Json files:');
+    console.log("Json files:");
   }
   for (let i = 0; i < numJsons; i++) {
     console.log(` ${read.string()}: ${read.string()}`);
@@ -279,24 +318,38 @@ const loadLevelDat = (arrayBuffer) => {
     if (true) return;
     read.bytes(49314);
   }
-  console.log(' };');
-  console.log('};');
+  console.log(" };");
+  console.log("};");
 
   // Look for the start of the second resource spec
   let byteQueue = [read.uint8(), read.uint8(), read.uint8()];
-  while (byteQueue[0] != water.frequency || byteQueue[1] != water.size || byteQueue[2] != resourceCount) {
+  while (
+    byteQueue[0] != water.frequency ||
+    byteQueue[1] != water.size ||
+    byteQueue[2] != resourceCount
+  ) {
     byteQueue[0] = byteQueue[1];
     byteQueue[1] = byteQueue[2];
     byteQueue[2] = read.uint8();
   }
 
   console.log(`Water:`);
-  console.log(` Frequency: ${water.frequency == 0 ? 'Only in starting area' : frequencies[water.frequency]}`);
+  console.log(
+    ` Frequency: ${
+      water.frequency == 0
+        ? "Only in starting area"
+        : frequencies[water.frequency]
+    }`
+  );
   console.log(` Size: ${sizes[water.size]}`);
 
   for (let i = 0; i < resourceCount; i++) {
     const name = read.string();
-    const [frequency, size, richness] = [frequencies[read.uint8()], sizes[read.uint8()], richnesses[read.uint8()]];
+    const [frequency, size, richness] = [
+      frequencies[read.uint8()],
+      sizes[read.uint8()],
+      richnesses[read.uint8()],
+    ];
     console.log(`${name}:`);
     console.log(` Frequency: ${frequency}`);
     console.log(` Size: ${size}`);
@@ -331,31 +384,41 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.uint32, 0);
   expect(read.uint16, 0);
 
-  expect(read.string, 'cliff');
+  expect(read.string, "cliff");
   expect(read.float, cliff.size);
   expect(read.float, cliff.frequency);
-  console.log(`Cliffs:`)
-  console.log(` Frequency: ${cliff.frequency}${cliffFrequencyString}`)
-  console.log(` Size: ${cliff.size}${cliffSizeString}`)
+  console.log(`Cliffs:`);
+  console.log(` Frequency: ${cliff.frequency}${cliffFrequencyString}`);
+  console.log(` Size: ${cliff.size}${cliffSizeString}`);
 
   // Cheat again because this block seems to be variable size
-  let targetQueue = [6, 'n'.charCodeAt(0), 'a'.charCodeAt(0), 'u'.charCodeAt(0), 'v'.charCodeAt(0), 'i'.charCodeAt(0), 's'.charCodeAt(0)];
+  let targetQueue = [
+    6,
+    "n".charCodeAt(0),
+    "a".charCodeAt(0),
+    "u".charCodeAt(0),
+    "v".charCodeAt(0),
+    "i".charCodeAt(0),
+    "s".charCodeAt(0),
+  ];
   let foundNauvis = true;
   for (let i = 0; i < targetQueue.length; i++) {
     byteQueue[i] = read.uint8();
-    foundNauvis = foundNauvis && (byteQueue[i] == targetQueue[i]);
+    foundNauvis = foundNauvis && byteQueue[i] == targetQueue[i];
   }
   while (!foundNauvis) {
     foundNauvis = true;
     for (let i = 0; i < targetQueue.length - 1; i++) {
       byteQueue[i] = byteQueue[i + 1];
-      foundNauvis = foundNauvis && (byteQueue[i] == targetQueue[i]);
+      foundNauvis = foundNauvis && byteQueue[i] == targetQueue[i];
     }
     byteQueue[targetQueue.length - 1] = read.uint8();
-    foundNauvis = foundNauvis && (byteQueue[targetQueue.length - 1] == targetQueue[targetQueue.length - 1]);
+    foundNauvis =
+      foundNauvis &&
+      byteQueue[targetQueue.length - 1] == targetQueue[targetQueue.length - 1];
   }
 
-  const surface = 'nauvis';
+  const surface = "nauvis";
   console.log(`Surface: ${surface}`);
   expect(read.uint8, 0);
   expect(read.uint32, 0);
@@ -375,7 +438,7 @@ const loadLevelDat = (arrayBuffer) => {
 
   const numLuas = read.uint8();
   if (numLuas > 0) {
-    console.log('Lua files:');
+    console.log("Lua files:");
   }
   for (let i = 0; i < numLuas; i++) {
     console.log(` ${read.string()}: ${read.string()}`);

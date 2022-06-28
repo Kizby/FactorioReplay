@@ -1,14 +1,28 @@
-import { fromIEEE754Double, fromIEEE754Single, toIEEE754Double } from './parse_ieee.mjs';
-import { idMapTypes, signalIdTypes, idMaps } from './id_maps.mjs';
+import {
+  fromIEEE754Double,
+  fromIEEE754Single,
+  toIEEE754Double,
+} from "./parse_ieee.mjs";
+import { idMapTypes, signalIdTypes, idMaps } from "./id_maps.mjs";
 
-let curIndex, buffer, curTick, curPlayer, datString, error = '', lastTickStart;
+let curIndex,
+  buffer,
+  curTick,
+  curPlayer,
+  datString,
+  error = "",
+  lastTickStart;
 
 const fetch = {
   bytes: (count) => {
-    let result = '';
-    for (; curIndex < buffer.length && (undefined === count || count > 0); ++curIndex) {
+    let result = "";
+    for (
+      ;
+      curIndex < buffer.length && (undefined === count || count > 0);
+      ++curIndex
+    ) {
       const char = buffer[curIndex];
-      if (char == '\n') {
+      if (char == "\n") {
         if (count === undefined) {
           // No more bytes
           break;
@@ -40,9 +54,9 @@ const fetch = {
   char: () => {
     return buffer[curIndex++];
   },
-  checkSum: (next = ',') => {
+  checkSum: (next = ",") => {
     let checkSum = fetch.string(next);
-    let result = '';
+    let result = "";
     // Need to make this little endian
     while (checkSum.length > 0) {
       result += checkSum.substring(checkSum.length - 2);
@@ -51,10 +65,10 @@ const fetch = {
     return result;
   },
   commaAndWhitespace: () => {
-    let result = '';
-    if (buffer[curIndex] == ',') {
+    let result = "";
+    if (buffer[curIndex] == ",") {
       curIndex++;
-      result = ',';
+      result = ",";
     }
     return result + fetch.whitespace();
   },
@@ -68,9 +82,9 @@ const fetch = {
     fetch.whitespace();
     return true;
   },
-  num: (next = ',') => {
+  num: (next = ",") => {
     let endIndex = curIndex;
-    while (buffer[endIndex] != next && buffer[endIndex] != '\n') {
+    while (buffer[endIndex] != next && buffer[endIndex] != "\n") {
       endIndex++;
     }
     const result = parseFloat(buffer.substring(curIndex, endIndex));
@@ -78,7 +92,7 @@ const fetch = {
     fetch.commaAndWhitespace();
     return result;
   },
-  string: (delimiter, finalDelimiter = '\n') => {
+  string: (delimiter, finalDelimiter = "\n") => {
     let endIndex = buffer.indexOf(finalDelimiter, curIndex);
     if (delimiter !== undefined) {
       const commaIndex = buffer.indexOf(delimiter, curIndex);
@@ -93,7 +107,7 @@ const fetch = {
   },
   restOfLine: () => {
     const startIndex = curIndex;
-    curIndex = buffer.indexOf('\n', curIndex) + 1;
+    curIndex = buffer.indexOf("\n", curIndex) + 1;
     if (0 == curIndex) {
       // Got to the end of input
       curIndex = buffer.length;
@@ -101,22 +115,22 @@ const fetch = {
     return buffer.substring(startIndex, curIndex);
   },
   tick: (isRelative) => {
-    const colonIndex = buffer.indexOf(':', curIndex);
+    const colonIndex = buffer.indexOf(":", curIndex);
     if (colonIndex == -1) {
       error = `Failed to obtain tick on line after tick ${curTick}`;
       return [curTick, curPlayer];
     }
     const tickStr = buffer.substring(curIndex, colonIndex);
-    let openIndex = tickStr.indexOf('(');
+    let openIndex = tickStr.indexOf("(");
     if (isRelative) {
       curTick += parseInt(tickStr.substring(0, openIndex));
     } else {
       curTick = parseInt(tickStr.substring(0, openIndex));
     }
-    let closeIndex = tickStr.indexOf(')', openIndex + 1);
+    let closeIndex = tickStr.indexOf(")", openIndex + 1);
     curPlayer = tickStr.substring(openIndex + 1, closeIndex);
     if (/[0123456789]/.test(curPlayer[0])) {
-      curPlayer = mapValIfPossible(curPlayer, 'player');
+      curPlayer = mapValIfPossible(curPlayer, "player");
     }
     curIndex = colonIndex + 1;
 
@@ -126,58 +140,87 @@ const fetch = {
     curIndex = lastTickStart;
     const startIndex = curIndex;
     let tickGuess = read.tick();
-    tickGuess = tickGuess.replace('@', '?');
+    tickGuess = tickGuess.replace("@", "?");
     curIndex = startIndex - 1; // Take back the bytes we've tried to interpret
     const endIndex = tryFindHeartbeat(buffer, curIndex);
     return `${tickGuess}${read.bytes(endIndex - curIndex)}`;
   },
   whitespace: () => {
     const startIndex = curIndex;
-    while ('\n' != buffer[curIndex] && /\s/.test(buffer[curIndex])) {
+    while ("\n" != buffer[curIndex] && /\s/.test(buffer[curIndex])) {
       curIndex++;
     }
     return buffer.substring(startIndex, curIndex);
   },
 };
 
-const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-const leaveReasons = ['', 'Dropped', 'Reconnecting', 'MalformedData', 'Desynced', 'CouldNotKeepUp', 'AFK'];
-const inventories = [[],
-[undefined, 'Player', 'Toolbelt', 'Gun', 'Ammo', 'Armor', 'Tool'],
-[],
-[],
-[undefined, 'FuelOrContainer', 'Input', 'Output'],
-[],
-[],
-[],
-[],
-[],
-[],
-[],
-[],
-[],
-[],
-[]];
-const shotTargets = ['None', 'Enemy', 'Selected'];
-const transferCounts = ['None?', 'One', 'All'];
-const trainAccelerations = ['Coast', 'Accelerate', 'Decelerate', 'Reverse'];
-const trainJunctionChoices = ['Right', 'Straight', 'Left'];
+const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+const leaveReasons = [
+  "",
+  "Dropped",
+  "Reconnecting",
+  "MalformedData",
+  "Desynced",
+  "CouldNotKeepUp",
+  "AFK",
+];
+const inventories = [
+  [],
+  [undefined, "Player", "Toolbelt", "Gun", "Ammo", "Armor", "Tool"],
+  [],
+  [],
+  [undefined, "FuelOrContainer", "Input", "Output"],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+];
+const shotTargets = ["None", "Enemy", "Selected"];
+const transferCounts = ["None?", "One", "All"];
+const trainAccelerations = ["Coast", "Accelerate", "Decelerate", "Reverse"];
+const trainJunctionChoices = ["Right", "Straight", "Left"];
 const cheatIndex = [
-  0, 1, 2, 3, 4, 5, 6, 'AllTechs', 'NotAllTechs', 9, 10, 11, 'StarterItems', 'NoStarterItems', 14, 'GodMode', 'NotGodMode', 17, 'AlwaysDay', 'NotAlwaysDay'
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  "AllTechs",
+  "NotAllTechs",
+  9,
+  10,
+  11,
+  "StarterItems",
+  "NoStarterItems",
+  14,
+  "GodMode",
+  "NotGodMode",
+  17,
+  "AlwaysDay",
+  "NotAlwaysDay",
 ];
-const characterTabs = [
-  undefined, 'Crafting', 'Character', 'Logistics'
-];
+const characterTabs = [undefined, "Crafting", "Character", "Logistics"];
 
 const mapValIfPossible = (val, category) => {
   let idMap, mapped;
-  if (category !== undefined &&
+  if (
+    category !== undefined &&
     (idMap = idMaps[category]) !== undefined &&
-    (mapped = idMap[val]) !== undefined) {
+    (mapped = idMap[val]) !== undefined
+  ) {
     return mapped;
   }
   return val;
-}
+};
 
 const read = {
   uint8: (category) => {
@@ -185,20 +228,25 @@ const read = {
   },
   uint16: (category) => {
     return mapValIfPossible(
-      buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100), category)
+      buffer[curIndex++] + buffer[curIndex++] * 0x100,
+      category
+    );
   },
   // Doubt these actually exist, but useful for unknowns
   uint24: () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100)
-      + (buffer[curIndex++] * 0x10000);
+    return (
+      buffer[curIndex++] +
+      buffer[curIndex++] * 0x100 +
+      buffer[curIndex++] * 0x10000
+    );
   },
   uint32: () => {
-    return buffer[curIndex++]
-      + (buffer[curIndex++] * 0x100)
-      + (buffer[curIndex++] * 0x10000)
-      + (buffer[curIndex++] * 0x1000000);
+    return (
+      buffer[curIndex++] +
+      buffer[curIndex++] * 0x100 +
+      buffer[curIndex++] * 0x10000 +
+      buffer[curIndex++] * 0x1000000
+    );
   },
   int8: () => {
     let num = read.uint8();
@@ -243,21 +291,21 @@ const read = {
   },
   string: () => {
     const len = read.optUint32();
-    let result = '';
+    let result = "";
     for (let i = 0; i < len; i++) {
       result += String.fromCharCode(buffer[curIndex++]);
     }
     return result;
   },
   bytes: (length) => {
-    let result = '';
+    let result = "";
     for (let i = 0; i < length; i++) {
       let byte = read.uint8().toString(16);
       if (byte.length == 1) {
-        byte = '0' + byte;
+        byte = "0" + byte;
       }
       if (i > 0) {
-        result += ' ';
+        result += " ";
       }
       result += byte;
     }
@@ -305,7 +353,7 @@ const read = {
     const rawCheckSum = read.uint32();
     let checkSum = rawCheckSum.toString(16);
     while (checkSum.length < 8) {
-      checkSum = '0' + checkSum;
+      checkSum = "0" + checkSum;
     }
     return checkSum;
   },
@@ -320,48 +368,50 @@ const read = {
     const slot = read.uint16();
     const inventoryContext = read.uint16();
     const inventory = inventories[inventoryContext][whichInventory];
-    return `${inventory ? inventory : `${whichInventory}, ${inventoryContext}`}, ${slot}`;
+    return `${
+      inventory ? inventory : `${whichInventory}, ${inventoryContext}`
+    }, ${slot}`;
   },
   tick: () => {
     lastTickStart = curIndex;
     curTick = read.uint32();
-    curPlayer = read.optUint16('player');
-    if (idMaps.player['Server'] === undefined) {
-      idMaps.player['Server'] = curPlayer;
-      idMaps.player[curPlayer] = 'Server';
-      curPlayer = 'Server';
+    curPlayer = read.optUint16("player");
+    if (idMaps.player["Server"] === undefined) {
+      idMaps.player["Server"] = curPlayer;
+      idMaps.player[curPlayer] = "Server";
+      curPlayer = "Server";
     }
     return `@${curTick}(${curPlayer}): `;
   },
   isNotDragging: () => {
-    return read.bool() ? '' : 'Dragging';
+    return read.bool() ? "" : "Dragging";
   },
   isNotGhost: () => {
-    return read.bool() ? '' : 'Ghost';
+    return read.bool() ? "" : "Ghost";
   },
   uint8ProbablyZero: () => {
     const num = read.uint8();
-    return num == 0 ? '' : num;
+    return num == 0 ? "" : num;
   },
   uint16ProbablyZero: () => {
     const num = read.uint16();
-    return num == 0 ? '' : num;
+    return num == 0 ? "" : num;
   },
   uint24ProbablyZero: () => {
     const num = read.uint24();
-    return num == 0 ? '' : num;
+    return num == 0 ? "" : num;
   },
   uint8ProbablyFour: () => {
     const num = read.uint8();
-    return num == 4 ? '' : num;
+    return num == 4 ? "" : num;
   },
   previousTick: () => {
     const num = read.uint32();
-    return num == curTick - 1 ? '' : num;
+    return num == curTick - 1 ? "" : num;
   },
   uint32OrAll: () => {
     const num = read.uint32();
-    return num == 0xffffffff ? 'all' : num;
+    return num == 0xffffffff ? "all" : num;
   },
   shotTarget: () => {
     return shotTargets[read.uint8()];
@@ -371,27 +421,27 @@ const read = {
   },
   inOut: () => {
     if (read.bool()) {
-      return 'In';
+      return "In";
     }
-    return 'Out';
+    return "Out";
   },
   float: () => {
-    const bytes = buffer.slice(curIndex, curIndex += 4);
+    const bytes = buffer.slice(curIndex, (curIndex += 4));
     return fromIEEE754Single(bytes.reverse());
   },
   double: () => {
-    const bytes = buffer.slice(curIndex, curIndex += 8);
+    const bytes = buffer.slice(curIndex, (curIndex += 8));
     return fromIEEE754Double(bytes.reverse());
   },
   curPlayer: () => {
     const player = read.player();
     if (player == curPlayer) {
-      return '';
+      return "";
     }
     return player;
   },
   player: () => {
-    return mapValIfPossible(read.uint16(), 'player');
+    return mapValIfPossible(read.uint16(), "player");
   },
   trainJunctionChoice: () => {
     return trainJunctionChoices[read.uint8()];
@@ -401,7 +451,7 @@ const read = {
   },
   blueprintIcons: () => {
     const iconCount = read.uint8();
-    let result = '';
+    let result = "";
     for (let i = 0; i < iconCount; i++) {
       if (i > 0) {
         result = `${result}, `;
@@ -412,14 +462,14 @@ const read = {
     return result;
   },
   blueprintOrBook: (recursive = false) => {
-    let result = '';
+    let result = "";
     const blueprintId = read.uint32();
     let blueprintContainer;
     if (recursive) {
       blueprintContainer = read.item();
     }
     const blueprintBytes = read.bytes(20);
-    let unknown3 = '';
+    let unknown3 = "";
     if (!recursive) {
       blueprintContainer = read.item();
       unknown3 = read.uint8ProbablyZero();
@@ -432,17 +482,17 @@ const read = {
         throw `No terminus on saved blueprint?`;
       }
     }
-    if (name === '') {
+    if (name === "") {
       result = `${blueprintId} =`;
     } else {
       result = `${name} (${blueprintId}) =`;
     }
-    result = `${result} ${blueprintBytes} in a ${blueprintContainer}`
-    if (unknown3 != '') {
+    result = `${result} ${blueprintBytes} in a ${blueprintContainer}`;
+    if (unknown3 != "") {
       result = `${result} (${unknown3})`;
     }
     result = `${result} with icons [${icons}]`;
-    if (blueprintContainer == 'blueprint-book') {
+    if (blueprintContainer == "blueprint-book") {
       result = `${result}:`;
       const containerBlueprintCount = read.uint8();
       for (let i = 0; i < containerBlueprintCount; i++) {
@@ -460,14 +510,14 @@ const read = {
     const unknown1 = read.uint16();
     const blueprintId = read.uint32();
     const unknown2 = read.bytes(8);
-    const extraBytes = read.bytesUntil([0, 0, 18, 0], /*inclusive=*/false);
+    const extraBytes = read.bytesUntil([0, 0, 18, 0], /*inclusive=*/ false);
     const major = read.uint16();
     const minor = read.uint16();
     const patch = read.uint16();
     const unknown4 = read.uint24();
     const itemCount = extraBytes.length == 8 ? 1 : read.uint32();
     if (itemCount > 9000) {
-      throw 'Oops';
+      throw "Oops";
     }
     const items = [];
     for (let i = 0; i < itemCount; ++i) {
@@ -481,7 +531,9 @@ const read = {
     const unknown6 = read.uint16();
     const unknown7 = read.uint8();
     const unknown8 = read.checkSum();
-    return `Blueprint ${blueprintId} (from ${major}.${minor}.${patch}): [${items.join(', ')}] with icons ${icons}, [${unknown1}, ${unknown2}, ${extraBytes}, ${unknown6}, ${unknown7}, ${unknown8}]`;
+    return `Blueprint ${blueprintId} (from ${major}.${minor}.${patch}): [${items.join(
+      ", "
+    )}] with icons ${icons}, [${unknown1}, ${unknown2}, ${extraBytes}, ${unknown6}, ${unknown7}, ${unknown8}]`;
   },
   cheatType: () => {
     const val = read.uint32();
@@ -494,7 +546,7 @@ const read = {
 };
 
 const write = {
-  uint8: (val = fetch.string(','), category) => {
+  uint8: (val = fetch.string(","), category) => {
     let num = parseInt(val);
     if (isNaN(num) && category !== undefined) {
       num = mapValIfPossible(val, category);
@@ -504,12 +556,12 @@ const write = {
     }
     let result = num.toString(16);
     if (result.length < 2) {
-      result = '0' + result;
+      result = "0" + result;
     }
     datString += result;
     return num;
   },
-  uint16: (val = fetch.string(','), category) => {
+  uint16: (val = fetch.string(","), category) => {
     let num = parseInt(val);
     if (isNaN(num) && category !== undefined) {
       num = mapValIfPossible(val, category);
@@ -577,7 +629,7 @@ const write = {
   },
   string: (stopAtComma, val) => {
     if (undefined === val) {
-      val = fetch.string(stopAtComma ? ',' : undefined);
+      val = fetch.string(stopAtComma ? "," : undefined);
     }
     write.optUint32(val.length);
     for (let i = 0; i < val.length; i++) {
@@ -589,7 +641,7 @@ const write = {
   },
   bool: (val) => {
     if (val === undefined) {
-      val = (fetch.string() == 'true');
+      val = fetch.string() == "true";
     }
     write.uint8(val ? 1 : 0);
   },
@@ -601,7 +653,7 @@ const write = {
     fetch.commaAndWhitespace();
   },
   direction: () => {
-    const direction = fetch.string(',');
+    const direction = fetch.string(",");
     for (let i = 0; i < directions.length; i++) {
       if (directions[i] == direction) {
         write.uint8(i);
@@ -611,7 +663,7 @@ const write = {
     error = `Can't parse direction "${direction}"`;
   },
   leaveReason: () => {
-    const leaveReason = fetch.string(',');
+    const leaveReason = fetch.string(",");
     for (let i = 0; i < leaveReasons.length; i++) {
       if (leaveReasons[i] == leaveReason) {
         write.uint8(i);
@@ -622,8 +674,8 @@ const write = {
   },
   slotInInventory: () => {
     let inventoryContext, whichInventory;
-    if ('0123456789'.indexOf(buffer[curIndex]) == -1) {
-      const inventory = fetch.string(',');
+    if ("0123456789".indexOf(buffer[curIndex]) == -1) {
+      const inventory = fetch.string(",");
       var found = false;
       for (let i = 0; !found && i < inventories.length; i++) {
         for (let j = 0; j < inventories[i].length; j++) {
@@ -647,39 +699,39 @@ const write = {
     write.uint16(inventoryContext);
   },
   isNotDragging: () => {
-    write.bool(fetch.string(',') != 'Dragging');
+    write.bool(fetch.string(",") != "Dragging");
   },
   isNotGhost: () => {
-    write.bool(fetch.string(',') != 'Ghost');
+    write.bool(fetch.string(",") != "Ghost");
   },
-  uint8ProbablyZero: (next = '\n') => {
-    const num = (buffer[curIndex] == next) ? 0 : fetch.num(next);
+  uint8ProbablyZero: (next = "\n") => {
+    const num = buffer[curIndex] == next ? 0 : fetch.num(next);
     write.uint8(num);
   },
   uint16ProbablyZero: () => {
-    const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
+    const num = buffer[curIndex] == "\n" ? 0 : fetch.num();
     write.uint16(num);
     return num;
   },
   uint24ProbablyZero: () => {
-    const num = (buffer[curIndex] == '\n') ? 0 : fetch.num();
+    const num = buffer[curIndex] == "\n" ? 0 : fetch.num();
     write.uint24(num);
     return num;
   },
   uint8ProbablyFour: () => {
-    const num = (buffer[curIndex] == '\n') ? 4 : fetch.num();
+    const num = buffer[curIndex] == "\n" ? 4 : fetch.num();
     write.uint8(num);
   },
   previousTick: () => {
-    const num = (buffer[curIndex] == '\n') ? curTick - 1 : fetch.num();
+    const num = buffer[curIndex] == "\n" ? curTick - 1 : fetch.num();
     write.uint32(num);
   },
   uint32OrAll: () => {
-    const num = fetch.string(',');
-    write.uint32(num == 'all' ? 0xffffffff : parseInt(num));
+    const num = fetch.string(",");
+    write.uint32(num == "all" ? 0xffffffff : parseInt(num));
   },
   shotTarget: () => {
-    const shotTarget = fetch.string(',');
+    const shotTarget = fetch.string(",");
     for (let i = 0; i < shotTargets.length; i++) {
       if (shotTargets[i] == shotTarget) {
         write.uint8(i);
@@ -689,7 +741,7 @@ const write = {
     error = `Can't parse shotTarget "${shotTarget}"`;
   },
   transferCount: () => {
-    const transferCount = fetch.string(',');
+    const transferCount = fetch.string(",");
     for (let i = 0; i < transferCounts.length; i++) {
       if (transferCounts[i] == transferCount) {
         write.uint8(i);
@@ -699,10 +751,13 @@ const write = {
     error = `Can't parse transferCount "${transferCount}"`;
   },
   inOut: () => {
-    write.bool(fetch.string() == 'In');
+    write.bool(fetch.string() == "In");
   },
   curPlayer: () => {
-    const num = (buffer[curIndex] == '\n') ? mapValIfPossible(curPlayer, 'player') : fetch.num();
+    const num =
+      buffer[curIndex] == "\n"
+        ? mapValIfPossible(curPlayer, "player")
+        : fetch.num();
     write.uint16(num);
   },
   double: () => {
@@ -713,7 +768,7 @@ const write = {
     }
   },
   trainJunctionChoice: () => {
-    const trainJunctionChoice = fetch.string(',');
+    const trainJunctionChoice = fetch.string(",");
     for (let i = 0; i < trainJunctionChoices.length; i++) {
       if (trainJunctionChoices[i] == trainJunctionChoice) {
         write.uint8(i);
@@ -723,7 +778,7 @@ const write = {
     error = `Can't parse train junction choice "${trainJunctionChoice}"`;
   },
   trainAcceleration: () => {
-    const trainAcceleration = fetch.string(',');
+    const trainAcceleration = fetch.string(",");
     for (let i = 0; i < trainAccelerations.length; i++) {
       if (trainAccelerations[i] == trainAcceleration) {
         write.uint8(i);
@@ -735,9 +790,9 @@ const write = {
   blueprintIcons: (inSavedBlueprint = false) => {
     const category = [];
     const id = [];
-    const finalDelimiter = inSavedBlueprint ? ']' : '\n';
+    const finalDelimiter = inSavedBlueprint ? "]" : "\n";
     while (buffer[curIndex] != finalDelimiter) {
-      const oneIcon = fetch.string(',', finalDelimiter);
+      const oneIcon = fetch.string(",", finalDelimiter);
       let found = false;
       for (let i = 0; i < signalIdTypes.length; i++) {
         if (idMaps[signalIdTypes[i]].hasOwnProperty(oneIcon)) {
@@ -759,13 +814,16 @@ const write = {
     }
   },
   blueprintOrBook: (recursive = false) => {
-    const maybeNameAndId = fetch.string('=');
+    const maybeNameAndId = fetch.string("=");
     let id;
-    let name = '';
-    if (maybeNameAndId.endsWith(')')) {
+    let name = "";
+    if (maybeNameAndId.endsWith(")")) {
       // looks like: "<name> (<id>)"
-      id = maybeNameAndId.substring(maybeNameAndId.lastIndexOf('(') + 1, maybeNameAndId.lastIndexOf(')'));
-      name = maybeNameAndId.substring(0, maybeNameAndId.lastIndexOf('(') - 1);
+      id = maybeNameAndId.substring(
+        maybeNameAndId.lastIndexOf("(") + 1,
+        maybeNameAndId.lastIndexOf(")")
+      );
+      name = maybeNameAndId.substring(0, maybeNameAndId.lastIndexOf("(") - 1);
     } else {
       // looks like: "<id>"
       id = maybeNameAndId;
@@ -773,29 +831,29 @@ const write = {
 
     write.uint16(id);
 
-    fetch.literalString('=');
+    fetch.literalString("=");
 
     const blueprintBytes = fetch.bytes(20);
 
-    if (!fetch.literalString('in a')) {
+    if (!fetch.literalString("in a")) {
       return;
     }
 
     if (recursive) {
-      const blueprintContainer = fetch.string(' ');
+      const blueprintContainer = fetch.string(" ");
       write.item(blueprintContainer);
     }
 
     datString += blueprintBytes;
 
     if (!recursive) {
-      const blueprintContainer = fetch.string(' ');
+      const blueprintContainer = fetch.string(" ");
       write.item(blueprintContainer);
-      if ('(' == buffer[curIndex]) {
+      if ("(" == buffer[curIndex]) {
         ++curIndex;
-        const unknown = fetch.num(')');
+        const unknown = fetch.num(")");
         write.uint8(unknown);
-        if (!fetch.literalString(')')) {
+        if (!fetch.literalString(")")) {
           return;
         }
       } else {
@@ -803,13 +861,13 @@ const write = {
       }
     }
 
-    if (!fetch.literalString('with icons [')) {
+    if (!fetch.literalString("with icons [")) {
       return;
     }
 
     write.blueprintIcons(true);
 
-    if (!fetch.literalString(']')) {
+    if (!fetch.literalString("]")) {
       return;
     }
 
@@ -819,7 +877,7 @@ const write = {
       write.uint16(0xffff);
     }
 
-    if (buffer[curIndex] == ':') {
+    if (buffer[curIndex] == ":") {
       // Need to call this recursively on the contents of this container
       ++curIndex;
       // Hack to let the recursive calls write directly to datString
@@ -827,7 +885,7 @@ const write = {
       const savedDatLen = datString.length;
       write.uint8(0);
       let count = 0;
-      while (buffer[curIndex] != ';') {
+      while (buffer[curIndex] != ";") {
         if (count > 0) {
           fetch.commaAndWhitespace();
         }
@@ -840,9 +898,12 @@ const write = {
         // Overwrite the previously claimed 0 count with the actual value
         let countBytes = count.toString(16);
         if (countBytes.length < 2) {
-          countBytes = '0' + countBytes;
+          countBytes = "0" + countBytes;
         }
-        datString = datString.substring(0, savedDatLen) + countBytes + datString.substring(savedDatLen + 2);
+        datString =
+          datString.substring(0, savedDatLen) +
+          countBytes +
+          datString.substring(savedDatLen + 2);
       }
     }
   },
@@ -861,18 +922,27 @@ const write = {
 // Add convenience functions to directly parse known mapped ids (read.item() etc.)
 for (let i = 0; i < idMapTypes.length; i++) {
   read[idMapTypes[i][0]] = () => read[idMapTypes[i][1]](idMapTypes[i][0]);
-  write[idMapTypes[i][0]] = (val = fetch.string(',')) => write[idMapTypes[i][1]](val, idMapTypes[i][0]);
+  write[idMapTypes[i][0]] = (val = fetch.string(",")) =>
+    write[idMapTypes[i][1]](val, idMapTypes[i][0]);
 }
 
 const tryFindHeartbeat = (buffer, curIndex) => {
   // Factorio emits CheckSum frames every second, on the second, so try to find the next one
   // Find the next CheckSum frame
-  for (let searchIndex = curIndex; searchIndex + 6 <= buffer.length; searchIndex++) {
+  for (
+    let searchIndex = curIndex;
+    searchIndex + 6 <= buffer.length;
+    searchIndex++
+  ) {
     if (buffer[searchIndex] != 0x42) {
       // Not a checksum
       continue;
     }
-    const tick = buffer[searchIndex + 1] + (buffer[searchIndex + 2] << 8) + (buffer[searchIndex + 3] << 16) + (buffer[searchIndex + 4] << 24);
+    const tick =
+      buffer[searchIndex + 1] +
+      (buffer[searchIndex + 2] << 8) +
+      (buffer[searchIndex + 3] << 16) +
+      (buffer[searchIndex + 4] << 24);
     if (tick % 60 != 0) {
       // Not an even second
       continue;
@@ -892,8 +962,8 @@ const tryFindHeartbeat = (buffer, curIndex) => {
 const setBuffer = (newBuffer) => {
   buffer = newBuffer;
   curIndex = 0;
-  datString = '';
-  error = '';
+  datString = "";
+  error = "";
 };
 
 const eof = () => {
@@ -904,8 +974,12 @@ const expect = (func, data) => {
   let lastIndex = curIndex;
   let nextBytes = func();
   if (nextBytes != data) {
-    console.log(`Unexpected bytes (0x${nextBytes.toString(16)}) at offset 0x${lastIndex.toString(16)}`);
-    throw 'Not parsing more';
+    console.log(
+      `Unexpected bytes (0x${nextBytes.toString(
+        16
+      )}) at offset 0x${lastIndex.toString(16)}`
+    );
+    throw "Not parsing more";
   }
 };
 
@@ -913,4 +987,16 @@ const progress = () => {
   return curIndex / buffer.length;
 };
 
-export { read, write, fetch, setBuffer, expect, eof, datString, error, idMaps, tryFindHeartbeat, progress };
+export {
+  read,
+  write,
+  fetch,
+  setBuffer,
+  expect,
+  eof,
+  datString,
+  error,
+  idMaps,
+  tryFindHeartbeat,
+  progress,
+};

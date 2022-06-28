@@ -1,8 +1,8 @@
-import './jszip/jszip.mjs';
+import "./jszip/jszip.mjs";
 
 const loadedZip = {
-  name: '?',
-  zip: null
+  name: "?",
+  zip: null,
 };
 
 const parseFileFromJSZip = (zip, filename) => {
@@ -15,21 +15,26 @@ const parseFileFromJSZip = (zip, filename) => {
     break;
   }
   const object = zip.file(`${loadedZip.name}/${filename}`);
-  return object ? object.async('arraybuffer') : new Promise((resolve, _reject) => { resolve(new ArrayBuffer()) });
+  return object
+    ? object.async("arraybuffer")
+    : new Promise((resolve, _reject) => {
+        resolve(new ArrayBuffer());
+      });
 };
 
 const parseFileFromZip = (zipBytes, filename) => {
   const jszip = new JSZip();
-  return jszip.loadAsync(zipBytes)
-    .then(zip => parseFileFromJSZip(zip, filename), console.error);
+  return jszip
+    .loadAsync(zipBytes)
+    .then((zip) => parseFileFromJSZip(zip, filename), console.error);
 };
 
 const parseReplayFromZip = (zipBytes) => {
-  return parseFileFromZip(zipBytes, 'replay.dat');
+  return parseFileFromZip(zipBytes, "replay.dat");
 };
 
 const parseLevelFromZip = (zipBytes) => {
-  return parseFileFromZip(zipBytes, 'level.dat');
+  return parseFileFromZip(zipBytes, "level.dat");
 };
 
 const getZipWithReplay = (replayDat, preserveDate) => {
