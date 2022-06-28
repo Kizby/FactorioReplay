@@ -128,7 +128,7 @@ export const frameHandlers = [
     'SmartPipette',
     ['uint8', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8'],
   ],
-  [0x51, 'StackSplit'],
+  [0x51, 'StackSplit', 'slotInInventory'],
   [0x52, 'InventorySplit', 'slotInInventory'],
   [0x53, 'CancelCraft'],
   [0x54, 'SetFilter'],
@@ -347,10 +347,14 @@ export const frameHandlers = [
   [0xc4, 'TranslateString'],
   [0xc5, 'FlushOpenedEntitySpecificFluid'],
   [0xc6, 'ChangePickingState', ['uint8']],
-  [0xc7, 'SelectedEntityChangedVeryClose', ['uint8']],
-  [0xc8, 'SelectedEntityChangedVeryClosePrecise', ['uint8', 'uint8']],
-  [0xc9, 'SelectedEntityChangedRelative', ['uint8', 'uint8', 'uint8', 'uint8']],
-  [0xca, 'SelectedEntityChangedBasedOnUnitNumber'],
+  [0xc7, 'SelectedEntityChangedVeryClose', ['uint8']], // Don't know
+  [0xc8, 'SelectedEntityChangedVeryClosePrecise', ['uint8', 'uint8']], // Don't know
+  [0xc9, 'SelectedEntityChangedRelative', ['uint8', 'uint8', 'uint8', 'uint8']], // Don't know
+  [
+    0xca,
+    'SelectedEntityChangedBasedOnUnitNumber',
+    ['uint8', 'uint8', 'uint8', 'uint8'],
+  ], // Don't know
   [0xcb, 'SetAutosortInventory'],
   [0xcc, 'SetFlatControllerGui', ['uint8']],
   [0xcd, 'SetRecipeNotifications'],
@@ -360,8 +364,8 @@ export const frameHandlers = [
   [0xd1, 'SwitchInserterFilterModeState'],
   [0xd2, 'SwitchConnectToLogisticNetwork'],
   [0xd3, 'SetBehaviorMode'],
-  [0xd4, 'FastEntityTransfer', ['uint8']],
-  [0xd5, 'RotateEntity'],
+  [0xd4, 'FastEntityTransfer', 'uint8'],
+  [0xd5, 'RotateEntity', 'direction'],
   [0xd6, 'FastEntitySplit'],
   [0xd7, 'SetTrainStopped'],
   [0xd8, 'ChangeControllerSpeed'],
@@ -392,6 +396,6 @@ export const frameHandlers = [
   [0xf1, 'SetPlayerColor'],
   [0xf2, 'PlayerClickedGpsTag'],
   [0xf3, 'SetTrainsLimit'],
-  [0xf4, 'ClearRecipeNotification'],
+  [0xf4, 'ClearRecipeNotification', 'recipe'],
   [0xf5, 'SetLinkedContainerLinkID'],
 ]
