@@ -5,9 +5,9 @@ const loadLevelDat = (arrayBuffer) => {
   setBuffer(new Uint8Array(arrayBuffer));
   const [major, minor, patch] = [read.uint16(), read.uint16(), read.uint16()];
   console.log(`Factorio version: ${major}.${minor}.${patch}`);
-  if (major != 0 || minor != 18 || patch != 22) {
+  if (major != 1 || minor != 1 || patch != 59) {
     console.error(
-      `This tool has only been tested on Factorio 0.18.22! Use it with version ${major}.${minor}.${patch} at your own risk!`
+      `This tool has only been tested on Factorio 1.1.59! Use it with version ${major}.${minor}.${patch} at your own risk!`
     );
   }
 
@@ -18,7 +18,7 @@ const loadLevelDat = (arrayBuffer) => {
   console.log(`Scenario: ${scenario}(${scenarioContext})`);
 
   expect(read.uint32, 1);
-  expect(read.uint32, 0x1010000);
+  expect(read.uint32, 0x1000000);
   expect(read.uint8, major);
   expect(read.uint8, minor);
   expect(read.uint8, patch);
@@ -238,6 +238,8 @@ const loadLevelDat = (arrayBuffer) => {
   expect(read.double, 2);
   expect(read.double, 3);
   expect(read.double, 4);
+  expect(read.uint8, 1);
+  expect(read.uint32, 20);
 
   expect(read.uint32, 3);
   expect(read.uint32, 0);
@@ -250,7 +252,7 @@ const loadLevelDat = (arrayBuffer) => {
     console.log(`Unknown: ${read.checkSum()}`);
   }
   expect(read.uint32, 0);
-  expect(read.uint32, 0);
+  //expect(read.uint32, 0);
 
   const parseDataValues = (name, readNum) => {
     idMaps[name] = {};
