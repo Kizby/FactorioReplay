@@ -31,4 +31,5 @@
   "javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
   // Defines whether an open brace is put onto a new line for functions or not.
   "javascript.format.placeOpenBraceOnNewLineForFunctions": false,
+  "prettier.singleQuote": true,
 }
