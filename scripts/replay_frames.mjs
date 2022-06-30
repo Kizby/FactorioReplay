@@ -76,34 +76,45 @@ export const frameHandlers = [
       let result = '';
       result += read.fixed32() + ', '; // x
       result += read.fixed32() + ', '; // y
-      result += read.uint8() + ', '; //entityOverride ID<EntityPrototype,unsigned_short>
       result += read.direction() + ', '; // direction
-      let isDragging = read.isDragging();
-      result += isDragging
-        ? `dragging, ${read.fixed32()}, ${read.fixed32()}, `
-        : 'notDragging';
-      if (isDragging)
-        result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse';
+      let bool1 = read.uint8(); //isDragging();
+      let bool2 = read.uint8(); //isGhost();
+      result += `${bool1}, ${bool2}, `;
+      let isDragging = bool2 == 1;
+      if (isDragging) {
+        result += `${read.fixed32()}, ${read.fixed32()}, `;
+        let is = read.uint8();
+        result += (is >> 5) + ', ' + ((is >> 1) % 2) + ', ';
+      }
+      if (bool1 == 1 && bool2 == 0) {
+        result += `${read.uint8()}, `;
+      }
       return result;
     },
     () => {
       write.fixed32();
       write.fixed32();
-      write.uint8();
       write.direction();
-      let isDragging = fetch.string(',');
-      console.log(isDragging);
-      if (isDragging == 'dragging') {
-        write.uint8(1);
+      write.uint8();
+      if (write.uint8() == 1) {
         write.fixed32();
         write.fixed32();
-      } else write.uint8(32);
+      }
     },
   ],
   [0x3d, 'StartWalking', 'direction'],
   [0x3e, 'BeginMiningTerrain', ['fixed32', 'fixed32']],
   [0x3f, 'ChangeRidingState', ['direction', 'uint8', 'bool']],
-  [0x40, 'OpenItem', 'slotInInventory'],
+  [
+    0x40,
+    'OpenItem',
+    [
+      'inv', //
+      'uint16',
+      'inventory',
+      'inventoryType',
+    ],
+  ],
   [0x41, 'OpenParentOfOpenedItem', 'slotInInventory'],
   [0x42, 'ResetItem', 'slotInInventory'],
   [0x43, 'DestroyItem', 'slotInInventory'],
@@ -131,11 +142,21 @@ export const frameHandlers = [
   [0x55, 'CheckCRC'],
   [0x56, 'SetCircuitCondition'],
   [0x57, 'SetSignal'],
-  [0x58, 'StartResearch', ['fixed32']],
+  [0x58, 'StartResearch', 'fixed16'],
   [0x59, 'SetLogisticFilterItem'],
   [0x5a, 'SetLogisticFilterSignal'],
   [0x5b, 'SetCircuitModeOfOperation'],
-  [0x5c, 'GuiClick'],
+  [
+    0x5c,
+    'GuiClick',
+    [
+      'uint32', //
+      'mouseButton',
+      'bool', // alt
+      'bool', // ctrl
+      'bool', // shift
+    ],
+  ],
   [0x5d, 'GuiConfirmed'],
   [0x5e, 'WriteToConsole', 'string'],
   [0x5f, 'MarketOffer'],
@@ -159,9 +180,46 @@ export const frameHandlers = [
   [0x71, 'SetInventoryBar'],
   [0x72, 'MoveOnZoom'],
   [0x73, 'StartRepair'],
-  [0x74, 'Deconstruct'],
-  [0x75, 'Upgrade'],
-  [0x76, 'Copy'],
+  [
+    0x74,
+    'Deconstruct',
+    [
+      'int32',
+      'int32',
+      'int32',
+      'int32',
+      'int16',
+      'int16',
+      'bool', // skipFogOfWar
+    ],
+  ],
+  [
+    0x75,
+    'Upgrade',
+    [
+      'int32',
+      'int32',
+      'int32',
+      'int32',
+      'int16',
+      'int16',
+      'bool', // skipFogOfWar
+      'bool', // loader
+    ],
+  ],
+  [
+    0x76,
+    'Copy',
+    [
+      'int32',
+      'int32',
+      'int32',
+      'int32',
+      'int16',
+      'int16',
+      'bool', // skipFogOfWar
+    ],
+  ],
   [0x77, 'AlternativeCopy'],
   [0x78, 'SelectBlueprintEntities', 'item'],
   [0x79, 'AltSelectBlueprintEntities'],
@@ -307,7 +365,23 @@ export const frameHandlers = [
   [0xa4, 'ServerCommand'],
   [0xa5, 'SetControllerLogisticTrashFilterItem'],
   [0xa6, 'SetEntityLogisticTrashFilterItem'],
-  [0xa7, 'SetInfinityContainerFilterItem'],
+  [
+    0xa7,
+    'SetInfinityContainerFilterItem',
+    [
+      'item', //
+      'uint8', //
+      'uint8', //
+      'uint8', //
+      'uint8', //
+      'uint8', //
+      'uint8', //
+      'uint8', //
+      // 'uint8', //
+      // 'uint16',
+      // 'uint32',
+    ],
+  ],
   [0xa8, 'SetInfinityPipeFilter'],
   [0xa9, 'ModSettingsChanged'],
   [0xaa, 'SetEntityEnergyProperty'],
@@ -331,12 +405,20 @@ export const frameHandlers = [
     ['uint8', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8', 'uint8'],
   ],
   [0xba, 'QuickBarSetSlot'],
-  [0xbb, 'QuickBarPickSlot'],
+  [
+    0xbb,
+    'QuickBarPickSlot',
+    [
+      'uint16', // location
+      'bool', // pickGhostCursor
+      'bool', // cursorSplit
+    ],
+  ],
   [0xbc, 'QuickBarSetSelectedPage'],
   [0xbd, 'PlayerLeaveGame'],
   [
     0xbe,
-    'MapEditorAction',
+    'MapEditorAction', // too much to handle in one go, maybe needs separate file
     () => {
       let result = '';
       const action = read.uint8('editorAction');
@@ -347,9 +429,15 @@ export const frameHandlers = [
           result += read.fixed32() + ', '; // y
           result += read.direction() + ', '; // direction
           let isDragging = read.isDragging();
-          result += isDragging + ', ';
-          if (isDragging)
-            result += read.uint8() == 1 ? 'someBoolTrue' : 'someBoolFalse';
+          result += isDragging + isDragging ? ', ' : '';
+          // if (isDragging)
+          result += read.uint8() + ', ';
+          // result += read.uint32() + ', '; // surfaceIndex
+          // result += read.fixed32() + ', ';
+          // result += read.fixed32() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', '; // entityPrototype
+          break;
         case 'DropItem':
           result += read.uint32() + ', '; // surfaceIndex
           result += read.fixed32() + ', ';
@@ -392,6 +480,8 @@ export const frameHandlers = [
           break;
         case 'SetCliffEditorID':
         case 'SetResourceEditorID':
+          result += read.uint8() + ', ' + read.uint8(); // entityId
+          break;
         case 'SetEntityEditorID':
           result += idMaps['entity'][read.uint8()] + ', ' + read.uint8(); // entityId
           break;
@@ -418,19 +508,32 @@ export const frameHandlers = [
           break;
         case 'SetEntityHealth':
         case 'TickCustom':
-        case 'SetBrushToolSize':
-        case 'SetBrushToolIntensity':
-        case 'SetBrushToolRepetition':
-        case 'SetCursorToolIntensity':
         case 'ChangeToolSize':
           result += read.uint32() + ', ';
+          break;
+        case 'SetBrushToolRepetition':
+        case 'SetCursorToolIntensity':
+        case 'SetBrushToolIntensity':
+        case 'SetBrushToolSize':
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+          result += read.uint8() + ', ';
+
           break;
         case 'SetBrushToolShape':
           result += idMaps['editorType'][read.uint8()] + ', ';
           result += read.uint32() + ', '; // toolIndex
-          result += read.uint32() + ', ';
-          result += read.uint32() + ', ';
-          result += read.uint8() + ', ';
+          result += read.uint8();
           break;
         case 'SetTileEditorID':
         case 'InstantResearch':
@@ -502,9 +605,24 @@ export const frameHandlers = [
   [0xc4, 'TranslateString'],
   [0xc5, 'FlushOpenedEntitySpecificFluid'],
   [0xc6, 'ChangePickingState', ['uint8']],
-  [0xc7, 'SelectedEntityChangedVeryClose', ['uint8']], // Don't know
+  [0xc9, 'SelectedEntityChangedRelative', ['fixed16', 'fixed16']], // Don't know
+  [
+    0xc7,
+    'SelectedEntityChangedVeryClose',
+    () => {
+      const num = read.uint8();
+      const x = ((num & 0xf) * 0x10 + 8) / 16;
+      const y = ((num & 0xf0) + 8) / 16;
+      return `${x}, ${y}`;
+    },
+    () => {
+      const x = fetch.string(',');
+      const y = fetch.string(',');
+      const num = ((x * 16 - 8) | 0) / 0x10 + ((y * 16 - 8) | 0);
+      write.uint8(num);
+    },
+  ], // Don't know
   [0xc8, 'SelectedEntityChangedVeryClosePrecise', ['uint8', 'uint8']], // Don't know
-  [0xc9, 'SelectedEntityChangedRelative', ['uint8', 'uint8', 'uint8', 'uint8']], // Don't know
   [
     0xca,
     'SelectedEntityChangedBasedOnUnitNumber',
@@ -534,7 +652,7 @@ export const frameHandlers = [
   [0xe0, 'DeleteCustomTag'],
   [0xe1, 'DeletePermissionGroup'],
   [0xe2, 'AddPermissionGroup'],
-  [0xe3, 'SetInfinityContainerRemoveUnfilteredItems'],
+  [0xe3, 'SetInfinityContainerRemoveUnfilteredItems', 'bool'],
   [0xe4, 'SetCarWeaponsControl'],
   [0xe5, 'SetRequestFromBuffers'],
   [0xe6, 'ChangeActiveQuickBar'],

@@ -209,6 +209,32 @@ const cheatIndex = [
   'NotAlwaysDay',
 ];
 const characterTabs = [undefined, 'Crafting', 'Character', 'Logistics'];
+const mouseButton = {
+  NONE: '0x0001',
+  '0x0001': 'NONE',
+  LEFT: '0x0002',
+  '0x0002': 'LEFT',
+  RIGHT: '0x0004',
+  '0x0004': 'RIGHT',
+  LEFT_AND_RIGHT: '0x0006',
+  '0x0006': 'LEFT_AND_RIGHT',
+  MIDDLE: '0x0008',
+  '0x0008': 'MIDDLE',
+  BUTTON_4: '0x0010',
+  '0x0010': 'BUTTON_4',
+  BUTTON_5: '0x0020',
+  '0x0020': 'BUTTON_5',
+  BUTTON_6: '0x0040',
+  '0x0040': 'BUTTON_6',
+  BUTTON_7: '0x0080',
+  '0x0080': 'BUTTON_7',
+  BUTTON_8: '0x0100',
+  '0x0100': 'BUTTON_8',
+  BUTTON_9: '0x0200',
+  '0x0200': 'BUTTON_9',
+  ALL: '0x03fe',
+  '0x03fe': 'ALL',
+};
 
 const mapValIfPossible = (val, category) => {
   let idMap, mapped;
@@ -248,6 +274,20 @@ const read = {
       buffer[curIndex++] * 0x1000000
     );
   },
+  uint64: () => {
+    return (
+      BigInt(
+        buffer[curIndex++] +
+          buffer[curIndex++] * 0x100 +
+          buffer[curIndex++] * 0x10000 +
+          buffer[curIndex++] * 0x1000000 +
+          buffer[curIndex++] * 0x100000000 +
+          buffer[curIndex++] * 0x10000000000 +
+          buffer[curIndex++] * 0x1000000000000
+      ) +
+      BigInt(buffer[curIndex++]) * 0x100000000000000n
+    );
+  },
   int8: () => {
     let num = read.uint8();
     if (num >= 0x80) {
@@ -266,6 +306,13 @@ const read = {
     let num = read.uint32();
     if (num >= 0x80000000) {
       num -= 0x100000000;
+    }
+    return num;
+  },
+  int64: () => {
+    let num = read.uint64();
+    if (num >= 0x8000000000000000n) {
+      num -= 0x10000000000000000n;
     }
     return num;
   },
@@ -342,6 +389,11 @@ const read = {
     }
     return read.bytes(endIndex - startIndex);
   },
+  mouseButton: () => {
+    let bytes = read.bytes(2).replace(' ', '');
+    bytes = bytes[2] + bytes[3] + bytes[0] + bytes[1];
+    return mouseButton['0x' + bytes];
+  },
   bool: () => {
     const parsed = read.uint8();
     if (parsed != 0 && parsed != 1) {
@@ -357,6 +409,12 @@ const read = {
     }
     return checkSum;
   },
+  dir: () => {
+    let a = read.uint8();
+    return a <= 7
+      ? directions[a]
+      : `${directions[a % 16]}->${directions[a >> 4]}`;
+  },
   direction: () => {
     return directions[read.uint8()];
   },
@@ -368,6 +426,9 @@ const read = {
     const invType = idMaps['inventoryType'][read.uint8()];
     const localShelfTarget = read.bool();
     return `${inventory}, ${invType}, ${localShelfTarget}`;
+  },
+  inv: () => {
+    return `${inventories[1][read.uint8()]}`;
   },
   slotInInventory: () => {
     const whichInventory = read.uint8();
@@ -647,6 +708,13 @@ const write = {
   bytes: (count) => {
     datString += fetch.bytes(count);
   },
+  mouseButton: () => {
+    const button = fetch.string(',');
+    let bytes = `${mouseButton[button]}`.slice(2);
+    bytes = bytes[2] + bytes[3] + bytes[0] + bytes[1];
+    write.uint8(parseInt(bytes[0] + bytes[1], 16));
+    write.uint8(parseInt(bytes[2] + bytes[3], 16));
+  },
   bool: (val) => {
     if (val === undefined) {
       val = fetch.string() == 'true';
@@ -659,6 +727,10 @@ const write = {
     }
     datString += checkSum;
     fetch.commaAndWhitespace();
+  },
+  dir: () => {
+    const result = fetch.string(',');
+    console.log(result);
   },
   direction: () => {
     const direction = fetch.string(',');

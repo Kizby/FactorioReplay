@@ -78,11 +78,11 @@ const getReplayDatBytes = (text) => {
       // @ - command at a given tick
       // + - command at an offset from the last command
       const [tick, player] = fetch.tick(lineType == '+');
-      console.log(tick, player);
+      // console.log(tick, player);
       fetch.whitespace();
 
       let name = fetch.string(' ');
-      console.log(name);
+      // console.log(name);
       const frameHandler = inputActionNameToFrameHandler[name];
       if (!frameHandler) {
         console.error(

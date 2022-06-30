@@ -32,6 +32,7 @@ export const idMapTypes = [
   ['editorAction', 'uint8'],
   ['editorType', 'uint8'],
   ['inventory', 'uint8'],
+  ['inventoryType', 'uint8'],
 ];
 
 export const signalIdTypes = {
