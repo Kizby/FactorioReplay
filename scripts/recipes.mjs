@@ -1,55 +1,54 @@
 /*
- Acquired by running the following lua script in a game with all techs unlocked:
+ Acquired by running the following lua script in a game:
 
   /c local list = {}
   list[#list+1] = "{"
   local firstRecipe = true;
-  for _, recipe in pairs(game.player.force.recipes) do
-    if recipe.enabled then
-      if firstRecipe then
-        firstRecipe = false
+  for _, recipe in pairs(game.player.force.recipes) do 
+    if firstRecipe then
+      firstRecipe = false
+    else
+      list[#list] = list[#list] .. ","
+    end
+    list[#list+1] = "  \"" .. recipe.name .. "\": {"
+    list[#list+1] = "    \"ingredients\": ["
+    local start = true
+    for _, ingredient in pairs(recipe.ingredients) do
+      if start then
+        start = false
       else
         list[#list] = list[#list] .. ","
       end
-      list[#list+1] = "  \"" .. recipe.name .. "\": {"
-      list[#list+1] = "    \"ingredients\": ["
-      local start = true
-      for _, ingredient in pairs(recipe.ingredients) do
-        if start then
-          start = false
-        else
-          list[#list] = list[#list] .. ","
-        end
-        list[#list+1] = "      {"
-        list[#list+1] = "        \"name\": \"" .. ingredient.name .. "\","
-        list[#list+1] = "        \"amount\": " .. ingredient.amount
-        list[#list+1] = "      }"
-      end
-      list[#list+1] = "    ],"
-      list[#list+1] = "    \"products\": ["
-      start = true
-      for _, product in pairs(recipe.products) do
-        if start then
-          start = false
-        else
-          list[#list] = list[#list] .. ","
-        end
-        list[#list+1] = "      {"
-        list[#list+1] = "        \"name\": \"" .. product.name .. "\","
-        list[#list+1] = "        \"amount\": " .. product.amount
-        list[#list+1] = "      }"
-      end
-      list[#list+1] = "    ],"
-      list[#list+1] = "    \"energy\": " .. recipe.energy .. ","
-      list[#list+1] = "  }"
+      list[#list+1] = "      {"
+      list[#list+1] = "        \"name\": \"" .. ingredient.name .. "\","
+      list[#list+1] = "        \"amount\": " .. ingredient.amount
+      list[#list+1] = "      }"
     end
+    list[#list+1] = "    ],"
+    list[#list+1] = "    \"products\": ["
+    start = true
+    for _, product in pairs(recipe.products) do
+      if start then
+        start = false
+      else
+        list[#list] = list[#list] .. ","
+      end
+      list[#list+1] = "      {"
+      list[#list+1] = "        \"name\": \"" .. product.name .. "\","
+      list[#list+1] = "        \"amount\": " .. product.amount
+      list[#list+1] = "      }"
+    end
+    list[#list+1] = "    ],"
+    list[#list+1] = "    \"energy\": " .. recipe.energy .. ","
+    list[#list+1] = "  }"
   end
   list[#list+1] = "};"
-  game.write_file("recipes.txt", serpent.block(list) .. "\n", true)
+  for _, string in pairs(list) do
+    game.write_file("recipes.txt", string .. "\n", true)
+  end
 
  with some massaging of the formatting after.
 */
-
 export const recipes = {
   accumulator: {
     ingredients: [
@@ -1011,6 +1010,25 @@ export const recipes = {
     ],
     energy: 60,
   },
+  'electric-energy-interface': {
+    ingredients: [
+      {
+        name: 'iron-plate',
+        amount: 2,
+      },
+      {
+        name: 'electronic-circuit',
+        amount: 5,
+      },
+    ],
+    products: [
+      {
+        name: 'electric-energy-interface',
+        amount: 1,
+      },
+    ],
+    energy: 0.5,
+  },
   'electric-engine-unit': {
     ingredients: [
       {
@@ -1286,6 +1304,25 @@ export const recipes = {
     ],
     energy: 4,
   },
+  'express-loader': {
+    ingredients: [
+      {
+        name: 'express-transport-belt',
+        amount: 5,
+      },
+      {
+        name: 'fast-loader',
+        amount: 1,
+      },
+    ],
+    products: [
+      {
+        name: 'express-loader',
+        amount: 1,
+      },
+    ],
+    energy: 10,
+  },
   'express-splitter': {
     ingredients: [
       {
@@ -1381,6 +1418,25 @@ export const recipes = {
       },
     ],
     energy: 0.5,
+  },
+  'fast-loader': {
+    ingredients: [
+      {
+        name: 'fast-transport-belt',
+        amount: 5,
+      },
+      {
+        name: 'loader',
+        amount: 1,
+      },
+    ],
+    products: [
+      {
+        name: 'fast-loader',
+        amount: 1,
+      },
+    ],
+    energy: 3,
   },
   'fast-splitter': {
     ingredients: [
@@ -1952,6 +2008,37 @@ export const recipes = {
       },
     ],
     energy: 3,
+  },
+  loader: {
+    ingredients: [
+      {
+        name: 'iron-plate',
+        amount: 5,
+      },
+      {
+        name: 'iron-gear-wheel',
+        amount: 5,
+      },
+      {
+        name: 'electronic-circuit',
+        amount: 5,
+      },
+      {
+        name: 'transport-belt',
+        amount: 5,
+      },
+      {
+        name: 'inserter',
+        amount: 5,
+      },
+    ],
+    products: [
+      {
+        name: 'loader',
+        amount: 1,
+      },
+    ],
+    energy: 1,
   },
   locomotive: {
     ingredients: [
@@ -3434,6 +3521,68 @@ export const recipes = {
       },
     ],
     energy: 60,
+  },
+  spidertron: {
+    ingredients: [
+      {
+        name: 'raw-fish',
+        amount: 1,
+      },
+      {
+        name: 'rocket-control-unit',
+        amount: 16,
+      },
+      {
+        name: 'low-density-structure',
+        amount: 150,
+      },
+      {
+        name: 'effectivity-module-3',
+        amount: 2,
+      },
+      {
+        name: 'rocket-launcher',
+        amount: 4,
+      },
+      {
+        name: 'fusion-reactor-equipment',
+        amount: 2,
+      },
+      {
+        name: 'exoskeleton-equipment',
+        amount: 4,
+      },
+      {
+        name: 'radar',
+        amount: 2,
+      },
+    ],
+    products: [
+      {
+        name: 'spidertron',
+        amount: 1,
+      },
+    ],
+    energy: 10,
+  },
+  'spidertron-remote': {
+    ingredients: [
+      {
+        name: 'rocket-control-unit',
+        amount: 1,
+      },
+      {
+        name: 'radar',
+        amount: 1,
+      },
+    ],
+    products: [
+      {
+        name: 'spidertron-remote',
+        amount: 1,
+      },
+    ],
+    energy: 0.5,
   },
   splitter: {
     ingredients: [

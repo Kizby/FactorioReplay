@@ -29,6 +29,7 @@ const stripReplayDat = (arrayBuffer) => {
     const strippedSegments = [];
     for (let curIndex = 0; curIndex < buffer.length; ) {
       const nextIndex = tryFindHeartbeat(buffer, curIndex);
+      console.log(nextIndex);
       strippedSegments.push(buffer.subarray(curIndex, nextIndex));
       curIndex = nextIndex + 14; // Checksum frames are 14 bytes long
     }
